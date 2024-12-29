@@ -43,7 +43,7 @@ nav a{
 }
 
 #Home{
-    background-color: beige;
+    /* background-color: beige; */
     color: black;
     padding: 15%;
     display: flex;
@@ -219,7 +219,7 @@ nav a{
 /* animation */
 
 #projects{
-    background-color: beige;
+    /* background-color: beige; */
     padding: 10px;
 }
 
@@ -319,7 +319,7 @@ nav a{
     align-items: center;
     flex-direction: column;
     padding: 3%;
-    background-color: beige;
+    /* background-color: beige; */
 }
 
 #contact > div{

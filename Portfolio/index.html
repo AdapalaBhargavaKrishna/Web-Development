@@ -286,7 +286,10 @@
             Copyright © 2025 Bhargava .All rights reserved
         </div>
     </div>
-    <script src="script.js"></script>
+    <script>
+        const copy = document.querySelector(".logos-slide").cloneNode(true);
+        document.querySelector(".logos").appendChild(copy)
+    </script>
 </body>
 
 </html>
