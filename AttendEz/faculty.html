@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Dashboard</title>
+    <link rel="stylesheet" href="faculty.css">
+</head>
+<body>
+    <div class="main">
+    <nav>
+        <div class="head">
+            <img src="assets/college.svg" alt="">
+            <h1>Faculty Dashboard</h1>
+        </div>
+        <div class="nav-button">
+            <button >Notifications</button>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </nav>
+        <div class="container">
+            <div class="sidebar">
+                <button onclick="showSection('attendance')">Attendance</button>
+                <button onclick="showSection('timetable')">Timetable</button>
+                <button onclick="showSection('students')">Student Records</button>
+                <button onclick="showSection('assignments')">Assignments</button>
+                <button onclick="showSection('announcements')">Announcements</button>
+                <button onclick="showSection('notes')">Class Notes</button>
+            </div>
+            <div class="mainbar" id="mainbar">
+                <h2>Welcome to the Faculty Dashboard</h2>
+                <p>Select an option from the sidebar to view details.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="faculty.js"></script>
+</body>
+</html>
