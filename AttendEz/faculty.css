@@ -57,6 +57,7 @@ nav{
 
 .sidebar {
     width: 20%;
+    min-width: 20%;
     height: 100%; /* Takes full height of the container */
     background-color: #333;
     border-radius: 10px;
@@ -86,4 +87,105 @@ nav{
     background-color: white;
     border-radius: 10px;
     overflow-y: auto;
+}
+
+.mainbar > h2{
+    font-size: 2.5rem;
+    margin-top: 0;
+}
+
+.mainbar > p{
+    font-size: 1.5rem;
+}
+
+.select-batch > button{
+    margin-top: 20px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.select-batch select{
+    padding: 10px 15px;
+    margin-left: 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+.attendance-list{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.swipe-absent, .swipe-present{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.swipe-absent > p, .swipe-present > p{ 
+    margin: 0;
+}
+
+.roll-container {
+    width: 25vw;
+    height: 40vh;
+    margin-top: 20px;
+}
+
+.roll-numbers{
+    background-color: beige;
+    height: 88%;
+    margin: 2rem;
+    border-radius: 50px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(55px, 1fr));
+    justify-content: center;
+    text-align: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 20px;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.roll-number {
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    cursor: pointer;
+    
+
+    width: 2rem;
+    height: 1.5rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.confirm-btn {
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.clear-button{
+    margin-top: 20px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
 }

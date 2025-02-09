@@ -1,17 +1,30 @@
 <h2>Attendance</h2>
 <p>Mark student attendance below.</p>
-<table border="1">
-    <tr>
-        <th>Student Name</th>
-        <th>Roll Number</th>
-        <th>Present</th>
-        <th>Absent</th>
-    </tr>
-    <tr>
-        <td>John Doe</td>
-        <td>101</td>
-        <td><input type="radio" name="attendance_101" value="Present"></td>
-        <td><input type="radio" name="attendance_101" value="Absent"></td>
-    </tr>
-</table>
-<button onclick="saveAttendance()">Submit Attendance</button>
+<div class="select-batch">
+    <button class="class-button" onclick="selectType('class')">Class</button>
+    <select id="batch-select" onchange="selectType('batch')">
+        <option value="">Select Batch</option>
+        <option value="Batch-1">Batch-1</option>
+        <option value="Batch-2">Batch-2</option>
+        <option value="Batch-3">Batch-3</option>
+    </select>
+</div>
+
+<div class="attendance-list">
+    <div class="swipe-absent">
+        <p>double click or leave to mark</p>
+        <b>"Absent"</b>
+    </div>
+    <div id="rollNumberContainer" class="roll-container">
+        <div class="roll-numbers" id="rollNumbers">
+
+        </div>
+    </div>
+    <div class="swipe-present">
+        <p>click to mark</p>
+        <b>"Present"</b>
+    </div>
+</div>
+<button onclick="finalizeAttendance()" class="confirm-btn">Confirm Attendance</button>
+<div id="absenteesList"></div>
+<button id="clear-button" class="clear-button" onclick="clearAttendance()" style="display: none;">Clear</button>
