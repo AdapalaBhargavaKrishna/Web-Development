@@ -334,3 +334,70 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- function selectType(type) {
+    const rollNumbersDiv = document.getElementById('rollNumbers');
+    const batchSelect = document.getElementById('batch-select');
+    rollNumbersDiv.innerHTML = '';
+
+    // Reset attendance data
+    attendance = {};
+    document.getElementById('absenteesList').innerHTML = ''; // Clear absentees list
+
+    // Get the login type (Assume it's stored in localStorage)
+    let loginType = localStorage.getItem("loginType"); // IT-1, IT-2, IT-3
+
+    if (type === "class") {
+        batchSelect.value = "";
+        if (loginType === "IT-1") {
+            rollNumbers = ["201", "202", "203", "204", "205", "206", "207", "208"];
+        } else if (loginType === "IT-2") {
+            rollNumbers = ["301", "302", "303", "304", "305", "306", "307", "308"];
+        } else if (loginType === "IT-3") {
+            rollNumbers = ["401", "402", "403", "404", "405", "406", "407", "408"];
+        }
+    } else if (type === "batch") {
+        const selectedBatch = batchSelect.value;
+
+        if (loginType === "IT-1") {
+            if (selectedBatch === "Batch-1") {
+                rollNumbers = ["201", "202", "203", "204"];
+            } else if (selectedBatch === "Batch-2") {
+                rollNumbers = ["205", "206", "207", "208"];
+            }
+        } else if (loginType === "IT-2") {
+            if (selectedBatch === "Batch-1") {
+                rollNumbers = ["301", "302", "303", "304"];
+            } else if (selectedBatch === "Batch-2") {
+                rollNumbers = ["305", "306", "307", "308"];
+            }
+        } else if (loginType === "IT-3") {
+            if (selectedBatch === "Batch-1") {
+                rollNumbers = ["401", "402", "403", "404"];
+            } else if (selectedBatch === "Batch-2") {
+                rollNumbers = ["405", "406", "407", "408"];
+            }
+        }
+    }
+
+    rollNumbers.forEach(roll => {
+        const rollNumberDiv = document.createElement('div');
+        rollNumberDiv.className = 'roll-number';
+        rollNumberDiv.textContent = roll;
+        rollNumberDiv.addEventListener('click', () => markAttendance(roll));
+        rollNumbersDiv.appendChild(rollNumberDiv);
+    });
+} -->

@@ -1,183 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AttendZ Login</title>
     <style>
         body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f4f4f4;
-}
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
 
-.container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
 
-        position: relative;
-}
+        .left {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 25vw;
+            height: 50vh;
+            border-radius: 10px 0 0 10px;
+        }
 
-.left{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 25vw;
-    height: 50vh;
-    border-radius: 10px 0 0 10px;
-}
+        h1 {
+            font-size: 24px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeSlide 0.5s ease-out forwards;
+        }
 
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
 
-h1 {
-    font-size: 24px;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeSlide 0.5s ease-out forwards;
-}
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-@keyframes fadeSlide {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+        .buttons {
+            display: flex;
+            gap: 10px;
+            transition: transform 0.5s ease-in-out;
+        }
 
-.buttons {
-    display: flex;
-    gap: 10px;
+        .buttons.vertical {
+            flex-direction: column;
+        }
 
-    transition: transform 0.5s ease-in-out;
-}
-.buttons.vertical {
-    flex-direction: column;
-}
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 10rem;
+            transition: all 0.5s ease-in-out;
+        }
 
-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 14px;
-    width: 10rem;
-    transition: all 0.5s ease-in-out;
-}
+        .student-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
 
-.student-btn {
-    background-color: #4CAF50;
-    color: white;
-}
+        .faculty-btn {
+            background-color: #2196F3;
+            color: white;
+        }
 
-.faculty-btn {
-    background-color: #2196F3;
-    color: white;
-}
+        .right {
+            display: none;
+            width: 25vw;
+            height: 50vh;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.5s ease-in-out;
+        }
 
-.right {
-    display: none; 
-    width: 25vw;
-    height: 50vh;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.5s ease-in-out;
-}
+        .login-form {
+            display: none;
+            width: 200px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
 
+        .login-form input
+         {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
 
-.login-form {
-    display: none;
-    width: 200px;
-    text-align: center;
-    animation: fadeIn 0.5s ease-in-out;
-}
+        .login-form button {
+            background-color: #333;
+            color: white;
+            width: 100%;
+        }
 
-.login-form input {
-    width: 100%;
-    padding: 8px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
+        .section-select {
+            width: 13.5rem;
+            padding: 8px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
 
-.login-form button {
-    background-color: #333;
-    color: white;
-    width: 100%;
-}
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateX(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
     </style>
 </head>
+
 <body>
+    <div class="container">
+        <div class="left">
+            <h1 id="welcomeText">Welcome to AttendZ</h1>
+            <div class="buttons" id="buttons">
+                <button class="student-btn" onclick="showLogin('Student')">Login as Student</button>
+                <button class="faculty-btn" onclick="showLogin('Faculty')">Login as Faculty</button>
+            </div>
+        </div>
 
-    
-<div class="container">
-    <div class="left">
-        <h1 id="welcomeText">Welcome to AttendZ</h1>
-        <div class="buttons" id="buttons">
-            <button class="student-btn" onclick="showLogin('Student')">Login as Student</button>
-            <button class="faculty-btn" onclick="showLogin('Faculty')">Login as Faculty</button>
+        <div class="right" id="right">
+            <div class="login-form" id="loginForm">
+                <h2 id="formTitle">Login</h2>
+                <div id="inputField"></div>
+                <input type="password" id="password" placeholder="Password" required>
+                <button onclick="validateLogin()">Login</button>
+            </div>
         </div>
     </div>
 
-    <div class="right", id="right">
-        <div class="login-form" id="loginForm">
-            <h2 id="formTitle">Login</h2>
-            <input type="text" placeholder="Username" required>
-            <input type="password" placeholder="Password" required>
-            <button>Login</button>
-        </div>
-    </div>
-</div>
+    <script>
+        function showLogin(role) {
+            const buttons = document.getElementById("buttons");
+            const loginForm = document.getElementById("loginForm");
+            const right = document.getElementById("right");
+            const formTitle = document.getElementById("formTitle");
+            const inputField = document.getElementById("inputField");
 
-<script>
-    function showMessage(role) {
-    const welcomeText = document.getElementById("welcomeText");
-    welcomeText.style.opacity = "0"; // Reset animation
-    setTimeout(() => {
-        welcomeText.innerText = `Welcome, ${role}!`;
-        welcomeText.style.animation = "none"; // Reset animation
-        void welcomeText.offsetWidth; // Trick to restart animation
-        welcomeText.style.animation = "fadeSlide 0.5s ease-out forwards";
-    }, 200);
-}
+            buttons.classList.add("vertical");
+            formTitle.innerText = `Welcome, ${role}`;
+            right.style.display = "flex";
+            loginForm.style.display = "block";
 
-function showLogin(role) {
-    const buttons = document.getElementById("buttons");
-    const loginForm = document.getElementById("loginForm");
-    const right = document.getElementById("right");
-    const formTitle = document.getElementById("formTitle");
+            if (role === "Student") {
+                inputField.innerHTML = '<input type="text" id="username" placeholder="Student ID" required>';
+            } else {
+                inputField.innerHTML = `
+                <select id="facultyDropdown" class="section-select" required>
+                    <option value="" disabled selected>Select Section</option>
+                    <option value="it1">IT 1</option>
+                    <option value="it2">IT 2</option>
+                    <option value="it3">IT 3</option>
+                </select>`;
+            }
+        }
 
+        function validateLogin() {
+            const facultyDropdown = document.getElementById("facultyDropdown");
+            const username = document.getElementById("username");
+            const password = document.getElementById("password").value;
 
-    buttons.classList.add("vertical");
-
-    formTitle.innerText = `Welcome, ${role}`;
-    right.style.display = "flex";
-    loginForm.style.display = "block";
-
-}
-
-</script>
+            if (facultyDropdown && facultyDropdown.value !== "") {
+                if (password === facultyDropdown.value) {
+                    window.location.href = "faculty.html";
+                } else {
+                    alert("Invalid Credentials");
+                }
+            } else if (username && username.value !== "") {
+                if (password === username.value) {
+                    alert("Login Successful");
+                } else {
+                    alert("Invalid Credentials");
+                }
+            } else {
+                alert("Invalid Credentials");
+            }
+        }
+    </script>
 </body>
+
 </html>
