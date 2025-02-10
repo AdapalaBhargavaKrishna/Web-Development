@@ -96,3 +96,24 @@ function clearAttendance() {
     document.getElementById('rollNumbers').innerHTML = '';
     document.getElementById("clear-button").style.display = "none";
 }
+
+function addRow() {
+    let tbody = document.getElementById("timetable-body");
+    let row = document.createElement("tr");
+    
+    let dayCell = document.createElement("td");
+    dayCell.innerHTML = `<input type='text' placeholder='Day'>`;
+    row.appendChild(dayCell);
+    
+    for (let i = 0; i < 6; i++) {
+        let cell = document.createElement("td");
+        cell.innerHTML = `<input type='text' placeholder='Subject, Room No'>`;
+        row.appendChild(cell);
+    }
+    
+    tbody.appendChild(row);
+}
+
+function clearTable() {
+    document.getElementById("timetable-body").innerHTML = "";
+}
