@@ -117,3 +117,22 @@ function addRow() {
 function clearTable() {
     document.getElementById("timetable-body").innerHTML = "";
 }
+
+
+var tl = gsap.timeline();
+
+tl.from(".ani", {
+    y: -30,
+    opacity: 0,
+    duration: 0.5,
+    delay: 0.5,
+    stagger: 0.2
+})
+
+gsap.from(".ani2", {
+    x: -30,
+    opacity: 0,
+    duration: 0.5,
+    delay: 0.5,
+    stagger: 0.2
+})
