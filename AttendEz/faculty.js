@@ -132,6 +132,7 @@ function clearTable() {
     document.getElementById("timetable-body").innerHTML = "";
 }
 
+/*<---------------GSAP--------------->*/
 
 var tl = gsap.timeline();
 
@@ -156,4 +157,23 @@ gsap.from(".ani2", {
     duration: 0.5,
     delay: 0.5,
     stagger: 0.2
+})
+
+function BreakText() {
+    var h1tag = document.getElementById("heading")
+    var h1Text = h1tag.textContent;
+    var splittedText = h1Text.split("");
+    var clutter = ""
+    splittedText.forEach(function(elem){
+        clutter += `<span>${elem}</span>`
+    })
+    h1tag.innerHTML = clutter;
+}
+BreakText();
+gsap.from("#heading span", {
+    y: 100,
+    opacity: 0,
+    duration: 0.5,
+    delay: 0.2,
+    stagger: 0.1
 })
