@@ -129,6 +129,13 @@ tl.from(".ani", {
     stagger: 0.2
 })
 
+tl.from(".mainbar h2, .mainbar p", {
+    y: 20,
+    scale: 0.8,
+    opacity: 0,
+    duration: 0.5
+})
+
 gsap.from(".ani2", {
     x: -30,
     opacity: 0,
