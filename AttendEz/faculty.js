@@ -52,13 +52,15 @@ function selectType(type) {
         const rollNumberDiv = document.createElement('div');
         rollNumberDiv.className = 'roll-number';
         rollNumberDiv.textContent = roll;
+        rollNumberDiv.setAttribute('data-roll', roll);
         rollNumberDiv.addEventListener('click', () => markAttendance(roll));
         rollNumbersDiv.appendChild(rollNumberDiv);
     });
 }
 
-
 function markAttendance(roll) {
+    const rollNumberDiv = document.querySelector(`.roll-number[data-roll="${roll}"]`);
+    
     if (!attendance[roll]) {
         attendance[roll] = 'present';
     } else if (attendance[roll] === 'present') {
@@ -66,7 +68,19 @@ function markAttendance(roll) {
     } else {
         attendance[roll] = 'present';
     }
-    updateRollNumberDisplay(roll);
+
+    gsap.to(rollNumberDiv, {
+        scale: 0,
+        duration: 0.1,
+        onComplete: () =>{
+            updateRollNumberDisplay(roll);
+            gsap.to(rollNumberDiv, {
+                scale: 1,
+                duration:0.1
+            })
+        }
+    })
+
 }
 
 function updateRollNumberDisplay(roll) {
