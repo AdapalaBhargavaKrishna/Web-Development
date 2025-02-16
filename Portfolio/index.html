@@ -11,36 +11,36 @@
 
 <body>
     <nav>
-        <div class="Name">Bhargava Krishna</div>
+        <div class="Name navani">Bhargava Krishna</div>
         <div>
             <ul>
-                <li><a href="#Home">Home</a></li>
-                <li><a href="#Experience">Experience</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li class="navani"><a href="#Home">Home</a></li>
+                <li class="navani"><a href="#Experience">Experience</a></li>
+                <li class="navani"><a href="#projects">Projects</a></li>
+                <li class="navani"><a href="#contact">Contact</a></li>
             </ul>
         </div>
     </nav>
-    <hr style="color: black;">
+    <!-- <hr style="color: black;"> -->
     <div id="Home">
         <div class="profilepic">
             <img src="assets/pfp.JPG" alt="">
         </div>
         <div class="profileinfo">
-            <h1>Bhargava Krishna</h1>
-            <h2>Aspiring SDE | Full-Stack Developer | Problem Solver</h2>
-            <p> I'm a passionate software developer focused on web development and problem-solving, always striving to
+            <h1 class="pfani1">Bhargava Krishna</h1>
+            <h2 class="pfani1">Aspiring SDE | Full-Stack Developer | Problem Solver</h2>
+            <p class="pfani1"> I'm a passionate software developer focused on web development and problem-solving, always striving to
                 build scalable, user-friendly solutions.</p>
 
             <div class="view">
-                <a href="#projects" class="btn">View Projects</a>
-                <a href="resume.pdf" download class="btn">Download Resume</a>
+                <a class="pfani1" href="#projects" class="btn">View Projects</a>
+                <a class="pfani1" href="resume.pdf" download class="btn">Download Resume</a>
             </div>
             <div class="social">
-                <a href="https://www.instagram.com/bhargava.246"><img src="assets/insta.svg" alt=""></a>
-                <a href="https://www.facebook.com/"><img src="assets/facebook.svg" alt=""></a>
-                <a href="https://www.linkedin.com/in/bhargava-krishna-44810728a"><img src="assets/linkedin.svg" alt=""></a>
-                <a href="https://github.com/"><img src="assets/github.svg" alt=""></a>
+                <a class="pfani1" href="https://www.instagram.com/bhargava.246"><img src="assets/insta.svg" alt=""></a>
+                <a class="pfani1" href="https://www.facebook.com/"><img src="assets/facebook.svg" alt=""></a>
+                <a class="pfani1" href="https://www.linkedin.com/in/bhargava-krishna-44810728a"><img src="assets/linkedin.svg" alt=""></a>
+                <a class="pfani1" href="https://github.com/"><img src="assets/github.svg" alt=""></a>
             </div>
         </div>
     </div>
@@ -299,10 +299,13 @@
             Copyright © 2025 Bhargava .All rights reserved
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         const copy = document.querySelector(".logos-slide").cloneNode(true);
         document.querySelector(".logos").appendChild(copy)
     </script>
+    <script src="script.js"></script>
 </body>
 
 </html>

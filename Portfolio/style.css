@@ -18,17 +18,18 @@ html {
 nav{
     display: flex;
     justify-content: space-between;
-    background-color: wheat;
+    background-color: black;
     padding: 10px ;
-    color: black;
+    color: white;
     width: auto;
-    
-    /* box-shadow: -4px 5px 4px rgba(0, 0, 0, 0.2); */
+    margin: 20px;
+    background-color: rgb(28, 28, 28);
+    box-shadow: -4px 5px 4px rgba(0, 0, 0, 0.2);
 }
 
-nav > div{
-    display: flex;
-    align-items: center;
+.Name{
+    font-weight: 600;
+    font-size: x-large;
 }
 
 nav ul{
@@ -39,11 +40,20 @@ nav ul{
 
 nav a{
     text-decoration: none;
+    color: white;
+    font-weight: 600;
+    padding: 5px;
+    border-radius: 50px;
+    font-size: larger;
+}
+
+nav a:hover{
     color: black;
+    background-color: white;
+    font-weight: 600;
 }
 
 #Home{
-    /* background-color: beige; */
     color: black;
     padding: 15%;
     display: flex;
@@ -52,13 +62,24 @@ nav a{
     gap: 30px;
 }
 
+
 .profilepic img{
     width: 400px;
     height: 400px;
     object-fit: cover;
     padding: 0;
     margin: 0;
-    border-radius: 50%;
+    border-radius: 20%;
+}
+
+.profileinfo h1{
+    font-weight: 600;
+    font-size: 70px;
+}
+
+.profileinfo h2{
+    font-weight: 600;
+    font-size: 70px;
 }
 
 .profileinfo p{
