@@ -35,20 +35,151 @@
                 <div class="right-header">
                     <div class="search">
                         <span class="material-symbols-outlined  search-icon">search</span>
-                        <input placeholder="Search place" type="text">
+                        <input class="city-input" placeholder="Search place" type="text">
                     </div>
                     <div class="profile"><img src="pfp.JPG" alt=""></div>
                 </div>
             </div>
-            <div class="maincontents">
+            <div class="maincontents" style="display: none;">
                 <div class="left-mainbar">
-                    <div class="top-left"></div>
+                    <div class="top-left">
+                        <div class="location-date">
+                            <div class="location">
+                                <img src="loation.svg" alt="">
+                                <h1 class="country">India</h1>
+                            </div>
+                            <div class="date">
+                                <h1 class="current-date">Sunday</h1>
+                                <h3>10 oct</h3>
+                            </div>
+                        </div>
+                        <div class="weather-summary">
+                            <img src="assets/weather/clouds.svg" alt="">
+                            <div class="weather-summary-info">
+                                <h1 class="temp-text">29°C</h1>
+                                <div class="weather-info">
+                                    <h3>Heavy Rain</h3>
+                                    <p>Feels like 31°</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="bottom-left"></div>
                 </div>
                 <div class="right-mainbar">
-                    <div class="top-right"></div>
-                    <div class="bottom-right"></div>
+                    <div class="top-right">
+                        <h1 class="top-right-head">Today's Highlights</h1>
+                        <div class="weather-condition-container">
+                            <div class="weather-condition">
+                                <div class="condition-item">
+                                    <span class="material-symbols-outlined">
+                                        air
+                                    </span>
+                                    <div class="condition">
+                                        <h5 class="regular-txt">Wind Status</h5>
+                                        <div class="value-flex">
+                                            <h5 class="wind-value">2</h5><span>M/s</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="condition-item">
+                                    <span class="material-symbols-outlined">
+                                        water_drop
+                                    </span>
+                                    <div class="condition">
+                                        <h5 class="regular-txt">Humidity</h5>
+                                        <div class="value-flex">
+                                            <h5 class="humidity-value">85</h5><span>%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="condition-item">
+                                    <span class="material-symbols-outlined">
+                                        light_mode
+                                        </span>
+                                    <div class="condition">
+                                        <h5 class="regular-txt">UV Index</h5>
+                                        <div class="value-flex">
+                                            <h5 class="uv-value">4</h5><span>uv</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="condition-item">
+                                    <span class="material-symbols-outlined">
+                                        visibility
+                                        </span>
+                                    <div class="condition">
+                                        <h5 class="regular-txt">Visibility</h5>
+                                        <div class="value-flex">
+                                            <h5 class="visible-value">5</h5><span>km</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sun-condition">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bottom-right">
+                        <h1 class="top-right-head">Daily Forecast</h1>
+                        <div class="forecast-items-container">
+                            <div class="forecast-items">
+                                <h5 class="forecast-item-date">05 Oct</h5>
+                                <img src="assets/weather/thunderstorm.svg" class="forecast-item-img" alt="">
+                                <h5 class="forecast-item-temp">29°C</h5>
+                            </div>
+                            <div class="forecast-items">
+                                <h5 class="forecast-item-date">05 Oct</h5>
+                                <img src="assets/weather/thunderstorm.svg" class="forecast-item-img" alt="">
+                                <h5 class="forecast-item-temp">29°C</h5>
+                            </div>
+                            <div class="forecast-items">
+                                <h5 class="forecast-item-date">05 Oct</h5>
+                                <img src="assets/weather/thunderstorm.svg" class="forecast-item-img" alt="">
+                                <h5 class="forecast-item-temp">29°C</h5>
+                            </div>
+                            <div class="forecast-items">
+                                <h5 class="forecast-item-date">05 Oct</h5>
+                                <img src="assets/weather/thunderstorm.svg" class="forecast-item-img" alt="">
+                                <h5 class="forecast-item-temp">29°C</h5>
+                            </div>
+                            <div class="forecast-items">
+                                <h5 class="forecast-item-date">05 Oct</h5>
+                                <img src="assets/weather/thunderstorm.svg" class="forecast-item-img" alt="">
+                                <h5 class="forecast-item-temp">29°C</h5>
+                            </div>
+                            <div class="forecast-items">
+                                <h5 class="forecast-item-date">05 Oct</h5>
+                                <img src="assets/weather/thunderstorm.svg" class="forecast-item-img" alt="">
+                                <h5 class="forecast-item-temp">29°C</h5>
+                            </div>
+                            <div class="forecast-items">
+                                <h5 class="forecast-item-date">05 Oct</h5>
+                                <img src="assets/weather/thunderstorm.svg" class="forecast-item-img" alt="">
+                                <h5 class="forecast-item-temp">29°C</h5>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+
+
+            <div class="search-city section-message">
+                <img src="assets/message/search-city.png" alt="">
+                 <div>
+                    <h1>Search City</h1>
+                    <h4>Find out the weather conditions of the city</h4>
+                 </div>
+            </div>
+
+
+            <div class="not-found section-message" style="display: none;">
+                <img src="assets/message/not-found.png" alt="">
+                 <div>
+                    <h1>Search City</h1>
+                    <h4>Find out the weather conditions of the city</h4>
+                 </div>
             </div>
 
         </div>
@@ -58,7 +189,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
         integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="script.js"></script>
+    <script src="animation.js"></script>
+    <script src="script.js" defer></script>
 </body>
 
 </html>
