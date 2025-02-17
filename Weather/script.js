@@ -11,6 +11,7 @@ const conditionTxt =  document.querySelector(".condition-txt")
 const humidityValueTxt =  document.querySelector(".humidity-value")
 const windValueTxt =  document.querySelector(".wind-value")
 const weatherSummaryImg =  document.querySelector(".weather-summary-img")
+const currentDayTxt =  document.querySelector(".current-day")
 const currentDateTxt =  document.querySelector(".current-date")
 
 
@@ -50,11 +51,20 @@ function getWeatherIcon(id){
 }
 
 
+function getCurrentDay(){
+    const currentDate = new Date()
+    
+    const options = {
+        weekday: 'long'
+    }
+
+    return currentDate.toLocaleDateString('en-GB', options)
+}
+
 function getCurrentDate(){
     const currentDate = new Date()
     
     const options = {
-        weekday: 'short',
         day: '2-digit',
         month: 'short'
     }
@@ -85,6 +95,7 @@ async function updateWeatherinfo(city) {
     humidityValueTxt.textContent = humidity
     windValueTxt.textContent = speed
 
+    currentDayTxt.textContent = getCurrentDay()
     currentDateTxt.textContent = getCurrentDate()
     weatherSummaryImg.src = `assets/weather/${getWeatherIcon(id)}`
     
