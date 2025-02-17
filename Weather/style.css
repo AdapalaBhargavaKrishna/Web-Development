@@ -93,7 +93,13 @@ body {
     padding: 8px;
     border-radius: 28px;
     background: #1e1e1e;
+}
 
+.search-btn{
+    background-color: #272727;
+    background: none;
+    display: flex;
+    border: none;
 }
 
 .search input {
