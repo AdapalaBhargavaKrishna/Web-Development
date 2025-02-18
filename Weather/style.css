@@ -56,6 +56,10 @@ body {
     list-style: none;
 }
 
+.side-icons ul li{
+    margin-top: 16px;
+}
+
 .side-icons ul li a {
     text-decoration: none;
     color: white;
@@ -287,6 +291,26 @@ body {
 .sun-condition{
     width: 50%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.sunrise, .sunset{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px;
+    background-color: #272727;
+    border-radius: 30px;
+}
+
+.sunrise{
+    margin-top: 20px;
+}
+
+.sunset{
+    margin: 13px 0px;
 }
 
 .forecast-items-container{
