@@ -1,6 +1,6 @@
 * {
     margin: 0;
-    padding: 5px;
+    padding: 4px;
     box-sizing: border-box;
 }
 
@@ -237,9 +237,9 @@ body {
 }
 
 .weather-condition-container{
-    margin: 1rem;
-    width: 44vw;
-    height: 38vh;
+    margin: 0 1rem 1rem 1rem;
+    width: 43vw;
+    height: 36vh;
     display: flex;
     gap: 1rem;
 }
@@ -254,7 +254,7 @@ body {
 
 .condition-item{
     background-color: #272727;
-    margin: 10px;
+    margin: 5px;
     border-radius: 30px;
     display: flex;
     flex-direction: column;
