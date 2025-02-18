@@ -10,12 +10,15 @@ const tempTxt =  document.querySelector(".temp-text")
 const conditionTxt =  document.querySelector(".condition-txt")
 const humidityValueTxt =  document.querySelector(".humidity-value")
 const windValueTxt =  document.querySelector(".wind-value")
+const visibleValueTxt =  document.querySelector(".visible-value")
+const tempValueTxt =  document.querySelector(".temp-value")
 const weatherSummaryImg =  document.querySelector(".weather-summary-img")
 const currentDayTxt =  document.querySelector(".current-day")
 const currentDateTxt =  document.querySelector(".current-date")
 const feelsLikeTxt =  document.querySelector(".feels-like")
 const sunriseTxt =  document.querySelector(".sunrise-timing")
 const sunsetTxt =  document.querySelector(".sunset-timing")
+
 
 const forecastItemsContainer = document.querySelector(".forecast-items-container")
 
@@ -89,10 +92,11 @@ async function updateWeatherinfo(city) {
 
     const {
         name: country,
-        main: {temp, humidity, feels_like},
+        main: {temp, humidity, feels_like, temp_max},
         sys: {sunrise, sunset},
         weather: [{id, main}],
-        wind: {speed}
+        wind: {speed},
+        visibility: visible
     } = weatherData
 
     countryTxt.textContent = country
@@ -100,6 +104,8 @@ async function updateWeatherinfo(city) {
     conditionTxt.textContent = main
     humidityValueTxt.textContent = humidity
     windValueTxt.textContent = speed
+    visibleValueTxt.textContent = Math.round(visible/1000)
+    tempValueTxt.textContent = Math.round(temp_max)
     feelsLikeTxt.textContent = "Feels Like " + Math.round(feels_like) + '°C'
     sunriseTxt.textContent = new Date(sunrise * 1000).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
     sunsetTxt.textContent = new Date(sunset * 1000).toLocaleTimeString([], {hour: '2-digit',minute: '2-digit'});
