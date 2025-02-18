@@ -13,6 +13,9 @@ const windValueTxt =  document.querySelector(".wind-value")
 const weatherSummaryImg =  document.querySelector(".weather-summary-img")
 const currentDayTxt =  document.querySelector(".current-day")
 const currentDateTxt =  document.querySelector(".current-date")
+const feelsLikeTxt =  document.querySelector(".feels-like")
+
+const forecastItemsContainer = document.querySelector(".forecast-items-container")
 
 
 
@@ -84,7 +87,8 @@ async function updateWeatherinfo(city) {
 
     const {
         name: country,
-        main: {temp, humidity},
+        main: {temp, humidity, feels_like},
+        sys: {sunrise, sunset},
         weather: [{id, main}],
         wind: {speed}
     } = weatherData
@@ -94,26 +98,61 @@ async function updateWeatherinfo(city) {
     conditionTxt.textContent = main
     humidityValueTxt.textContent = humidity
     windValueTxt.textContent = speed
+    feelsLikeTxt.textContent = "Feels Like " + Math.round(feels_like) + '°C'
+    // sunriseTxt.textContent = new Date(sunrise * 1000).toLocaleDateString();
+    // sunsetTxt.textContent = new Date(sunset * 1000).toLocaleDateString();
 
     currentDayTxt.textContent = getCurrentDay()
     currentDateTxt.textContent = getCurrentDate()
     weatherSummaryImg.src = `assets/weather/${getWeatherIcon(id)}`
     
-    
 
-
-
-
-
-
-
-
-
-
-
-
+    await updateForecastInfo(city)
 
     showDisplaySection(weatherInfoSection)
+}
+
+
+async function updateForecastInfo(city) {
+    const forecastsData = await getFetchData('forecast', city)
+    const timeTaken = '12:00:00'
+    const todayDate = new Date().toISOString().split('T')[0]
+
+
+    forecastItemsContainer.innerHTML = ``
+    forecastsData.list.forEach(forecastWeather =>{
+        if (forecastWeather.dt_txt.includes(timeTaken) && !forecastWeather.dt_txt.includes(todayDate)) {
+            updateForecastItems(forecastWeather)
+        }
+    })
+}
+
+
+function updateForecastItems(weatherData) {
+    const {
+        dt_txt : date,
+        weather: [{id}],
+        main: {temp}
+
+    } = weatherData
+
+    const dateTaken = new Date(date)
+    const dateOption = {
+        day: '2-digit',
+        month: 'short'
+    }
+
+    const dateResult = dateTaken.toLocaleDateString('en-US', dateOption)
+
+    const forecastItem = `
+        <div class="forecast-items">
+            <h5 class="forecast-item-date">${dateResult}</h5>
+            <img src="assets/weather/${getWeatherIcon(id)}" class="forecast-item-img" alt="">
+            <h5 class="forecast-item-temp">${Math.round(temp)}°C</h5>
+        </div>
+    `
+
+    forecastItemsContainer.insertAdjacentHTML('beforeend', forecastItem);
 }
 
 
