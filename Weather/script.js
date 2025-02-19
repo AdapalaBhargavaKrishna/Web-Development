@@ -1,3 +1,40 @@
+var tl = gsap.timeline()
+var t1 = gsap.timeline()
+
+gsap.from(".sideani", {
+    x: -80,
+    duration: 0.5,
+    delay: 0.2,
+    opacity: 0,
+    stagger: 0.1
+
+})
+
+gsap.from(".headani", {
+    y: -50,
+    duration: 0.7,
+    delay: 0.2,
+    opacity: 0,
+    stagger: 0.3
+
+})
+
+gsap.from(".top-right", {
+    scale: 1,
+    duration: 0.5,
+    delay: 0.1
+})
+
+gsap.from(".search-city", {
+    scale: 0, // Starts above the screen
+    opacity: 0,
+    duration: 0.5,
+    delay: 0.2,
+    scrub: 1
+})
+
+
+
 const cityInput = document.querySelector(".city-input")
 const searchBtn =  document.querySelector(".search-btn")
 
@@ -120,12 +157,38 @@ async function updateWeatherinfo(city) {
     await updateForecastInfo(city)
 
     showDisplaySection(weatherInfoSection)
+    tl.from(".boxesani", {
+        opacity: 0,
+        scale:0,
+        duration: 0.5,
+        stagger: 0.2,
+        ease: "power3.out"
+    });
+
+    t1.from(".boxesani1", {
+        opacity: 0,
+        scale:0,
+        duration: 0.5,
+        stagger: 0.2,
+        delay: 0.2,
+        ease: "power3.out"
+    });
+
+    tl.from(".boxani", {
+        opacity: 0,
+        y: -30,
+        duration: 0.4,
+        stagger: 0.3
+    });
+
+    t1.from(".boxani1", {
+        opacity: 0,
+        y: -30,
+        duration: 0.4,
+        stagger: 0.2
+    });
 }
 
-// function formatTime(timestamp) {
-//     const date = new Date(timestamp * 1000); // Convert to milliseconds
-//     return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-//     x}
 
 async function updateForecastInfo(city) {
     const forecastsData = await getFetchData('forecast', city)
@@ -159,7 +222,7 @@ function updateForecastItems(weatherData) {
     const dateResult = dateTaken.toLocaleDateString('en-US', dateOption)
 
     const forecastItem = `
-        <div class="forecast-items">
+        <div class="forecast-items boxani1">
             <h5 class="forecast-item-date">${dateResult}</h5>
             <img src="assets/weather/${getWeatherIcon(id)}" class="forecast-item-img" alt="">
             <h5 class="forecast-item-temp">${Math.round(temp)}°C</h5>
@@ -177,5 +240,11 @@ function showDisplaySection(section){
     });
 
     section.style.display = 'flex';
+    gsap.from(".not-found", {
+        y: -300,
+        opacity: 0,
+        duration: 1,
+        ease: "bounce.out"
+    })
 
 }
