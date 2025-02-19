@@ -313,6 +313,11 @@ body {
     margin: 13px 0px;
 }
 
+.sunrise img, .sunset img{
+    width: 100px;
+    height: 100px;
+}
+
 .forecast-items-container{
     display: flex;
     gap: 15px;
