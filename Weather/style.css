@@ -82,6 +82,7 @@ body {
     justify-content: space-between;
     align-items: center;
     margin: -5px;
+    margin-bottom: 1rem;
 }
 
 
@@ -236,6 +237,8 @@ body {
 }
 
 .top-right-head{
+    padding: 10px;
+    margin: 5px;
     margin-left: 10px;
     font-weight: 500;
 }
@@ -320,7 +323,8 @@ body {
 
 .forecast-items-container{
     display: flex;
-    gap: 15px;
+    gap: 1rem;
+    margin-top: 2rem;
     overflow-x: auto;
     padding-bottom: 10px;
 }
