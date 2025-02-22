@@ -1,5 +1,6 @@
 var tl = gsap.timeline()
 var t1 = gsap.timeline()
+var t2 = gsap.timeline()
 
 gsap.from(".sideani", {
     x: -80,
@@ -26,7 +27,7 @@ gsap.from(".top-right", {
 })
 
 gsap.from(".search-city", {
-    scale: 0, // Starts above the screen
+    scale: 0,
     opacity: 0,
     duration: 0.5,
     delay: 0.2,
@@ -164,16 +165,7 @@ async function updateWeatherinfo(city) {
         stagger: 0.2,
         ease: "power3.out"
     });
-
-    t1.from(".boxesani1", {
-        opacity: 0,
-        scale:0,
-        duration: 0.5,
-        stagger: 0.2,
-        delay: 0.2,
-        ease: "power3.out"
-    });
-
+    
     tl.from(".boxani", {
         opacity: 0,
         y: -30,
@@ -181,12 +173,36 @@ async function updateWeatherinfo(city) {
         stagger: 0.3
     });
 
+    t1.from(".boxesani1", {
+        opacity: 0,
+        scale:0,
+        duration: 0.5,
+        stagger: 0.2,
+        ease: "power3.out"
+    });
+
     t1.from(".boxani1", {
         opacity: 0,
         y: -30,
         duration: 0.4,
-        stagger: 0.2
+        stagger: 0.3
     });
+
+    t2.from(".boxesani2", {
+        opacity: 0,
+        scale:0,
+        duration: 0.5,
+        stagger: 0.2,
+        ease: "power3.out"
+    });
+
+    t2.from(".boxani2", {
+        opacity: 0,
+        y: -30,
+        duration: 0.4,
+        stagger: 0.3
+    });
+
 }
 
 
@@ -222,7 +238,7 @@ function updateForecastItems(weatherData) {
     const dateResult = dateTaken.toLocaleDateString('en-US', dateOption)
 
     const forecastItem = `
-        <div class="forecast-items boxani1">
+        <div class="forecast-items boxani2">
             <h5 class="forecast-item-date">${dateResult}</h5>
             <img src="assets/weather/${getWeatherIcon(id)}" class="forecast-item-img" alt="">
             <h5 class="forecast-item-temp">${Math.round(temp)}°C</h5>
