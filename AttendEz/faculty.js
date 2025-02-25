@@ -23,10 +23,6 @@ function logout() {
     window.location.href = "index.html";
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    BatchDropDown();
-});
-
 let rollNumbers = [];
 let attendance = {};
 
