@@ -208,3 +208,62 @@ th, td {
 th {
     background-color: #ddd;
 }
+
+.fee-grids {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.fee-grids th, .fee-grids td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.fee-grids th {
+    background-color: #333;
+    color: white;
+}
+
+.paid {
+    color: green;
+    font-weight: bold;
+}
+
+.not-paid {
+    color: red;
+    font-weight: bold;
+}
+
+.edit-btn {
+    padding: 5px 10px;
+    background: blue;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.edit-btn:hover {
+    background: darkblue;
+}
+
+.price-input {
+    width: 60px;
+    text-align: center;
+}
+
+.due-amount input{
+    border: none;
+    background: transparent;
+    text-align: center;
+}
+
+.due-edit{
+    background-color: green;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 15px;
+}
