@@ -87,6 +87,7 @@ nav{
     background-color: white;
     border-radius: 10px;
     overflow-y: auto;
+    scrollbar-width: none;
 }
 
 .maincontent > h2{
