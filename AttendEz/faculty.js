@@ -1,8 +1,17 @@
+const TotStudents = ["71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90",
+    "91", "92", "93", "94", "95", "96", "97", "98", "99", "100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110",
+    "111", "112", "113", "114", "115", "116", "117", "118", "119", "120", "121", "122", "123", "124", "125", "126", "127", "128", "129", "130",
+    "131", "132", "133", "134", "135", "136", "137", "308", "309", "310", "311", "312", "313", "314"];
+
+
 function showSection(section) {
     fetch(`sections/${section}.html`)
         .then(response => response.text())
         .then(data => {
             document.getElementById("mainbar").innerHTML = data;
+            if (section === "Fees") {
+                populateFeeTable();
+            }
         })
         .catch(error => {
             console.error("Error loading section:", error);
@@ -33,10 +42,7 @@ function selectType(type) {
 
     if (type === "class") {
         batchSelect.value = "";
-        rollNumbers = ["71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90",
-            "91", "92", "93", "94", "95", "96", "97", "98", "99", "100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110",
-            "111", "112", "113", "114", "115", "116", "117", "118", "119", "120", "121", "122", "123", "124", "125", "126", "127", "128", "129", "130",
-            "131", "132", "133", "134", "135", "136", "137", "308", "309", "310", "311", "312", "313", "314"];
+        rollNumbers = TotStudents;
     } else if (type === "batch") {
         const selectedBatch = document.getElementById('batch-select').value;
         if (selectedBatch === "Batch-1") {
@@ -177,3 +183,77 @@ gsap.from("#heading span", {
     delay: 0.2,
     stagger: 0.1
 })
+
+
+function populateFeeTable() {
+    let feeTable = document.getElementById("feeTable");
+    feeTable.innerHTML = ""; // Clear previous entries
+
+    TotStudents.forEach(roll => {
+        let row = document.createElement("tr");
+
+        // Roll No Column
+        let rollCell = document.createElement("td");
+        rollCell.textContent = roll;
+        row.appendChild(rollCell);
+
+        // Status Column
+        let statusCell = document.createElement("td");
+        statusCell.className = "fee-status";
+        statusCell.textContent = "Unpaid";
+        statusCell.style.color = "red";
+        row.appendChild(statusCell);
+
+        // Due Amount Column
+        let dueAmountCell = document.createElement("td");
+        let dueInput = document.createElement("input");
+        dueAmountCell.className = "due-amount";
+        dueInput.type = "number";
+        dueInput.placeholder = "Due Amount";
+        dueInput.disabled = true;
+        dueInput.addEventListener("input", function () {
+            updateFeeStatus(dueInput, statusCell);
+        });
+        dueAmountCell.appendChild(dueInput);
+        row.appendChild(dueAmountCell);
+
+        // Action Column
+        let actionCell = document.createElement("td");
+
+        let editButton = document.createElement("button");
+        editButton.textContent = "Edit";
+        editButton.className = "due-edit";
+        editButton.onclick = function () {
+            dueInput.disabled = false; // Enable input field
+            dueInput.focus(); // Focus input for editing
+            editButton.style.display = "none"; // Hide Edit button
+            saveButton.style.display = "inline-block"; // Show Save button
+        };
+
+        let saveButton = document.createElement("button");
+        saveButton.textContent = "Save";
+        saveButton.className = "due-edit";
+        saveButton.style.display = "none"; // Initially hidden
+        saveButton.onclick = function () {
+            dueInput.disabled = true; // Disable input field
+            saveButton.style.display = "none"; // Hide Save button
+            editButton.style.display = "inline-block"; // Show Edit button
+        };
+
+        actionCell.appendChild(editButton);
+        actionCell.appendChild(saveButton);
+        row.appendChild(actionCell);
+
+        feeTable.appendChild(row);
+    });
+}
+
+function updateFeeStatus(dueInput, statusCell) {
+    if (dueInput.value == 0 || dueInput.value === "") {
+        statusCell.textContent = "Paid";
+        statusCell.style.color = "green";
+    } else {
+        statusCell.textContent = "Unpaid";
+        statusCell.style.color = "red";
+    }
+}
