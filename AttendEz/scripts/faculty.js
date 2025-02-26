@@ -3,12 +3,20 @@ const TotStudents = ["71", "72", "73", "74", "75", "76", "77", "78", "79", "80",
     "111", "112", "113", "114", "115", "116", "117", "118", "119", "120", "121", "122", "123", "124", "125", "126", "127", "128", "129", "130",
     "131", "132", "133", "134", "135", "136", "137", "308", "309", "310", "311", "312", "313", "314"];
 
+const subjects = ["PQT","DCCST","DBMS","DAA","MAD","DAV","FOC","EEA","ES","DBMS LAB","DAA LAB","Mini Project"];
 
 function showSection(section) {
     fetch(`sections/${section}.html`)
-        .then(response => response.text())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.text();
+        })
         .then(data => {
             document.getElementById("mainbar").innerHTML = data;
+
+            // Call additional functions for specific sections
             if (section === "Fees") {
                 populateFeeTable();
             }
@@ -18,6 +26,7 @@ function showSection(section) {
             document.getElementById("mainbar").innerHTML = `<h2>Error Loading ${section}</h2>`;
         });
 }
+
 
 function logout() {
     window.location.href = "index.html";
@@ -253,3 +262,27 @@ function updateFeeStatus(dueInput, statusCell) {
         statusCell.style.color = "red";
     }
 }
+
+const subjectSelect = document.getElementById("subject-select");
+
+subjects.forEach(subject => {
+    let option = document.createElement("option");
+    option.value = subject.toLowerCase(); // Set value in lowercase
+    option.textContent = subject; // Display name
+    subjectSelect.appendChild(option);
+});
+
+const overallMarksBtn = document.querySelector(".marks-buttons button");
+const displayMarks = document.querySelector(".display-marks");
+const searchRollNosDiv = document.querySelector(".search-rollnos");
+
+overallMarksBtn.addEventListener("click", function () {
+    searchRollNosDiv.style.display = "flex";  // Show search section
+    displayOverallMarks();
+});
+
+subjectSelect.addEventListener("change", function () {
+    if (subjectSelect.value !== "") {
+        searchRollNosDiv.style.display = "flex";  // Show search section
+    }
+});
