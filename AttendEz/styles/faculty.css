@@ -196,8 +196,6 @@ nav{
     cursor: pointer;
 }
 
-/* <----------Fees----------> */
-
 table {
     width: 90%;
     margin: auto;
@@ -211,6 +209,8 @@ th, td {
 th {
     background-color: #ddd;
 }
+
+/* <----------Fees----------> */
 
 .fee-grids {
     width: 100%;
@@ -319,4 +319,11 @@ th {
     width: 8rem;
     border-radius: 7px;
     border: 1px solid #ddd;
+}
+
+.marks{
+    width: 100%;
+    margin: 1rem;
+    overflow: auto;
+    scrollbar-width: none;
 }

@@ -20,6 +20,9 @@ function showSection(section) {
             if (section === "Fees") {
                 populateFeeTable();
             }
+            if (section === "records") {
+                populateRecords();
+            }
         })
         .catch(error => {
             console.error("Error loading section:", error);
@@ -189,6 +192,7 @@ gsap.from("#heading span", {
     stagger: 0.1
 })
 
+// <----------Fees---------->
 
 function populateFeeTable() {
     let feeTable = document.getElementById("feeTable");
@@ -263,26 +267,34 @@ function updateFeeStatus(dueInput, statusCell) {
     }
 }
 
-const subjectSelect = document.getElementById("subject-select");
 
-subjects.forEach(subject => {
-    let option = document.createElement("option");
-    option.value = subject.toLowerCase(); // Set value in lowercase
-    option.textContent = subject; // Display name
-    subjectSelect.appendChild(option);
-});
+// <-----------Records---------->
 
-const overallMarksBtn = document.querySelector(".marks-buttons button");
-const displayMarks = document.querySelector(".display-marks");
-const searchRollNosDiv = document.querySelector(".search-rollnos");
 
-overallMarksBtn.addEventListener("click", function () {
-    searchRollNosDiv.style.display = "flex";  // Show search section
-    displayOverallMarks();
-});
+// function populateRecords() {
 
-subjectSelect.addEventListener("change", function () {
-    if (subjectSelect.value !== "") {
-        searchRollNosDiv.style.display = "flex";  // Show search section
-    }
-});
+    
+    const subjectSelect = document.getElementById("subject-select");
+    
+    subjects.forEach(subject => {
+        let option = document.createElement("option");
+        option.textContent = subject;
+        subjectSelect.appendChild(option);
+    });
+    
+
+    const overallMarksBtn = document.querySelector(".marks-buttons button");
+    const searchRollNosDiv = document.querySelector(".search-rollnos");
+    
+    overallMarksBtn.addEventListener("click", function () {
+        searchRollNosDiv.style.display = "flex";
+    });
+    
+    subjectSelect.addEventListener("change", function () {
+        if (subjectSelect.value !== "") {
+            searchRollNosDiv.style.display = "flex";  
+        }
+    });
+
+
+// }
