@@ -20,9 +20,6 @@ function showSection(section) {
             if (section === "Fees") {
                 populateFeeTable();
             }
-            if (section === "records") {
-                populateRecords();
-            }
         })
         .catch(error => {
             console.error("Error loading section:", error);
@@ -288,6 +285,7 @@ function updateFeeStatus(dueInput, statusCell) {
     
     overallMarksBtn.addEventListener("click", function () {
         searchRollNosDiv.style.display = "flex";
+        displayoverallMarks();
     });
     
     subjectSelect.addEventListener("change", function () {
