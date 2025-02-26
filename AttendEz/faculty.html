@@ -24,25 +24,37 @@
             <div class="sidebar">
                 <button class="ani2" onclick="showSection('attendance')">Attendance</button>
                 <button class="ani2" onclick="showSection('timetable')">Timetable</button>
-                <button class="ani2" onclick="showSection('students')">Student Records</button>
+                <button class="ani2" onclick="showSection('records')">Student Records</button>
                 <button class="ani2" onclick="showSection('assignments')">Assignments</button>
                 <button class="ani2" onclick="showSection('announcements')">Announcements</button>
                 <button class="ani2" onclick="showSection('notes')">Class Notes</button>
                 <button class="ani2" onclick="showSection('Fees')">Fees</button>
             </div>
             <div class="mainbar" id="mainbar">
-                <div class="class-notes-section">
-                    <h1>Class Notes</h1>
-                    <ul id="materialsList"></ul>
+                <div class="Student-Records">
+                    <h1>Student Records</h1>
+                    <div class="marks-buttons">
+                        <Button>Overall Marks</Button>
+                        <select id="subject-select">
+                            <option value="">Subject-Wise Marks</option>
+                            
+                        </select>
+                    </div>
+                    <div class="display-marks">
+                        <div style="display: none;" class="search-rollnos">
+                            <button>Everyone</button>
+                            <input placeholder="Search Student  " class="search-rollno"></input>
+                        </div>
+                    </div>
                 </div>
-                
-
             </div>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="faculty.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+        integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="faculty.js"></script>
 
 </body>
 
