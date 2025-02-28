@@ -327,3 +327,19 @@ th {
     overflow: auto;
     scrollbar-width: none;
 }
+
+
+@media (max-width: 600px) {
+    .head{
+        margin: 0px;
+    }
+    .nav-button{
+        margin: 0px;
+        display: flex;
+        gap: 1px;
+        align-items: center;
+    }
+    .sidebar{
+        display: none;
+    }
+}
