@@ -57,8 +57,8 @@ nav{
 
 .sidebar {
     width: 20%;
-    min-width: 20%;
-    height: 100%; /* Takes full height of the container */
+    min-width: 80%;
+    height: 100%;
     background-color: #333;
     border-radius: 10px;
     display: flex;
@@ -66,6 +66,7 @@ nav{
     gap: 5px;
     align-items: center;
     overflow-y: auto;
+    transition: width 0.3s ease;
 
 }
 
@@ -88,6 +89,7 @@ nav{
     border-radius: 10px;
     overflow-y: auto;
     scrollbar-width: none;
+    transition: margin-left 0.3s ease;
 }
 
 .maincontent > h2{
@@ -328,18 +330,36 @@ th {
     scrollbar-width: none;
 }
 
-
 @media (max-width: 600px) {
-    .head{
+    .head {
         margin: 0px;
     }
-    .nav-button{
+    .nav-button {
         margin: 0px;
         display: flex;
         gap: 1px;
         align-items: center;
     }
-    .sidebar{
+    .sidebar {
+        display: none;
+        /* width: 80%; */
+    }
+
+    #logo {
         display: none;
     }
+
+    #menu-icon {
+        display: flex !important;
+        margin-left: 10px;
+    }
+}
+
+.sidebar.active {
+    display: flex; /* Show sidebar */
+}
+
+.mainbar.hidden {
+    opacity: 0; /* Hide mainbar */
+    pointer-events: none; /* Disable interactions */
 }

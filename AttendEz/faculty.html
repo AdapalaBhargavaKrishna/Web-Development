@@ -12,7 +12,8 @@
     <div class="main">
         <nav>
             <div class="head">
-                <img class="ani" src="assets/college.svg" alt="">
+                <img class="ani" id="logo" src="assets/college.svg" alt="">
+                <img class="ani" id="menu-icon" src="assets/menu.svg" alt="" onclick="toggleSidebar()" style="display: none;">
                 <h1 id="heading" class="ani">Faculty Dashboard</h1>
             </div>
             <div class="nav-button">
@@ -21,7 +22,7 @@
             </div>
         </nav>
         <div class="container">
-            <div class="sidebar">
+            <div class="sidebar" id="sidebar">
                 <button class="ani2" onclick="showSection('attendance')">Attendance</button>
                 <button class="ani2" onclick="showSection('timetable')">Timetable</button>
                 <button class="ani2" onclick="showSection('records')">Student Records</button>
