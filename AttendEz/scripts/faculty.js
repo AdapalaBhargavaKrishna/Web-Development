@@ -296,3 +296,32 @@ function updateFeeStatus(dueInput, statusCell) {
 
 
 // }
+
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const mainbar = document.getElementById('mainbar');
+    const isVisible = sidebar.classList.contains('active');
+
+    if (isVisible) {
+        sidebar.classList.remove('active');
+        mainbar.classList.remove('hidden'); // Show mainbar
+    } else {
+        sidebar.classList.add('active');
+        mainbar.classList.add('hidden'); // Hide mainbar
+    }
+}
+
+function handleSidebarButtonClick() {
+    const sidebar = document.getElementById('sidebar');
+    const mainbar = document.getElementById('mainbar');
+
+    // Hide the sidebar and show the mainbar
+    sidebar.classList.remove('active');
+    mainbar.classList.remove('hidden'); // Show
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.sidebar button').forEach(button => {
+        button.addEventListener('click', handleSidebarButtonClick);
+    });
+});
