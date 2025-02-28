@@ -57,7 +57,7 @@ nav{
 
 .sidebar {
     width: 20%;
-    min-width: 80%;
+    max-width: 80%;
     height: 100%;
     background-color: #333;
     border-radius: 10px;
@@ -342,7 +342,7 @@ th {
     }
     .sidebar {
         display: none;
-        /* width: 80%; */
+        width: 800%;
     }
 
     #logo {
