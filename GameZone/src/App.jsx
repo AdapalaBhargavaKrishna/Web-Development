@@ -1,10 +1,12 @@
-import { useState } from 'react'
-import './App.css'
+import React from 'react'
+import Hero from './components/Hero.jsx'
 
-function App() {
+const App = () => {
   return (
     <>
-      
+      <main className='relative min-h-screen w-screen overflow-x-hidden'>
+        <Hero/>
+      </main>
     </>
   )
 }
