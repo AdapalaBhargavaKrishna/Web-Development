@@ -1,18 +1,45 @@
-import React from 'react'
+import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Navbar = () => {
-  return (
-    <div id="navbar" className='flex intems-center justify-between m-2 p-5 bg-blue-200 rounded-xl'>
-        <div id="head">
-            <h1 className="bold text-xl">Recipe Mate</h1>
-        </div>
-        <div id="themes" className=" flex justify-around items-center gap-5">
-                <a href="#">Home</a>
-                <a href="#">Search</a>
-                <button className=''>Dark mode</button>
-        </div>
-    </div>
-  )
-}
+  const navbarRef = useRef(null);
 
-export default Navbar
+  useEffect(() => {
+    gsap.to(navbarRef.current, {
+      y: -100, // Move navbar up to hide
+    //   ease: "power2.out",
+      duration: 0.1,
+      scrollTrigger: {
+        trigger: document.body,
+        start: "top top",
+        end: "bottom bottom",
+        toggleActions: "play none reverse none",
+        scrub: true,
+      },
+      
+    });
+  }, []);
+
+  return (
+    <div
+      ref={navbarRef}
+      id="navbar"
+      className="fixed text-white top-0 flex items-center justify-between mt-2 p-5 bg-transparent rounded-xl w-full z-10 transition-all duration-300"
+    >
+      <div id="head">
+        <h1 className="font-bold text-2xl">Recipe Mate</h1>
+      </div>
+
+      <div id="themes" className="flex justify-around items-center gap-5 text-lg">
+        <a href="#" className="hover:underline">Home</a>
+        <a href="#" className="hover:underline">Search</a>
+        <button className="px-4 py-2 text-white rounded-lg hover:bg-gray-700 transition">Dark mode</button>
+      </div>
+    </div>
+  );
+};
+
+export default Navbar;
