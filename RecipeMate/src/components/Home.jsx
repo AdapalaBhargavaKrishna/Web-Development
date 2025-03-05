@@ -1,9 +1,26 @@
-import React from 'react';
+import React, {useRef, useEffect} from "react";
+import gsap from "gsap";
 
 const Home = () => {
+
+  const titleRef = useRef(null);
+
+  useEffect(() => {
+    gsap.fromTo(
+      titleRef.current,
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1.5,
+        ease: "power3.out",
+      }
+    );
+  }, []);
+
   return (
     <div id="Home" className="relative w-full h-screen">
-      {/* Background Video */}
+
       <div id="video" className="absolute inset-0 w-full h-full">
         <video
           src="/videos/cooking.mp4"
@@ -14,23 +31,20 @@ const Home = () => {
         />
       </div>
 
-      {/* Title and Content */}
       <div
+        ref = {titleRef}
         id="Title"
         className="absolute inset-0 flex flex-col items-center text-white text-center 
                    justify-center gap-6 px-4"
       >
-        {/* Title */}
         <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-9xl font-extrabold">
           RecipeMate
         </h1>
 
-        {/* Tagline */}
         <p className="text-lg sm:text-2xl md:text-3xl font-bold">
           Discover, Cook, and Enjoy – Your Ultimate Recipe Companion!
         </p>
 
-        {/* Button */}
         <button className="px-6 py-3 sm:px-8 sm:py-4 text-lg sm:text-xl font-semibold 
                           bg-red-500 rounded-lg shadow-lg hover:bg-red-600 transition-all">
           Find Recipes 🍳
