@@ -35,7 +35,7 @@ const Navbar = () => {
 
       <div id="themes" className="flex justify-around items-center gap-5 text-lg">
         <a href="#" className="hover:underline">Home</a>
-        <a href="#" className="hover:underline">Search</a>
+        <a href="#search" className="hover:underline">Search</a>
         <button className="px-4 py-2 text-white rounded-lg hover:bg-gray-700 transition">Dark mode</button>
       </div>
     </div>
