@@ -7,7 +7,7 @@ import Search from './components/Search'
 function App() {
 
   return (
-    <div className='bg-blue-50'>
+    <div>
     <Navbar/>
     <Home/>
     <Search/>

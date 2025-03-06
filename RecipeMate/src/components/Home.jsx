@@ -18,6 +18,11 @@ const Home = () => {
     );
   }, []);
 
+  const handleScrollToSearch = () => {
+    document.getElementById("search").scrollIntoView({ behavior: "smooth" });
+  };
+  
+
   return (
     <div id="Home" className="relative w-full h-screen">
 
@@ -45,14 +50,13 @@ const Home = () => {
           Discover, Cook, and Enjoy – Your Ultimate Recipe Companion!
         </p>
 
-        <button className="px-6 py-3 sm:px-8 sm:py-4 text-lg sm:text-xl font-semibold 
+        <button onClick={handleScrollToSearch} className="px-6 py-3 sm:px-8 sm:py-4 text-lg sm:text-xl font-semibold 
                           bg-red-500 rounded-lg shadow-lg hover:bg-red-600 transition-all">
           Find Recipes 🍳
         </button>
       </div>
 
-      {/* Down Arrow (for scrolling hint) */}
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+      <div onClick={handleScrollToSearch} className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce cursor-pointer">
         <span className="text-white text-2xl sm:text-3xl">↓</span>
       </div>
     </div>
