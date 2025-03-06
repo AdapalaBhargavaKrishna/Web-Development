@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import RecipeSlider from './RecipeSlider'
+import RecipeModal from './RecipeModal'
 import gsap from "gsap";
 
 const Search = () => {
 
   const [searchResults, setSearchResults] = useState([]);
+  const [selectMeal, setSelectMeal] = useState(null);
   const searchRef = useRef(null);
   const sliderRef = useRef(null);
   
@@ -14,6 +16,12 @@ const Search = () => {
 
     setSearchResults(data.meals || []);
   };
+
+  const fetchMealDetails = async (id) => {
+    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
+    const data = await response.json();
+    setSelectMeal(data.meals[0]);
+  }
 
   const handleSearch = () => {
     const query = searchRef.current.value.trim().replace(/\s/g, "_");
@@ -33,7 +41,7 @@ const Search = () => {
     <div id="search" className='w-full h-screen flex items-center flex-col bg-blue-50'>
       <h1 className='mt-12 font-extrabold text-7xl'>Discover the PERFECT RECIPE</h1>
       <div id="slider" ref={sliderRef} className='w-full h-screen p-10'>
-        <RecipeSlider />
+      <RecipeSlider onSelectMeal={fetchMealDetails} />
       </div>
       <div id="searchbar" className='flex gap-3 items-center mb-28 mt-5'>
         <h5>Enter Main Ingredient</h5>
@@ -56,13 +64,17 @@ const Search = () => {
       {searchResults.length > 0 && (
         <div className="grid grid-cols-3 gap-6 p-8 overflow-y-auto w-4/5 overflow-hidden h-[75vh] mb-1 ">
           {searchResults.map((meal) => (
-            <div key={meal.idMeal} className="bg-white rounded-lg shadow-md p-4 text-center hover:shadow-lg hover:scale-105 transition-all duration-300">
+            <div key={meal.idMeal} className="bg-white rounded-lg shadow-md p-4 text-center hover:shadow-lg hover:scale-105 transition-all duration-300"
+              onClick={() => fetchMealDetails(meal.idMeal)}
+            >
               <img src={meal.strMealThumb} alt={meal.strMeal} className="w-full h-60 object-cover rounded-md" />
               <h3 className="mt-4 text-lg font-semibold">{meal.strMeal}</h3>
             </div>
           ))}
         </div>
       )}
+
+      {selectMeal && <RecipeModal meal = {selectMeal} onClose={() => setSelectMeal(null)} />}
     </div>
   );
 };
