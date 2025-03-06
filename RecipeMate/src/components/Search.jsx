@@ -39,12 +39,12 @@ const Search = () => {
 
   return (
     <div id="search" className='w-full h-screen flex items-center flex-col bg-blue-50'>
-      <h1 className='mt-12 font-extrabold text-7xl'>Discover the PERFECT RECIPE</h1>
-      <div id="slider" ref={sliderRef} className='w-full h-screen p-10'>
+      <h1 className='mt-12 font-extrabold text-2xl md:text-7xl'>Discover the PERFECT RECIPE</h1>
+      <div id="slider" ref={sliderRef} className='w-full h-3/5 md:h-screen p-5 md:p-10'>
       <RecipeSlider onSelectMeal={fetchMealDetails} />
       </div>
-      <div id="searchbar" className='flex gap-3 items-center mb-28 mt-5'>
-        <h5>Enter Main Ingredient</h5>
+      <div id="searchbar" className='flex flex-col md:flex-row gap-3 items-center mb-28 mt-5'>
+        <h4 className='font-semibold'>Enter Main Ingredient</h4>
         <div id="searchbtn" className='relative flex items-center'>
           <input
             ref={searchRef}
@@ -62,7 +62,7 @@ const Search = () => {
         </div>
       </div>
       {searchResults.length > 0 && (
-        <div className="grid grid-cols-3 gap-6 p-8 overflow-y-auto w-4/5 overflow-hidden h-[75vh] mb-1 ">
+        <div className="grid md:grid-cols-3 grid-cols-1 gap-6 p-8 overflow-y-auto hide-scrollbar w-4/5 h-[75vh] mb-1 ">
           {searchResults.map((meal) => (
             <div key={meal.idMeal} className="bg-white rounded-lg shadow-md p-4 text-center hover:shadow-lg hover:scale-105 transition-all duration-300"
               onClick={() => fetchMealDetails(meal.idMeal)}
