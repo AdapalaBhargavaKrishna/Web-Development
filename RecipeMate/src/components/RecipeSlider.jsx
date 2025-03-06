@@ -4,7 +4,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Draggable } from "gsap/all";
 
-const RecipeSlider = () => {
+const RecipeSlider = ({onSelectMeal}) => {
 
   const [recipes, setRecipes] = useState([]);
 
@@ -49,7 +49,9 @@ const RecipeSlider = () => {
       <Slider {...settings}>
         {recipes.map((recipe) => (
           <div key={recipe.id} className="px-4">
-            <div className="bg-white rounded-lg shadow-md p-4 text-center h-full">
+            <div className="bg-white rounded-lg shadow-md p-4 text-center h-full"
+              onClick={() => onSelectMeal(recipe.id)}
+            >
               <img 
               src={recipe.img} 
               alt={recipe.title} 
