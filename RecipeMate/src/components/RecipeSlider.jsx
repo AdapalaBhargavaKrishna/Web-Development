@@ -49,7 +49,7 @@ const RecipeSlider = ({onSelectMeal}) => {
       <Slider {...settings}>
         {recipes.map((recipe) => (
           <div key={recipe.id} className="px-4">
-            <div className="bg-white rounded-lg shadow-md p-4 text-center h-full"
+            <div className="bg-white mt-4 rounded-lg shadow-md p-4 text-center h-full"
               onClick={() => onSelectMeal(recipe.id)}
             >
               <img 

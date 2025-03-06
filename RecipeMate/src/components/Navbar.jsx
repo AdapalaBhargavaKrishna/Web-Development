@@ -9,8 +9,8 @@ const Navbar = () => {
 
   useEffect(() => {
     gsap.to(navbarRef.current, {
-      y: -100, // Move navbar up to hide
-    //   ease: "power2.out",
+      y: -100,
+      ease: "power2.out",
       duration: 0.1,
       scrollTrigger: {
         trigger: document.body,
@@ -36,7 +36,7 @@ const Navbar = () => {
       <div id="themes" className="flex justify-around items-center gap-5 text-lg">
         <a href="#" className="hover:underline">Home</a>
         <a href="#search" className="hover:underline">Search</a>
-        <button className="px-4 py-2 text-white rounded-lg hover:bg-gray-700 transition">Dark mode</button>
+        <button className="px-4 py-2 text-white rounded-lg hover:bg-gray-700 transition">Download App</button>
       </div>
     </div>
   );
