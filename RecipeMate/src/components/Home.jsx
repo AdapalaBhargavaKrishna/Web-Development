@@ -24,7 +24,7 @@ const Home = () => {
   
 
   return (
-    <div id="Home" className="relative w-full h-screen">
+    <div id="Home" className="relative md:w-full w-[101.5vw] min-h-[101vh] md:h-screen">
 
       <div id="video" className="absolute inset-0 w-full h-full">
         <video
