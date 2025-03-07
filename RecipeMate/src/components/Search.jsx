@@ -2,8 +2,33 @@ import React, { useState, useEffect, useRef } from 'react'
 import RecipeSlider from './RecipeSlider'
 import RecipeModal from './RecipeModal'
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Search = () => {
+
+  useEffect(() => {
+    
+    gsap.utils.toArray('.fade-in').forEach((element) => {
+      gsap.fromTo(element,
+        {opacity: 0, y: 100},
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: element,
+            start: 'top 95%',
+            end: 'bottom 20%',
+          },
+        }  
+      )
+    })
+
+  }, [])
+  
 
   const [searchResults, setSearchResults] = useState([]);
   const [selectMeal, setSelectMeal] = useState(null);
@@ -39,11 +64,11 @@ const Search = () => {
 
   return (
     <div id="search" className='w-full h-screen flex items-center flex-col bg-blue-50'>
-      <h1 className='mt-12 font-extrabold text-2xl md:text-7xl'>Discover the PERFECT RECIPE</h1>
-      <div id="slider" ref={sliderRef} className='w-full h-3/5 md:h-screen p-5 md:p-10'>
+      <h1 className='mt-12 font-extrabold text-2xl md:text-7xl fade-in'>Discover the PERFECT RECIPE</h1>
+      <div id="slider" ref={sliderRef} className='w-full h-3/5 md:h-screen p-5 md:p-10 fade-in'>
       <RecipeSlider onSelectMeal={fetchMealDetails} />
       </div>
-      <div id="searchbar" className='flex flex-col md:flex-row gap-3 items-center mb-28 mt-5'>
+      <div id="searchbar" className='flex flex-col md:flex-row gap-3 items-center mb-28 mt-5 fade-in'>
         <h4 className='font-semibold'>Enter Main Ingredient</h4>
         <div id="searchbtn" className='relative flex items-center'>
           <input

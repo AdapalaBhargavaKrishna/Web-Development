@@ -7,7 +7,7 @@ import Search from './components/Search'
 function App() {
 
   return (
-    <div>
+    <div className='hide-scrollbar'>
     <Navbar/>
     <Home/>
     <Search/>
