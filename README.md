@@ -1,12 +1,32 @@
-# React + Vite
+# 🌐 Web Development Projects
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to my **Web Development** repository! 🚀 This repository contains various frontend and full-stack projects that I have built while learning and exploring **HTML, CSS, JavaScript, React.js, and more**. Each project is structured to enhance my skills and apply concepts practically.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📂 **Projects in This Repository**
+| Project Name      | Tech Stack Used  | Description |
+|------------------|----------------|-------------|
+| **Recipe Mate** | React.js, Tailwind CSS | A recipe management app for saving and searching recipes. |
+| **Task Focus** | React.js, Tailwind CSS | A to-do list app to boost productivity. |
+| **AttendZ** | HTML, CSS, JavaScript | A college management system with attendance tracking. |
+| **Class Performance Dashboard** | HTML, CSS, JavaScript | A dashboard for visualizing student performance. |
 
-## Expanding the ESLint configuration
+> **More projects will be added soon!** 🎯
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🚀 **Tech Stack**
+- **Frontend:** HTML, CSS, JavaScript, React.js, Tailwind CSS
+- **Backend:** (Planned) Node.js, Express.js
+- **Database:** (Planned) MongoDB, Firebase
+- **Version Control:** Git, GitHub
+- **Tools:** VS Code, Postman, Figma (for UI design)
+
+---
+
+## 📜 **How to Use This Repository**
+### ✅ Clone the Repository
+```sh
+git clone https://github.com/Bhargava-webdev/web-development.git
+cd web-development
