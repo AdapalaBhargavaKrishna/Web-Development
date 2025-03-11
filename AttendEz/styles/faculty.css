@@ -56,7 +56,7 @@ nav{
 }
 
 .sidebar {
-    width: 20%;
+    min-width: 20%;
     max-width: 80%;
     height: 100%;
     background-color: #333;
