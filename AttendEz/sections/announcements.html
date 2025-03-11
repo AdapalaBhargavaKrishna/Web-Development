@@ -1,1 +1,14 @@
 <h2>🔔 Announcements</h2>
+            
+                <h3>Select Section:</h3>
+                <select id="sectionSelect" onchange="togglePostButton()">
+                    <option value="">--Select Section--</option>
+                    <option value="IT1">IT1</option>
+                    <option value="IT2">IT2</option>
+                    <option value="IT3">IT3</option>
+                </select>
+            
+                <textarea id="announcementInput" placeholder="Enter your announcement..." disabled></textarea>
+                <button id="postButton" onclick="addAnnouncement()" disabled>Post Announcement</button>
+            
+                <div id="announcementsList"></div>
