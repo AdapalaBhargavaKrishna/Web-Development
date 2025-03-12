@@ -363,3 +363,49 @@ th {
     opacity: 0; /* Hide mainbar */
     pointer-events: none; /* Disable interactions */
 }
+
+#sectionSelect, #announcementInput, #postButton {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#announcementInput{
+    width: 98%
+}
+
+#postButton {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#postButton:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.announcement-item {
+    background: #f9f9f9;
+    padding: 10px;
+    margin: 10px 0;
+    border-left: 5px solid #4CAF50;
+    position: relative;
+}
+
+.announcement-item small {
+    display: block;
+    color: gray;
+}
+
+.announcement-item button {
+    background: red;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    padding: 5px;
+}
