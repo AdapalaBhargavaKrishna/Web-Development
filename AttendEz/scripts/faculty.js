@@ -325,3 +325,81 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', handleSidebarButtonClick);
     });
 });
+
+document.addEventListener("DOMContentLoaded", loadAnnouncements);
+
+function togglePostButton() {
+    let section = document.getElementById("sectionSelect").value;
+    let inputField = document.getElementById("announcementInput");
+    let postButton = document.getElementById("postButton");
+
+    if (section !== "") {
+        inputField.disabled = false;
+        postButton.disabled = false;
+    } else {
+        inputField.disabled = true;
+        postButton.disabled = true;
+    }
+
+    loadAnnouncements();
+}
+
+function addAnnouncement() {
+    let input = document.getElementById("announcementInput").value.trim();
+    let section = document.getElementById("sectionSelect").value;
+
+    if (input === "") {
+        alert("Please enter an announcement!");
+        return;
+    }
+
+    if (section === "") {
+        alert("Please select a section first!");
+        return;
+    }
+
+    let announcements = JSON.parse(localStorage.getItem(`announcements_${section}`)) || [];
+
+    let newAnnouncement = {
+        text: input,
+        time: new Date().toLocaleString()
+    };
+    announcements.unshift(newAnnouncement);
+
+    localStorage.setItem(`announcements_${section}`, JSON.stringify(announcements));
+    document.getElementById("announcementInput").value = "";
+
+    loadAnnouncements();
+}
+
+function loadAnnouncements() {
+    let section = document.getElementById("sectionSelect").value;
+    let announcementList = document.getElementById("announcementsList");
+
+    announcementList.innerHTML = ""; 
+
+    if (section === "") return;
+
+    let announcements = JSON.parse(localStorage.getItem(`announcements_${section}`)) || [];
+
+    announcements.forEach((announcement, index) => {
+        let announcementDiv = document.createElement("div");
+        announcementDiv.classList.add("announcement-item");
+        announcementDiv.innerHTML = `
+            <p>${announcement.text}</p>
+            <small>${announcement.time} | Section: ${section}</small>
+            <button onclick="deleteAnnouncement(${index})">X</button>
+        `;
+        announcementList.appendChild(announcementDiv);
+    });
+}
+
+function deleteAnnouncement(index) {
+    let section = document.getElementById("sectionSelect").value;
+    let announcements = JSON.parse(localStorage.getItem(`announcements_${section}`)) || [];
+    
+    announcements.splice(index, 1);
+    localStorage.setItem(`announcements_${section}`, JSON.stringify(announcements));
+    
+    loadAnnouncements();
+}
