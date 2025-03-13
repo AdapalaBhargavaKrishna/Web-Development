@@ -409,3 +409,146 @@ th {
     top: 10px;
     padding: 5px;
 }
+
+#assignments-section {
+    margin: 1rem;
+    font-family: Arial, sans-serif;
+}
+
+#create-assignment {
+    background-color: whitesmoke;
+    margin: 1rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#assignmentTitle, #assignmentDesc {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 90%;
+    padding: 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+#assignmentTitle:focus, #assignmentDesc:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0px 0px 5px rgba(76, 175, 80, 0.5);
+}
+
+#uploadAssignment {
+    padding: 12px 20px;
+    color: white;
+    background-color: #4CAF50;
+    border-radius: 20px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#uploadAssignment:hover {
+    transform: scale(1.05);
+    box-shadow: 3px 3px 15px 1px rgba(0, 0, 0, 0.3);
+}
+
+#assignments-list {
+    background-color: whitesmoke;
+    max-height: 40vh;
+    height: auto;
+    padding: 1rem;
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    border-radius: 10px;
+}
+
+#assignmentItems {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+.assignment-item {
+    background: white;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-left: 5px solid #4CAF50;
+    cursor: pointer;
+    width: 95%;
+    text-align: left;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.assignment-item:hover {
+    background: #e0e0e0;
+    transform: translateX(5px);
+}
+
+#assignment-details {
+    background-color: white;
+    padding: 1rem;
+    margin: 1rem;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.details-heading{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#assignment-details button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+    padding: 8px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+#assignment-details button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+#assignment-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 1rem;
+    background-color: whitesmoke;
+    width: 95%;
+    border-radius: 20px;
+}
+
+#assignment-info div {
+    display: flex;
+    align-items: center;
+    gap: 5px; 
+    margin: 0;
+    padding: 2px 0; 
+}
+
+#assignment-info p {
+    margin: 0;
+    padding: 0;
+}
