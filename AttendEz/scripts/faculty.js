@@ -7,28 +7,23 @@ const subjects = ["PQT","DCCST","DBMS","DAA","MAD","DAV","FOC","EEA","ES","DBMS 
 
 function showSection(section) {
     fetch(`sections/faculty/${section}.html`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.text();
-        })
+        .then(response => response.text())
         .then(data => {
             document.getElementById("mainbar").innerHTML = data;
 
-            // Call additional functions for specific sections
-            if (section === "Fees") {
-                populateFeeTable();
-            }
-            if (section === "announcements") {
-                loadAnnouncements();
-            }
+            // Wait for DOM update before executing section-specific code
+            requestAnimationFrame(() => {
+                if (section === "Fees") populateFeeTable();
+                if (section === "announcements") loadAnnouncements();
+                if (section === "assignments") AssignmentsFunction();
+            });
         })
         .catch(error => {
             console.error("Error loading section:", error);
             document.getElementById("mainbar").innerHTML = `<h2>Error Loading ${section}</h2>`;
         });
 }
+
 
 
 function logout() {
@@ -406,6 +401,7 @@ function deleteAnnouncement(index) {
 }
 
 // <----------------------------------------------Assignments--------------------------------------------------------> 
+
 let assignments = [];
 
 function createAssignment() {
@@ -477,7 +473,7 @@ function showAssignmentDetails(id) {
     gsap.fromTo(detailsSection, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
 }
 
-document.querySelector("#assignment-details button").addEventListener("click", () => {
+function assignmentBack() {
     const createSection = document.getElementById('create-assignment');
     const listSection = document.getElementById('assignments-list');
     const detailsSection = document.getElementById('assignment-details');
@@ -488,14 +484,12 @@ document.querySelector("#assignment-details button").addEventListener("click", (
         duration: 0.3,
         onComplete: () => {
             detailsSection.style.display = 'none';
-
             createSection.style.display = 'flex';
             listSection.style.display = 'flex';
             gsap.fromTo([createSection, listSection], { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.5 });
         }
     });
-});
-
+}
 
 function clearAssignmentForm() {
     document.getElementById('assignmentTitle').value = '';
@@ -503,13 +497,22 @@ function clearAssignmentForm() {
     document.getElementById('assignmentFile').value = '';
 }
 
-document.getElementById('assignmentTitle').addEventListener('input', toggleUploadButton);
-document.getElementById('assignmentDesc').addEventListener('input', toggleUploadButton);
-
 function toggleUploadButton() {
     const title = document.getElementById('assignmentTitle').value;
     const description = document.getElementById('assignmentDesc').value;
-    const uploadButton = document.getElementById('uploadAssignment');
+    document.getElementById('uploadAssignment').disabled = !(title && description);
+}
 
-    uploadButton.disabled = !(title && description);
+function AssignmentsFunction() {
+    setTimeout(() => {
+        const titleInput = document.getElementById('assignmentTitle');
+        const descInput = document.getElementById('assignmentDesc');
+
+        if (titleInput && descInput) {
+            titleInput.addEventListener('input', toggleUploadButton);
+            descInput.addEventListener('input', toggleUploadButton);
+        } else {
+            console.warn("Assignment form elements not found.");
+        }
+    }, 100); // Small delay to ensure elements are loaded
 }
