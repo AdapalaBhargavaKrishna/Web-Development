@@ -106,7 +106,6 @@ nav{
     font-size: 35px;
 }
 
-
 /* <---------------------Attendance---------------------> */
 
 .attendance {
@@ -259,6 +258,8 @@ nav{
     font-weight: bold;
 }
 
+/* <---------------------Timetable---------------------> */
+
 .faculty-timetable {
     width: 100%;
     display: flex;
@@ -277,7 +278,7 @@ nav{
     width: 90%;
     border-collapse: separate;
     border-spacing: 0;
-    border-radius: 15px;
+    border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     background: #fff;
@@ -301,26 +302,216 @@ nav{
     background-color: #f9f9f9;
 }
 
-.faculty-timetable tbody tr:hover {
-    background-color: #d1f7d1;
-    transition: 0.3s ease;
-}
-
 .faculty-timetable th:first-child {
     background-color: #527a58;
     color: white;
     font-weight: bold;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .faculty-timetable table {
-        font-size: 0.9rem;
-    }
-    .faculty-timetable th, .faculty-timetable td {
-        padding: 10px;
-    }
+/* <---------------------Assignment---------------------> */
+
+.assignment-heading {
+    text-align: center;
+    font-size: 2rem;
+    color: #2c3e50;
+    font-weight: bold;
+    margin-bottom: 15px;
 }
+
+.assignment-view{
+    padding: 1rem;
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.assignment-items{
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+.assignment-item{
+    background: #f7f7f7;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-left: 7px solid #4CAF50;
+    cursor: pointer;
+    width: 95%;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+}
+
+.assignment-item:hover{
+    background: #e0e0e0;
+    transform: translateX(5px) scale(1.02);
+    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.assignment-details {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 95%;
+    padding: 20px;
+    margin: auto;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.details-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.details-heading h2 {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.details-heading button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.details-heading button:hover {
+    background: linear-gradient(45deg, #f56248, #ff416c);
+    scale: 1.01;
+}
+
+#assignment-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 15px;
+    width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#assignment-info div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+}
+
+#assignment-info h3 {
+    color: #333;
+    margin: 0;
+}
+
+#assignment-info p {
+    color: #555;
+    font-weight: bold;
+    margin: 0;
+}
+
+.view-file {
+    background: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.view-file:hover {
+    background: #0056b3;
+    transform: scale(1.1);
+}
+
+
+.upload-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 1rem;
+    border-radius: 15px;
+    width: 91%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.upload-section h3 {
+    color: #333;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.upload-section input {
+    padding: 10px;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+    background: #f4f4f4;
+    width: 98%;
+    text-align: center;
+    cursor: pointer;
+}
+
+.upload-section input:hover {
+    transform: translateX(5px);
+    background: rgb(224, 224, 224);
+}
+
+.submit-assignment {
+    margin-top: 10px;
+    padding: 12px 20px;
+    background: linear-gradient(45deg, #4CAF50, #2ECC71);
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 20%;
+    text-align: center;
+}
+
+.submit-assignment:hover {
+    background: linear-gradient(45deg, #2ECC71, #4CAF50);
+    transform: scale(1.02);
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 10px 15px;
+    background: #007bff;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.custom-file-upload:hover {
+    background-color: #0075f3;
+    transform: scale(1.02);
+}
+
+#file-name {
+    display: block;
+    margin-top: 0.5rem;
+    color: #333;
+}
+
 
 
 

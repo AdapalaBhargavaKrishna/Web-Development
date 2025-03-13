@@ -1,28 +1,36 @@
-<div id="assignments-section">
-    <h2>📂 Assignments</h2>
+<div class="assignments">
+    <h1 class="assignment-heading">Assignments</h1>
+    <div class="assignment-view">
+      <ul class="assignment-items">
+          <li class="assignment-item">Assignment Title</li>
+          <li class="assignment-item">DBMS Assignment 1</li>
+          <li class="assignment-item">Algorithms Lab Report</li>
+          <li class="assignment-item">Mini Project Proposal</li>
+      </ul>
+  </div>
+  
 
-    <div id="create-assignment">
-        <h2>Create New Assignment</h2>
-        <input type="text" id="assignmentTitle" placeholder="Enter Assignment Title">
-        <textarea id="assignmentDesc" placeholder="Enter Assignment Description"></textarea>
-        <input type="file" id="assignmentFile">
-        <button id="uploadAssignment" onclick="createAssignment()" disabled>Upload</button>
-
+    <div class="assignment-details">
+      <div class="details-heading">
+          <h2>📜 Assignment Details</h2>
+          <button onclick="assignmentBack()"> 
+              <img src="assets/back.svg" alt=""> Back
+          </button>
+      </div>
+      
+      <div id="assignment-info">
+          <div><h3>Title:</h3><p>Assignment 1</p></div>
+          <div><h3>Description:</h3><p>New assignment</p></div>
+          <div><h3>File:</h3><button class="view-file">View File</button></div>
+      </div>
+  
+      <div class="upload-section">
+        <h3>📤 Submit Your Assignment</h3>
+        <input type="file" id="assignmentFile" accept="application/pdf" hidden>
+  
+        <label for="assignmentFile" class="custom-file-upload">Choose File</label>
+        <span id="file-name">No file chosen</span>
+        <button class="submit-assignment" onclick="submitAssignment()">Submit</button>
     </div>
-
-    <div id="assignments-list">
-        <h2>Created Assignments</h2>
-        <ul id="assignmentItems"></ul>
-
-    </div>
-
-    <div id="assignment-details" style="display:none">
-        <div class="details-heading">
-            <h3>Assignment Details</h3>
-            <button onclick="assignmentBack()">back <img src="assets/back.svg" alt=""></button>
-        </div>
-        <div id="assignment-info">
-        </div>
-        <p><b>Submitted By: </b><span id="submitted-count"> 0</span> Students</p>
-    </div>
-</div>
+  </div>
+  </div>
