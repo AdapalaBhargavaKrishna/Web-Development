@@ -259,6 +259,68 @@ nav{
     font-weight: bold;
 }
 
+.faculty-timetable {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.faculty-timetable h2 {
+    color: #3b3b3b;
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+.faculty-timetable table {
+    width: 90%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background: #fff;
+}
+
+.faculty-timetable th, 
+.faculty-timetable td {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+}
+
+.faculty-timetable thead th {
+    background: linear-gradient(45deg, #527a58, #2c3e50);
+    color: white;
+    font-weight: bold;
+}
+
+.faculty-timetable tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.faculty-timetable tbody tr:hover {
+    background-color: #d1f7d1;
+    transition: 0.3s ease;
+}
+
+.faculty-timetable th:first-child {
+    background-color: #527a58;
+    color: white;
+    font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .faculty-timetable table {
+        font-size: 0.9rem;
+    }
+    .faculty-timetable th, .faculty-timetable td {
+        padding: 10px;
+    }
+}
 
 
 
