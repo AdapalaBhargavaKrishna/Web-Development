@@ -512,7 +512,54 @@ nav{
     color: #333;
 }
 
+/* <---------------------Announcements---------------------> */
 
+.announcements {
+    width: 91%;
+    margin: 0 auto 1rem auto;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.announcements h1 {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.announcement-list {
+    display: flex;
+    flex-direction: column;
+    height: 75vh;
+    gap: 1rem;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.announce-card {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.announce-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.announce-card h3 {
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+.announce-card p {
+    color: #555;
+    line-height: 1.5;
+}
 
 
 /* <---------------------Mobile---------------------> */
