@@ -514,5 +514,5 @@ function AssignmentsFunction() {
         } else {
             console.warn("Assignment form elements not found.");
         }
-    }, 100); // Small delay to ensure elements are loaded
+    }, 100);
 }
