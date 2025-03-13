@@ -1,4 +1,154 @@
-<div class="maincontent">
-    <h2>Welcome to the Student Dashboard</h2>
-    <p>Select an option from the sidebar to view details.</p>
+<div class="attendance">
+  <h1>Attendance</h1>
+  <div class="total-attendance">
+      <h1 class="att-percentage">90.2%</h1>
+      <p class="att-message">Noob attendance go and bunk lil bro</p>
   </div>
+  <div class="subject-wise">
+    <div class="att-wise-heading">
+      <h2>Subject-Wise Attendance</h2>
+      <button onclick="showDateWise()">view Date-Wise</button>
+    </div>
+    <div class="subject-attendance">
+      <table>
+        <tr>
+          <th>S.No</th>
+          <th>Subject</th>
+          <th>Classes Held</th>
+          <th>Classes Attended</th>
+          <th>Attendance %</th>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>Probability and Queuing Theory</td>
+          <td>40</td>
+          <td>36</td>
+          <td>90.0%</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>DC Circuits, Sensors, and Transducers</td>
+          <td>38</td>
+          <td>35</td>
+          <td>92.1%</td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>Database Management and Systems</td>
+          <td>40</td>
+          <td>35</td>
+          <td>87.5%</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Design and Analysis of Algorithms</td>
+          <td>38</td>
+          <td>34</td>
+          <td>89.4%</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Engineering Economics and Accountancy</td>
+          <td>42</td>
+          <td>38</td>
+          <td>90.4%</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Environmental Science</td>
+          <td>39</td>
+          <td>34</td>
+          <td>87.2%</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Professional Elective - 1</td>
+          <td>35</td>
+          <td>30</td>
+          <td>85.7%</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>Database Management Systems Lab</td>
+          <td>20</td>
+          <td>18</td>
+          <td>90.0%</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>Algorithms Lab</td>
+          <td>18</td>
+          <td>16</td>
+          <td>88.9%</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>Mini Project - 1</td>
+          <td>15</td>
+          <td>14</td>
+          <td>93.3%</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>Mentoring</td>
+          <td>10</td>
+          <td>10</td>
+          <td>100.0%</td>
+        </tr>
+      </table>
+      
+      
+    </div>
+  </div>
+  <div class="date-wise">
+    <div class="att-wise-heading">
+      <h2>Date-Wise Attendance</h2>
+      <button onclick="showSubjectWise()">view Subject-Wise</button>
+    </div>
+    <div class="subject-select">
+      <label for="subjectDropdown">Select Subject:</label>
+      <select id="subjectDropdown" onchange="filterAttendance()">
+        <option value="all">All Subjects</option>
+        <option value="Probability and Queuing Theory">Probability and Queuing Theory</option>
+        <option value="DC Circuits Sensors and Transducers">DC Circuits Sensors and Transducers</option>
+        <option value="Engineering Economics and Accountancy">Engineering Economics and Accountancy</option>
+        <option value="Environmental Science">Environmental Science</option>
+        <option value="Professional Elective - 1">Professional Elective - 1</option>
+        <option value="DBMS Lab">DBMS Lab</option>
+        <option value="ALG Lab">ALG Lab</option>
+        <option value="Mini Project - 1">Mini Project - 1</option>
+        <option value="Mentoring">Mentoring</option>
+      </select>
+    </div>
+    <div class="date-attendance">
+      <table>
+        <tr>
+          <th>Date</th>
+          <th>Subject</th>
+          <th>Status</th>
+        </tr>
+        <tr>
+          <td>2025-03-01</td>
+          <td>Probability and Queuing Theory</td>
+          <td class="present">Present</td>
+        </tr>
+        <tr>
+          <td>2025-03-02</td>
+          <td>DBMS Lab</td>
+          <td class="absent">Absent</td>
+        </tr>
+        <tr>
+          <td>2025-03-02</td>
+          <td>Environmental Science</td>
+          <td class="present">Present</td>
+        </tr>
+        <tr>
+          <td>2025-03-03</td>
+          <td>Mini Project - 1</td>
+          <td class="absent">Absent</td>
+        </tr>
+      </table>
+    </div>
+    
+  </div>
+</div>

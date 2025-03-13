@@ -67,3 +67,10 @@ function showSubjectWise() {
         { opacity: 1, y: 0, duration: 0.5, display: "flex" }
     );
 }
+
+gsap.from(".faculty-timetable table", {
+    opacity: 0,
+    y: 30,
+    duration: 1,
+    ease: "power2.out"
+});
