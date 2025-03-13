@@ -6,7 +6,7 @@ const TotStudents = ["71", "72", "73", "74", "75", "76", "77", "78", "79", "80",
 const subjects = ["PQT","DCCST","DBMS","DAA","MAD","DAV","FOC","EEA","ES","DBMS LAB","DAA LAB","Mini Project"];
 
 function showSection(section) {
-    fetch(`sections/${section}.html`)
+    fetch(`sections/faculty/${section}.html`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -19,6 +19,9 @@ function showSection(section) {
             // Call additional functions for specific sections
             if (section === "Fees") {
                 populateFeeTable();
+            }
+            if (section === "announcements") {
+                loadAnnouncements();
             }
         })
         .catch(error => {
@@ -155,7 +158,7 @@ tl.from(".ani", {
     stagger: 0.2
 })
 
-tl.from(".mainbar h2, .mainbar p", {
+tl.from(".maincontent h2, .maincontent p", {
     y: 20,
     scale: 0.8,
     opacity: 0,
@@ -268,7 +271,7 @@ function updateFeeStatus(dueInput, statusCell) {
 // <-----------Records---------->
 
 
-// function populateRecords() {
+function populateRecords() {
 
     
     const subjectSelect = document.getElementById("subject-select");
@@ -295,7 +298,7 @@ function updateFeeStatus(dueInput, statusCell) {
     });
 
 
-// }
+}
 
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
@@ -325,8 +328,6 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', handleSidebarButtonClick);
     });
 });
-
-document.addEventListener("DOMContentLoaded", loadAnnouncements);
 
 function togglePostButton() {
     let section = document.getElementById("sectionSelect").value;
@@ -402,4 +403,113 @@ function deleteAnnouncement(index) {
     localStorage.setItem(`announcements_${section}`, JSON.stringify(announcements));
     
     loadAnnouncements();
+}
+
+// <----------------------------------------------Assignments--------------------------------------------------------> 
+let assignments = [];
+
+function createAssignment() {
+    const title = document.getElementById('assignmentTitle').value;
+    const description = document.getElementById('assignmentDesc').value;
+    const fileInput = document.getElementById('assignmentFile');
+    const file = fileInput.files[0];
+
+    if (!title || !description) {
+        alert('Please fill in both the title and description.');
+        return;
+    }
+
+    const assignment = {
+        id: Date.now(),
+        title,
+        description,
+        file: file ? file.name : null,
+        submissions: []
+    };
+
+    assignments.push(assignment);
+    updateAssignmentsList();
+    clearAssignmentForm();
+}
+
+function updateAssignmentsList() {
+    const assignmentItems = document.getElementById('assignmentItems');
+    assignmentItems.innerHTML = '';
+
+    assignments.forEach(assignment => {
+        const li = document.createElement('li');
+        li.className = 'assignment-item';
+        li.textContent = assignment.title;
+        li.addEventListener('click', () => showAssignmentDetails(assignment.id));
+        assignmentItems.appendChild(li);
+    });
+}
+
+function showAssignmentDetails(id) {
+    const assignment = assignments.find(a => a.id === id);
+    if (!assignment) return;
+
+    const createSection = document.getElementById('create-assignment');
+    const listSection = document.getElementById('assignments-list');
+    const detailsSection = document.getElementById('assignment-details');
+    const info = document.getElementById('assignment-info');
+    const count = document.getElementById('submitted-count');
+
+    info.innerHTML = `
+        <div><b>Title:</b><p>${assignment.title}</p></div>
+        <div><b>Description:</b><p>${assignment.description}</p></div>
+        <div><b>File:</b><p>${assignment.file ? assignment.file : "No file attached"}</p></div>
+    `;
+
+    count.textContent = assignment.submissions.length;
+
+    gsap.to([createSection, listSection], {
+        opacity: 0,
+        y: -20,
+        duration: 0.3,
+        onComplete: () => {
+            createSection.style.display = 'none';
+            listSection.style.display = 'none';
+        }
+    });
+
+    detailsSection.style.display = 'block';
+    gsap.fromTo(detailsSection, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
+}
+
+document.querySelector("#assignment-details button").addEventListener("click", () => {
+    const createSection = document.getElementById('create-assignment');
+    const listSection = document.getElementById('assignments-list');
+    const detailsSection = document.getElementById('assignment-details');
+
+    gsap.to(detailsSection, {
+        opacity: 0,
+        y: 20,
+        duration: 0.3,
+        onComplete: () => {
+            detailsSection.style.display = 'none';
+
+            createSection.style.display = 'flex';
+            listSection.style.display = 'flex';
+            gsap.fromTo([createSection, listSection], { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.5 });
+        }
+    });
+});
+
+
+function clearAssignmentForm() {
+    document.getElementById('assignmentTitle').value = '';
+    document.getElementById('assignmentDesc').value = '';
+    document.getElementById('assignmentFile').value = '';
+}
+
+document.getElementById('assignmentTitle').addEventListener('input', toggleUploadButton);
+document.getElementById('assignmentDesc').addEventListener('input', toggleUploadButton);
+
+function toggleUploadButton() {
+    const title = document.getElementById('assignmentTitle').value;
+    const description = document.getElementById('assignmentDesc').value;
+    const uploadButton = document.getElementById('uploadAssignment');
+
+    uploadButton.disabled = !(title && description);
 }
