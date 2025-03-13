@@ -6,8 +6,7 @@ function showSection(section) {
 
             // Wait for DOM update before executing section-specific code
             requestAnimationFrame(() => {
-                if (section === "Fees") populateFeeTable();
-                if (section === "announcements") loadAnnouncements();
+
                 if (section === "assignments") AssignmentsFunction();
             });
         })
@@ -74,3 +73,30 @@ gsap.from(".faculty-timetable table", {
     duration: 1,
     ease: "power2.out"
 });
+
+// <--------------------Assignment-------------------->
+
+function AssignmentsFunction() {
+    const assignmentItems = document.querySelectorAll(".assignment-item");
+    const assignmentView = document.querySelector(".assignment-view");
+    const assignmentDetails = document.querySelector(".assignment-details");
+    const backButton = document.querySelector(".details-heading button");
+
+assignmentItems.forEach(item => {
+    item.addEventListener("click", () => {
+        gsap.to(assignmentView, { x: 2000, duration: 0.5, onComplete: () => {
+            assignmentView.style.display = "none";
+            assignmentDetails.style.display = "flex";
+            gsap.fromTo(assignmentDetails, { opacity: 0, x: -500 }, { opacity: 1, x: 0, duration: 0.5 });
+        }});
+    });
+});
+
+backButton.addEventListener("click", () => {
+    gsap.to(assignmentDetails, { opacity: 0, duration: 0.5, onComplete: () => {
+        assignmentDetails.style.display = "none";
+        assignmentView.style.display = "flex";
+        gsap.fromTo(assignmentView, { opacity: 0, x: -100 }, { opacity: 1, x: 0, duration: 0.5 });
+    }});
+});
+}
