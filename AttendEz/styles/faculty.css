@@ -330,31 +330,6 @@ th {
     scrollbar-width: none;
 }
 
-@media (max-width: 600px) {
-    .head {
-        margin: 0px;
-    }
-    .nav-button {
-        margin: 0px;
-        display: flex;
-        gap: 1px;
-        align-items: center;
-    }
-    .sidebar {
-        display: none;
-        width: 800%;
-    }
-
-    #logo {
-        display: none;
-    }
-
-    #menu-icon {
-        display: flex !important;
-        margin-left: 10px;
-    }
-}
-
 .sidebar.active {
     display: flex; /* Show sidebar */
 }
@@ -551,4 +526,31 @@ th {
 #assignment-info p {
     margin: 0;
     padding: 0;
+}
+
+/* <---------------------Mobile---------------------> */
+
+@media (max-width: 600px) {
+    .head {
+        margin: 0px;
+    }
+    .nav-button {
+        margin: 0px;
+        display: flex;
+        gap: 1px;
+        align-items: center;
+    }
+    .sidebar {
+        display: none;
+        width: 800%;
+    }
+
+    #logo {
+        display: none;
+    }
+
+    #menu-icon {
+        display: flex !important;
+        margin-left: 10px;
+    }
 }
