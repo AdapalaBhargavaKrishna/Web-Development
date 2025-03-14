@@ -326,10 +326,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function togglePostButton() {
     let section = document.getElementById("sectionSelect").value;
+    let dropSubject = document.getElementById("subjectDropdown").value;
     let inputField = document.getElementById("announcementInput");
     let postButton = document.getElementById("postButton");
 
-    if (section !== "") {
+    if (section !== "" && dropSubject !== "") {
         inputField.disabled = false;
         postButton.disabled = false;
     } else {

@@ -339,7 +339,28 @@ th {
     pointer-events: none; /* Disable interactions */
 }
 
-#sectionSelect, #announcementInput, #postButton {
+.select-sec-sub{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.select-sec-sub select{
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+#sectionSelect, #subjectDropdown{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0;
+    width: 25%;
+}
+
+
+#announcementInput, #postButton {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
