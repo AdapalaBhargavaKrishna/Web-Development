@@ -8,6 +8,7 @@ function showSection(section) {
             requestAnimationFrame(() => {
 
                 if (section === "assignments") AssignmentsFunction();
+                if (section === "fees") feesSection();
             });
         })
         .catch(error => {
@@ -99,4 +100,139 @@ backButton.addEventListener("click", () => {
         gsap.fromTo(assignmentView, { opacity: 0, x: -100 }, { opacity: 1, x: 0, duration: 0.5 });
     }});
 });
+}
+
+// <--------------------Fees-------------------->
+
+const feeAmounts = {
+    college: 165000,
+    transport: 45000,
+    hostel: 115000
+};
+
+function showFees(fee) {
+    const fees = {
+        college: document.getElementById("college-fee"),
+        transport: document.getElementById("transport-fee"),
+        hostel: document.getElementById("hostel-fee"),
+    };
+
+    Object.values(fees).forEach(feeElement => {
+        feeElement.style.display = "none";
+        document.querySelector(".proceed-payment").style.background = "#818181";
+    });
+
+    if (!fee) {
+        Object.values(fees).forEach(feeElement => {
+            feeElement.style.display = "table-row";
+        });
+        updatePaymentDetails();
+        return;
+    }
+    
+
+    if (fees[fee]) {
+        fees[fee].style.display = "table-row";
+        updatePaymentDetails();
+    }
+
+}
+
+function updatePaymentDetails() {
+    let totalFee = 0;
+    let amountToPay = 0;
+
+    Object.keys(feeAmounts).forEach(fee => {
+        const feeRow = document.getElementById(`${fee}-fee`);
+        if (feeRow && feeRow.style.display === "table-row") {
+            totalFee += feeAmounts[fee];
+
+            const feeAmount = parseInt(feeRow.getElementsByTagName("td")[1].textContent.replace(/,/g, ""), 10);
+            amountToPay += feeAmount;
+
+            const feeStatusElement = feeRow.querySelector(".status");
+
+            // Update status based on amount
+            if (feeAmount > 0) {
+                feeStatusElement.innerText = "Unpaid";
+                feeStatusElement.classList.remove("paid");
+                feeStatusElement.classList.add("unpaid");
+            } else {
+                feeStatusElement.innerText = "Paid";
+                feeStatusElement.classList.remove("unpaid");
+                feeStatusElement.classList.add("paid");
+            }
+        }
+    });
+
+    // Update UI with total fee details
+    document.querySelector(".total-fee").innerText = `Total Fee: ₹${totalFee.toLocaleString()}`;
+    document.querySelector(".to-pay").innerText = `Amount to Pay: ₹${amountToPay.toLocaleString()}`;
+    document.querySelector(".total-amount strong").innerText = `₹${amountToPay.toLocaleString()}`;
+
+    // Update proceed button
+    const proceedButton = document.querySelector(".proceed-payment");
+    if (amountToPay > 0) {
+        proceedButton.style.background = "#ff4d4d";
+        proceedButton.style.cursor = "pointer";
+        proceedButton.disabled = false;
+    } else {
+        proceedButton.style.background = "#818181";
+        proceedButton.style.cursor = "not-allowed";
+        proceedButton.disabled = true;
+    }
+}
+
+
+function showPayments() {
+    const paymentContainer = document.querySelector(".fee-details-right");
+    const feeHeadRight = document.querySelector(".fee-head-right");
+
+    if (paymentContainer) {
+        paymentContainer.style.display = "flex"; // Show the payment section
+    }
+
+    if (feeHeadRight) {
+        feeHeadRight.style.display = "flex"; // Show the fee head
+    }
+}
+
+function showPaymodes() {
+    const paymentType = document.getElementById("pay-options").value;
+    const upiSection = document.getElementById("upi");
+    const creditCardSection = document.getElementById("credit-card");
+
+    upiSection.style.display = "none";
+    creditCardSection.style.display = "none";
+
+    if (paymentType === "upi") {
+        upiSection.style.display = "flex";
+        gsap.fromTo(upiSection, 
+            { y: -20, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.5 } 
+        );
+    } else if (paymentType === "credit-card") {
+        creditCardSection.style.display = "flex";
+        gsap.fromTo(creditCardSection, 
+            { y: -20, opacity: 0 },  
+            { y: 0, opacity: 1, duration: 0.5 }
+        );
+    }
+}
+
+function feesSection() {
+    
+    console.log("Fees section loaded!");
+
+    document.getElementById("fee-select").addEventListener("change", function () {
+        showFees(this.value);
+    });
+
+    document.getElementById("pay-options").addEventListener("change", function () {
+        showPaymodes();
+    });
+
+    // Set today's date for receipt
+    const today = new Date().toISOString().split("T")[0];
+    document.getElementById("receipt-date").value = today;
 }
