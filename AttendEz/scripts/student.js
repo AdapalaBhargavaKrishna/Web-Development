@@ -165,20 +165,24 @@ function updatePaymentDetails() {
         }
     });
 
-    // Update UI with total fee details
     document.querySelector(".total-fee").innerText = `Total Fee: ₹${totalFee.toLocaleString()}`;
     document.querySelector(".to-pay").innerText = `Amount to Pay: ₹${amountToPay.toLocaleString()}`;
     document.querySelector(".total-amount strong").innerText = `₹${amountToPay.toLocaleString()}`;
 
     // Update proceed button
     const proceedButton = document.querySelector(".proceed-payment");
+    const payButton = document.querySelector(".pay-btn");
     if (amountToPay > 0) {
         proceedButton.style.background = "#ff4d4d";
+        payButton.style.background = "#FF6F61";
         proceedButton.style.cursor = "pointer";
         proceedButton.disabled = false;
+
     } else {
         proceedButton.style.background = "#818181";
+        payButton.style.background = "#818181";
         proceedButton.style.cursor = "not-allowed";
+        payButton.style.cursor = "not-allowed";
         proceedButton.disabled = true;
     }
 }
