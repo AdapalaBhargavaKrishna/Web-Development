@@ -8,7 +8,7 @@ function showSection(section) {
             requestAnimationFrame(() => {
 
                 if (section === "assignments") AssignmentsFunction();
-                if (section === "fees") feesSection();
+                if (section === "Fees") feesSection();
             });
         })
         .catch(error => {
