@@ -231,7 +231,7 @@
                 } else {
                     alert("Invalid Credentials");
                 }
-            } else if (username && username.value !== "") {
+            } else if (username && username.value.length === 12) {
                 if (password === username.value) {
                     window.location.href = "student.html";
                 } else {
