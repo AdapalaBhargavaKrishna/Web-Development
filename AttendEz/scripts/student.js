@@ -199,6 +199,9 @@ function showPayments() {
     if (feeHeadRight) {
         feeHeadRight.style.display = "flex"; // Show the fee head
     }
+
+    const feeDetailsLeft = document.querySelector(".fee-details-left");
+    feeDetailsLeft.style.height = "25vh";
 }
 
 function showPaymodes() {
