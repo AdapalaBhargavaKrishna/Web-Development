@@ -240,3 +240,17 @@ function feesSection() {
     const today = new Date().toISOString().split("T")[0];
     document.getElementById("receipt-date").value = today;
 }
+
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const mainbar = document.querySelector('.mainbar');
+
+    sidebar.classList.toggle('active');
+    mainbar.classList.toggle('hidden');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.sidebar button').forEach(button => {
+        button.addEventListener('click', toggleSidebar);
+    });
+});

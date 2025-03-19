@@ -94,6 +94,15 @@ nav {
     transition: margin-left 0.3s ease;
 }
 
+.sidebar.active {
+    display: flex;
+}
+
+.mainbar.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
 .maincontent>h2 {
     margin: 0;
 }
