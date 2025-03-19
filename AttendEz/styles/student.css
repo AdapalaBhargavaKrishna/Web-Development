@@ -612,7 +612,9 @@ nav {
     font-size: 16px;
 }
 
-#college-fee, #transport-fee, #hostel-fee{
+#college-fee,
+#transport-fee,
+#hostel-fee {
     display: none;
 }
 
@@ -674,18 +676,18 @@ nav {
     flex-direction: column;
 }
 
-.fee-head-right{
+.fee-head-right {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
 }
 
-.fee-head-right select{
+.fee-head-right select {
     padding: 8px;
     border-radius: 8px;
 }
 
-#upi{
+#upi {
     display: none;
     align-items: center;
     justify-content: center;
@@ -694,7 +696,7 @@ nav {
     height: 90%;
 }
 
-#upi img{
+#upi img {
     width: 85%;
     object-fit: cover;
     border-radius: 15px;
@@ -710,7 +712,7 @@ nav {
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-#credit-card{
+#credit-card {
     display: none;
     flex-direction: column;
     justify-content: center;
@@ -783,7 +785,8 @@ nav {
     z-index: 1000;
 }
 
-.total-fee, .to-pay {
+.total-fee,
+.to-pay {
     font-size: 16px;
     font-weight: bold;
     color: #333;
@@ -799,8 +802,6 @@ nav {
     cursor: not-allowed;
 }
 
-
-/* Fade In Animation */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -812,7 +813,6 @@ nav {
         transform: translateY(0);
     }
 }
-
 
 /* <---------------------Mobile---------------------> */
 
@@ -841,4 +841,48 @@ nav {
         display: flex !important;
         margin-left: 10px;
     }
+
+    /* <---------------------Fees---------------------> */
+
+    .fee-header {
+        flex-direction: column;
+    }
+
+    .select-fee,
+    .receipt {
+        width: 85%;
+    }
+
+    .fee-details {
+        flex-direction: column;
+    }
+
+    .fee-details-left {
+        width: 100%;
+        height: 45vh;
+    }
+
+    .fee-details-left {
+        transition: height 0.8s ease-in-out;
+    }
+
+    .fee-details-right {
+        width: 100%;
+        height: 53vh;
+    }
+
+    .confirm-payments {
+        width: 99%;
+        padding: 10px 10px;
+    }
+
+    #credit-card {
+        margin-top: 1.5rem;
+        width: 91%;
+    }
+
+    .exp-cvv-flex {
+        flex-direction: column;
+    }
+
 }
