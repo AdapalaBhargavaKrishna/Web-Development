@@ -12,13 +12,15 @@
   <div class="main">
     <nav>
       <div class="head">
-        <img class="ani" src="assets/college.svg" alt="" />
+        <img class="ani" id="logo" src="assets/college.svg" alt="">
+        <img class="ani" id="menu-icon" src="assets/menu.svg" alt="" onclick="toggleSidebar()"
+            style="display: none;">
         <h1 id="heading" class="ani">Student Dashboard</h1>
-      </div>
-      <div class="nav-button">
+    </div>
+    <div class="nav-button">
         <button class="ani">Notifications</button>
         <button class="ani" onclick="logout()">Logout</button>
-      </div>
+    </div>
     </nav>
     <div class="container">
       <div class="sidebar">
