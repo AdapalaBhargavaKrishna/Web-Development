@@ -258,10 +258,8 @@ const notificationBtn = document.getElementById("notification-btn");
 const popup = document.getElementById("notification-popup");
 const closePopup = document.getElementById("close-popup");
 
-// Initial animation setup: Hide offscreen
 gsap.set(popup, { opacity: 0, y: -600 });
 
-// Show popup with GSAP animation
 notificationBtn.addEventListener("click", () => {
   if (popup.classList.contains("hidden")) {
     popup.classList.remove("hidden");
