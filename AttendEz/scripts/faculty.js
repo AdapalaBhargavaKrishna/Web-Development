@@ -524,10 +524,17 @@ const notificationBtn = document.getElementById("notification-btn");
 const popup = document.getElementById("notification-popup");
 const closePopup = document.getElementById("close-popup");
 
+gsap.set(popup, { opacity: 0, y: -600 });
+
 notificationBtn.addEventListener("click", () => {
-    popup.classList.toggle("hidden")
-})
+  if (popup.classList.contains("hidden")) {
+    popup.classList.remove("hidden");
+    gsap.to(popup, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
+  } else {
+    gsap.to(popup, { opacity: 0, y: -600, duration: 0.6, ease: "power2.in", onComplete: () => popup.classList.add("hidden") });
+  }
+});
 
 closePopup.addEventListener("click", () => {
-    popup.classList.add("hidden")
-})
+  gsap.to(popup, { opacity: 0, y: 600, duration: 0.6, ease: "power2.in", onComplete: () => popup.classList.add("hidden") });
+});
