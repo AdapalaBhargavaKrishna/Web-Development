@@ -18,10 +18,23 @@
         <h1 id="heading" class="ani">Student Dashboard</h1>
     </div>
     <div class="nav-button">
-        <button class="ani">Notifications</button>
+        <button class="ani" id="notification-btn">Notifications</button>
         <button class="ani" onclick="logout()">Logout</button>
     </div>
     </nav>
+
+    <div id="notification-popup" class="popup hidden">
+      <div class="popup-header">
+        <h2>Notifications</h2>
+        <button id="close-popup"><img src="assets/back.svg" alt=""></button>
+      </div>
+      <div class="popup-content">
+        <p>No new Notification</p>
+        <!-- <div>New Notification</div> -->
+        <!-- You can dynamically add notifications here -->
+      </div>
+    </div>
+
     <div class="container">
       <div class="sidebar">
         <button class="ani2" onclick="showSection('attendance')">Attendance</button>
