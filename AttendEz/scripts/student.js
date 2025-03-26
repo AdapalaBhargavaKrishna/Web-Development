@@ -251,9 +251,3 @@ function toggleSidebar() {
     sidebar.classList.toggle('active');
     mainbar.classList.toggle('hidden');
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.sidebar button').forEach(button => {
-        button.addEventListener('click', toggleSidebar);
-    });
-});
