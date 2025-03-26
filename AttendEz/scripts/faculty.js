@@ -517,3 +517,17 @@ function AssignmentsFunction() {
         }
     }, 100);
 }
+
+// <--------------------Notifications-------------------->
+
+const notificationBtn = document.getElementById("notification-btn");
+const popup = document.getElementById("notification-popup");
+const closePopup = document.getElementById("close-popup");
+
+notificationBtn.addEventListener("click", () => {
+    popup.classList.toggle("hidden")
+})
+
+closePopup.addEventListener("click", () => {
+    popup.classList.add("hidden")
+})

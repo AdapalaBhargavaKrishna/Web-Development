@@ -251,3 +251,17 @@ function toggleSidebar() {
     sidebar.classList.toggle('active');
     mainbar.classList.toggle('hidden');
 }
+
+// <--------------------Notifications-------------------->
+
+const notificationBtn = document.getElementById("notification-btn");
+const popup = document.getElementById("notification-popup");
+const closePopup = document.getElementById("close-popup");
+
+notificationBtn.addEventListener("click", () => {
+    popup.classList.toggle("hidden")
+})
+
+closePopup.addEventListener("click", () => {
+    popup.classList.add("hidden")
+})
