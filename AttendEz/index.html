@@ -233,7 +233,7 @@
                 }
             } else if (username && username.value.length === 12) {
                 if (password === username.value) {
-                    window.location.href = "student.html";
+                    window.location.href = `student.html?rollNumber=${username.value}`;
                 } else {
                     alert("Invalid Credentials");
                 }

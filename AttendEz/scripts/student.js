@@ -1,3 +1,14 @@
+// <--------------------roll-Number-------------------->
+
+const rollNumber = localStorage.getItem("rollNumber");
+if (rollNumber) {
+    document.getElementById("rollNumber").innerText = rollNumber
+} else{
+    document.getElementById("rollNumber").innerText = ""
+}
+
+// <--------------------Sections-------------------->
+
 function showSection(section) {
     fetch(`sections/student/${section}.html`)
         .then(response => response.text())

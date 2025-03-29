@@ -100,45 +100,59 @@ function updateRollNumberDisplay(roll) {
         }
     });
 }
+
 function finalizeAttendance() {
     rollNumbers.forEach(roll => {
         if (!(roll in attendance)) {
-            attendance[roll] = 'absent'; // Mark as absent if not explicitly selected
+            attendance[roll] = 'Absent'; // Mark as 'Absent' if not explicitly selected
         }
     });
-    const absentees = Object.keys(attendance).filter(roll => attendance[roll] === 'absent');
+
+    const attendanceData = rollNumbers.map(roll => ({
+        rollNumber: `160123737${roll}`,            // Convert roll number to 12-digit format
+        subject: "Mathematics",                    // Hardcoded subject or get it from the form/input
+        date: new Date().toISOString(),            // Sending the current date in ISO format
+        status: attendance[roll],                  // Present or Absent
+    }));
+
+    // Send attendance data to the backend
+    fetch("http://localhost:5000/api/attendance", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(attendanceData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Attendance saved:", data);
+        if (data.message) {
+            alert("Error: " + data.message);
+        } else {
+            alert("Attendance saved successfully!");
+        }
+    })
+    .catch(error => {
+        console.error("Error saving attendance:", error);
+        alert("Failed to save attendance. Please try again.");
+    });
+
+    // Display absentees
+    const absentees = Object.keys(attendance).filter(roll => attendance[roll] === 'Absent');
     const absenteesListDiv = document.getElementById('absenteesList');
     absenteesListDiv.innerHTML = `<h3>Absentees: ${absentees.join(', ')}</h3>`;
+
     rollNumbers.forEach(updateRollNumberDisplay);
     document.getElementById("clear-button").style.display = "block";
 }
+
+
 
 function clearAttendance() {
     attendance = {};
     document.getElementById('absenteesList').innerHTML = '';
     document.getElementById('rollNumbers').innerHTML = '';
     document.getElementById("clear-button").style.display = "none";
-}
-
-function addRow() {
-    let tbody = document.getElementById("timetable-body");
-    let row = document.createElement("tr");
-    
-    let dayCell = document.createElement("td");
-    dayCell.innerHTML = `<input type='text' placeholder='Day'>`;
-    row.appendChild(dayCell);
-    
-    for (let i = 0; i < 6; i++) {
-        let cell = document.createElement("td");
-        cell.innerHTML = `<input type='text' placeholder='Subject, Room No'>`;
-        row.appendChild(cell);
-    }
-    
-    tbody.appendChild(row);
-}
-
-function clearTable() {
-    document.getElementById("timetable-body").innerHTML = "";
 }
 
 /*<---------------GSAP--------------->*/
