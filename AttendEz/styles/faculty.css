@@ -553,6 +553,13 @@ th {
     padding: 5px;
 }
 
+/* <--------------------Assignments--------------------> */
+
+.assignment-download{
+    text-decoration: none;
+    color: #4CAF50;
+}
+
 #assignments-section {
     margin: 1rem;
     font-family: Arial, sans-serif;
@@ -653,7 +660,7 @@ th {
     align-items: center;
 }
 
-#assignment-details button {
+.details-heading button {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -668,7 +675,26 @@ th {
     transition: all 0.3s ease;
 }
 
-#assignment-details button:hover {
+.delete-assignments{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.delete-assignments button{
+    margin-top: 1rem;
+    right: 0;
+    padding: 8px;
+    background-color: #ff4621;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.details-heading button:hover {
     background-color: #0056b3;
     transform: scale(1.05);
 }

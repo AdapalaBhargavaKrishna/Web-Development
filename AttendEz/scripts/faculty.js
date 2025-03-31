@@ -77,7 +77,17 @@ function showSection(section) {
             requestAnimationFrame(() => {
                 if (section === "Fees") populateFeeTable();
                 if (section === "announcements") loadAnnouncements();
-                if (section === "assignments") AssignmentsFunction();
+                if (section === "assignments") {
+                    if (!db) { 
+                        openDatabase(() => {
+                            getAssignmentsFromDB(); // Load assignments after IndexedDB is ready
+                            AssignmentsFunction();
+                        });
+                    } else {
+                        getAssignmentsFromDB();
+                        AssignmentsFunction();
+                    }
+                }
             });
         })
         .catch(error => {
@@ -478,9 +488,51 @@ function deleteAnnouncement(index) {
 
 /*<---------------Assignments--------------->*/
 
-let assignments = [];
+let db;
+
+function openDatabase(callback) {
+    const request = indexedDB.open("AttendZ_DB", 1);
+
+    request.onupgradeneeded = function(event) {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains("assignments")) {
+            const assignmentStore = db.createObjectStore("assignments", { keyPath: "id" });
+            assignmentStore.createIndex("title", "title", { unique: false });
+        }
+    };
+
+    request.onsuccess = function(event) {
+        db = event.target.result;
+        console.log("IndexedDB opened successfully.");
+        if (callback) callback(); // Call the callback function once database is ready
+    };
+
+    request.onerror = function(event) {
+        console.error("IndexedDB error:", event.target.errorCode);
+    };
+}
+
+
+function saveAssignmentToDB(assignment) {
+    const transaction = db.transaction(['assignments'], 'readwrite');
+    const store = transaction.objectStore('assignments');
+    store.add(assignment);
+
+    transaction.oncomplete = function() {
+        console.log('Assignment saved to DB');
+    };
+
+    transaction.onerror = function(event) {
+        console.error('Error saving assignment:', event.target.errorCode);
+    };
+}
 
 function createAssignment() {
+    if (!db) {
+        console.error("Database not opened yet.");
+        return;
+    }
+
     const title = document.getElementById('assignmentTitle').value;
     const description = document.getElementById('assignmentDesc').value;
     const fileInput = document.getElementById('assignmentFile');
@@ -491,18 +543,71 @@ function createAssignment() {
         return;
     }
 
-    const assignment = {
-        id: Date.now(),
-        title,
-        description,
-        file: file ? file.name : null,
-        submissions: []
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const fileData = event.target.result;
+
+        const assignment = {
+            id: Date.now(),
+            title,
+            description,
+            file: fileData,
+            fileName: file ? file.name : null,
+            submissions: []
+        };
+
+        const transaction = db.transaction(["assignments"], "readwrite");
+        const store = transaction.objectStore("assignments");
+        const request = store.add(assignment);
+
+        request.onsuccess = function() {
+            console.log("Assignment saved!");
+            getAssignmentsFromDB();
+        };
+
+        request.onerror = function() {
+            console.error("Error saving assignment.");
+        };
     };
 
-    assignments.push(assignment);
-    updateAssignmentsList();
+    if (file) {
+        reader.readAsDataURL(file); // Convert file to Base64 for storage
+    } else {
+        const assignment = {
+            id: Date.now(),
+            title,
+            description,
+            file: null,
+            fileName: null,
+            submissions: []
+        };
+
+        const transaction = db.transaction(["assignments"], "readwrite");
+        const store = transaction.objectStore("assignments");
+        store.add(assignment).onsuccess = function() {
+            console.log("Assignment saved without file!");
+            getAssignmentsFromDB();
+        };
+    }
+
     clearAssignmentForm();
 }
+
+function getAssignmentsFromDB() {
+    const transaction = db.transaction(["assignments"], "readonly");
+    const store = transaction.objectStore("assignments");
+    const request = store.getAll();
+
+    request.onsuccess = function(event) {
+        assignments = event.target.result;
+        updateAssignmentsList();
+    };
+
+    request.onerror = function() {
+        console.error("Error retrieving assignments.");
+    };
+}
+
 
 function updateAssignmentsList() {
     const assignmentItems = document.getElementById('assignmentItems');
@@ -511,7 +616,7 @@ function updateAssignmentsList() {
     assignments.forEach(assignment => {
         const li = document.createElement('li');
         li.className = 'assignment-item';
-        li.textContent = assignment.title;
+        li.innerHTML = `${assignment.title}`;
         li.addEventListener('click', () => showAssignmentDetails(assignment.id));
         assignmentItems.appendChild(li);
     });
@@ -527,10 +632,24 @@ function showAssignmentDetails(id) {
     const info = document.getElementById('assignment-info');
     const count = document.getElementById('submitted-count');
 
+    let fileHTML = "<p>No file attached</p>";
+    if (assignment.file) {
+        const byteCharacters = atob(assignment.file.split(',')[1]); 
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: "application/octet-stream" });
+
+        const fileURL = URL.createObjectURL(blob);
+        fileHTML = `<a class="assignment-download" href="${fileURL}" download="${assignment.fileName}">📂 Download Assignment</a>`;
+    }
+
     info.innerHTML = `
         <div><b>Title:</b><p>${assignment.title}</p></div>
         <div><b>Description:</b><p>${assignment.description}</p></div>
-        <div><b>File:</b><p>${assignment.file ? assignment.file : "No file attached"}</p></div>
+        <div><b>File:</b>${fileHTML}</div>
     `;
 
     count.textContent = assignment.submissions.length;
@@ -547,7 +666,40 @@ function showAssignmentDetails(id) {
 
     detailsSection.style.display = 'block';
     gsap.fromTo(detailsSection, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
+
+    // 🛑 Attach delete functionality to the button
+    document.querySelector(".delete-assignments button").onclick = function () {
+        deleteAssignment(assignment.id);
+    };
 }
+
+function deleteAssignment(assignmentId) {
+    if (!db) {
+        console.error("Database not opened yet.");
+        return;
+    }
+
+    const transaction = db.transaction("assignments", "readwrite");
+    const store = transaction.objectStore("assignments");
+
+    const deleteRequest = store.delete(assignmentId);
+
+    deleteRequest.onsuccess = function () {
+        console.log(`✅ Assignment ${assignmentId} deleted successfully`);
+
+        // Remove from local array
+        assignments = assignments.filter(a => a.id !== assignmentId);
+
+        // Update UI
+        updateAssignmentsList();
+        assignmentBack(); // Go back to list after deletion
+    };
+
+    deleteRequest.onerror = function (event) {
+        console.error("❌ Error deleting assignment:", event.target.error);
+    };
+}
+
 
 function assignmentBack() {
     const createSection = document.getElementById('create-assignment');
@@ -581,6 +733,14 @@ function toggleUploadButton() {
 
 function AssignmentsFunction() {
     setTimeout(() => {
+        if (!db) {
+            openDatabase(() => {
+                getAssignmentsFromDB();
+            });
+        } else {
+            getAssignmentsFromDB();
+        }
+
         const titleInput = document.getElementById('assignmentTitle');
         const descInput = document.getElementById('assignmentDesc');
 
