@@ -102,8 +102,7 @@
             animation: fadeIn 0.5s ease-in-out;
         }
 
-        .login-form input
-         {
+        .login-form input {
             width: 100%;
             padding: 8px;
             margin: 8px 0;
@@ -136,36 +135,36 @@
                 transform: translateX(0);
             }
         }
-            
+
         @media (max-width: 700px) {
-            .buttons{
+            .buttons {
                 flex-direction: column;
             }
 
-            .container{
+            .container {
                 width: 70%;
                 flex-direction: column;
                 height: 65%;
                 background-color: whitesmoke;
             }
 
-            .left{
+            .left {
                 width: 85%;
             }
 
             @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-80px);
+                from {
+                    opacity: 0;
+                    transform: translateY(-80px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            }
-
-            .loginButton{
+            .loginButton {
                 margin-top: 10px;
             }
 
@@ -211,36 +210,44 @@
                 inputField.innerHTML = '<input type="text" id="username" placeholder="Student ID" required>';
             } else {
                 inputField.innerHTML = `
-                <select id="facultyDropdown" class="section-select" required>
-                    <option value="" disabled selected>Select Section</option>
-                    <option value="it1">IT 1</option>
-                    <option value="it2">IT 2</option>
-                    <option value="it3">IT 3</option>
-                </select>`;
+                    <select id="facultyDropdown" class="section-select" required>
+                        <option value="" disabled selected>Select Section</option>
+                        <option value="it1">IT 1</option>
+                        <option value="it2">IT 2</option>
+                        <option value="it3">IT 3</option>
+                    </select>`;
             }
+
         }
 
         function validateLogin() {
-            const facultyDropdown = document.getElementById("facultyDropdown");
-            const username = document.getElementById("username");
-            const password = document.getElementById("password").value;
+    const facultyDropdown = document.getElementById("facultyDropdown");
+    const usernameInput = document.getElementById("username");
+    const password = document.getElementById("password").value;
 
-            if (facultyDropdown && facultyDropdown.value !== "") {
-                if (password === facultyDropdown.value) {
-                    window.location.href = "faculty.html";
-                } else {
-                    alert("Invalid Credentials");
-                }
-            } else if (username && username.value.length === 12) {
-                if (password === username.value) {
-                    window.location.href = `student.html?rollNumber=${username.value}`;
-                } else {
-                    alert("Invalid Credentials");
-                }
-            } else {
-                alert("Invalid Credentials");
-            }
+    // Faculty Login
+    if (facultyDropdown && facultyDropdown.value) { 
+        const selectedSection = facultyDropdown.value;
+        if (password === selectedSection) {
+            window.location.href = `faculty.html?section=${selectedSection}`;
+        } else {
+            alert("Invalid Credentials");
         }
+    } 
+    // Student Login
+    else if (usernameInput && usernameInput.value.length === 12) {
+        const username = usernameInput.value;
+        if (password === username) {
+            window.location.href = `student.html?rollNumber=${username}`;
+        } else {
+            alert("Invalid Credentials");
+        }
+    } 
+    else {
+        alert("Invalid Credentials");
+    }
+}
+
     </script>
 </body>
 

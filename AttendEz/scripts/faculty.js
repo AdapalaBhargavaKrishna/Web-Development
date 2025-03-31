@@ -1,9 +1,72 @@
-const TotStudents = ["71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90",
-    "91", "92", "93", "94", "95", "96", "97", "98", "99", "100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110",
-    "111", "112", "113", "114", "115", "116", "117", "118", "119", "120", "121", "122", "123", "124", "125", "126", "127", "128", "129", "130",
-    "131", "132", "133", "134", "135", "136", "137", "308", "309", "310", "311", "312", "313", "314"];
+// <--------------------Toast-------------------->
 
-const subjects = ["PQT","DCCST","DBMS","DAA","MAD","DAV","FOC","EEA","ES","DBMS LAB","DAA LAB","Mini Project"];
+function showToast() {
+    Toastify({
+        text: "⚠ Please Select a Subject",
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "right",
+        offset: {
+            x: 50,
+            y: 100
+        },
+        style: {
+            background: "#ff5656",
+            color: "#fff",
+            fontWeight: "bold",
+        },
+    }).showToast();
+}
+
+// <--------------------Section Name-------------------->
+const sectionName = new URLSearchParams(window.location.search).get("section");
+
+// <--------------------Total Students-------------------->
+
+let TotStudents = [];
+
+if (sectionName === "it1") {
+    TotStudents = [...Array(70).keys()].map(i => (i + 1).toString())
+        .concat([...Array(7).keys()].map(i => (301 + i).toString()));
+
+} else if (sectionName === "it2") {
+    TotStudents = [...Array(70).keys()].map(i => (71 + i).toString())
+        .concat([...Array(7).keys()].map(i => (308 + i).toString()));
+        
+} else if (sectionName === "it3") {
+    TotStudents = [...Array(70).keys()].map(i => (138 + i).toString())
+        .concat([...Array(6).keys()].map(i => (315 + i).toString()));
+
+} else {
+    console.log("Invalid Section Name");
+}
+
+const batchData = {
+    "Batch-1": TotStudents.slice(0, 26),         
+    "Batch-2": TotStudents.slice(26, 51),        
+    "Batch-3": TotStudents.slice(51)             
+};
+
+console.log("Batches:", batchData);
+
+// <--------------------Total Subjects-------------------->
+
+    const subjects = [
+        "PQT : Probability and Queueing Theory",
+        "DCCST : DC Circuits Sensors and Transducers",
+        "DBMS : Database Management Systems",
+        "DAA : Design and Analysis of Algorithms",
+        "EEA : Engineering Economics and Accountancy",
+        "ES : Environmental Science",
+        "MAD : Mobile Application Development",
+        "DBMS Lab : Database Management Systems Lab",
+        "ALG Lab : Algorithms Lab",
+        "MP-I : Mini Project – I",
+        "MENTORING : MENTORING"
+    ];
+
+// <--------------------Show Sections-------------------->
 
 function showSection(section) {
     fetch(`sections/faculty/${section}.html`)
@@ -11,7 +74,6 @@ function showSection(section) {
         .then(data => {
             document.getElementById("mainbar").innerHTML = data;
 
-            // Wait for DOM update before executing section-specific code
             requestAnimationFrame(() => {
                 if (section === "Fees") populateFeeTable();
                 if (section === "announcements") loadAnnouncements();
@@ -24,37 +86,36 @@ function showSection(section) {
         });
 }
 
-
+// <--------------------Logout-------------------->
 
 function logout() {
     window.location.href = "index.html";
 }
 
+// <--------------------Attendance-------------------->
+
 let rollNumbers = [];
 let attendance = {};
-
 
 function selectType(type) {
     const rollNumbersDiv = document.getElementById('rollNumbers');
     const batchSelect = document.getElementById('batch-select');
+    const subjectSelect = document.getElementById('subject-dropdown');
     rollNumbersDiv.innerHTML = '';
 
-    // Reset attendance data
-    attendance = {};
-    document.getElementById('absenteesList').innerHTML = ''; // Clear absentees list
+    if (!subjectSelect.value) {
+        showToast()
+        return;
+    }
+
+    document.getElementById('absenteesList').innerHTML = '';
 
     if (type === "class") {
         batchSelect.value = "";
-        rollNumbers = TotStudents;
+        rollNumbers = [...TotStudents]; 
     } else if (type === "batch") {
-        const selectedBatch = document.getElementById('batch-select').value;
-        if (selectedBatch === "Batch-1") {
-            rollNumbers = ["71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96"];
-        } else if (selectedBatch === "Batch-2") {
-            rollNumbers = ["97", "98", "99", "100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "112", "113", "114", "115", "116", "117", "118", "119", "120", "121"];
-        } else if (selectedBatch === "Batch-3") {
-            rollNumbers = ["121", "122", "123", "124", "125", "126", "127", "128", "129", "130", "131", "132", "133", "134", "135", "136", "137", "308", "309", "310", "311", "312", "313", "314"];
-        }
+        const selectedBatch = batchSelect.value;
+        rollNumbers = batchData[selectedBatch] || [];
     }
 
     rollNumbers.forEach(roll => {
@@ -66,6 +127,8 @@ function selectType(type) {
         rollNumbersDiv.appendChild(rollNumberDiv);
     });
 }
+
+// <--------------------Attendance Marking-------------------->
 
 function markAttendance(roll) {
     const rollNumberDiv = document.querySelector(`.roll-number[data-roll="${roll}"]`);
@@ -89,7 +152,6 @@ function markAttendance(roll) {
             })
         }
     })
-
 }
 
 function updateRollNumberDisplay(roll) {
@@ -104,40 +166,17 @@ function updateRollNumberDisplay(roll) {
 function finalizeAttendance() {
     rollNumbers.forEach(roll => {
         if (!(roll in attendance)) {
-            attendance[roll] = 'Absent'; // Mark as 'Absent' if not explicitly selected
+            attendance[roll] = 'Absent';
         }
     });
 
     const attendanceData = rollNumbers.map(roll => ({
-        rollNumber: `160123737${roll}`,            // Convert roll number to 12-digit format
-        subject: "Mathematics",                    // Hardcoded subject or get it from the form/input
-        date: new Date().toISOString(),            // Sending the current date in ISO format
-        status: attendance[roll],                  // Present or Absent
+        rollNumber: `160123737${roll}`,            
+        subject: "",                    
+        date: new Date().toISOString(),        
+        status: attendance[roll],
     }));
 
-    // Send attendance data to the backend
-    fetch("http://localhost:5000/api/attendance", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(attendanceData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Attendance saved:", data);
-        if (data.message) {
-            alert("Error: " + data.message);
-        } else {
-            alert("Attendance saved successfully!");
-        }
-    })
-    .catch(error => {
-        console.error("Error saving attendance:", error);
-        alert("Failed to save attendance. Please try again.");
-    });
-
-    // Display absentees
     const absentees = Object.keys(attendance).filter(roll => attendance[roll] === 'Absent');
     const absenteesListDiv = document.getElementById('absenteesList');
     absenteesListDiv.innerHTML = `<h3>Absentees: ${absentees.join(', ')}</h3>`;
@@ -145,8 +184,6 @@ function finalizeAttendance() {
     rollNumbers.forEach(updateRollNumberDisplay);
     document.getElementById("clear-button").style.display = "block";
 }
-
-
 
 function clearAttendance() {
     attendance = {};
@@ -201,11 +238,11 @@ gsap.from("#heading span", {
     stagger: 0.1
 })
 
-// <----------Fees---------->
+/*<---------------Fees--------------->*/
 
 function populateFeeTable() {
     let feeTable = document.getElementById("feeTable");
-    feeTable.innerHTML = ""; // Clear previous entries
+    feeTable.innerHTML = "";
 
     TotStudents.forEach(roll => {
         let row = document.createElement("tr");
@@ -276,9 +313,7 @@ function updateFeeStatus(dueInput, statusCell) {
     }
 }
 
-
-// <-----------Records---------->
-
+/*<---------------Records--------------->*/
 
 function populateRecords() {
 
@@ -305,8 +340,6 @@ function populateRecords() {
             searchRollNosDiv.style.display = "flex";  
         }
     });
-
-
 }
 
 function toggleSidebar() {
@@ -327,9 +360,8 @@ function handleSidebarButtonClick() {
     const sidebar = document.getElementById('sidebar');
     const mainbar = document.getElementById('mainbar');
 
-    // Hide the sidebar and show the mainbar
     sidebar.classList.remove('active');
-    mainbar.classList.remove('hidden'); // Show
+    mainbar.classList.remove('hidden');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -415,7 +447,7 @@ function deleteAnnouncement(index) {
     loadAnnouncements();
 }
 
-// <----------------------------------------------Assignments--------------------------------------------------------> 
+/*<---------------Assignments--------------->*/
 
 let assignments = [];
 
