@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Faculty Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <link rel="stylesheet" href="styles/faculty.css">
 </head>
 
@@ -18,22 +20,22 @@
                 <h1 id="heading" class="ani">Faculty Dashboard</h1>
             </div>
             <div class="nav-button">
-                <button class="ani">Notifications</button>
+                <button class="ani" id="notification-btn">Notifications</button>
                 <button class="ani" onclick="logout()">Logout</button>
             </div>
         </nav>
 
         <div id="notification-popup" class="popup hidden">
             <div class="popup-header">
-              <h2>Notifications</h2>
-              <button id="close-popup"><img src="assets/back.svg" alt=""></button>
+                <h2>Notifications</h2>
+                <button id="close-popup"><img src="assets/back.svg" alt=""></button>
             </div>
             <div class="popup-content">
-              <p>No new Notification</p>
-              <!-- <div>New Notification</div> -->
-              <!-- You can dynamically add notifications here -->
+                <p>No new Notification</p>
+                <!-- <div>New Notification</div> -->
+                <!-- You can dynamically add notifications here -->
             </div>
-          </div>
+        </div>
 
         <div class="container">
             <div class="sidebar" id="sidebar">

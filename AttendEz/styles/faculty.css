@@ -172,8 +172,36 @@ nav{
     font-size: 35px;
 }
 
+.Attendance-dropdown{
+    display: flex;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.subject-dropdown{
+    width: 28vw;
+    display: flex;
+    align-items: center;
+}
+
+.subject-dropdown > div{
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.subject-dropdown select{
+    padding: 10px 15px;
+    margin-left: 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    width: 17vw;
+
+}
+
 .select-batch > button{
-    margin-top: 20px;
     padding: 10px 15px;
     border-radius: 5px;
     background-color: #4CAF50;
@@ -250,6 +278,7 @@ nav{
     background-color: green;
     color: white;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
 }
 
