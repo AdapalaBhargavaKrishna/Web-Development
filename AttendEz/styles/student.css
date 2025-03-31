@@ -188,7 +188,6 @@ nav {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
 }
 
 .attendance>h1 {
@@ -207,7 +206,9 @@ nav {
 
 .att-message {
     color: green;
-    margin: 0.7rem;
+    margin-top: 0.7rem;
+    font-weight: 700;
+    margin-bottom: 0;
 }
 
 .subject-wise {
@@ -279,23 +280,32 @@ nav {
     flex-direction: column;
 }
 
+.date-wise-dropdown{
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+}
+
+.date-select {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+    gap: 1rem;
+}
+
+.date-select select{
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
 .date-attendance {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 10px;
-}
-
-.subject-select {
-    margin: 15px 0;
-}
-
-.subject-select select {
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    cursor: pointer;
 }
 
 .date-attendance table {
@@ -337,21 +347,21 @@ nav {
 
 /* <---------------------Timetable---------------------> */
 
-.faculty-timetable {
+.student-timetable {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.faculty-timetable h2 {
+.student-timetable h2 {
     color: #3b3b3b;
     text-align: center;
     font-size: 1.8rem;
     margin-bottom: 10px;
 }
 
-.faculty-timetable table {
+.student-timetable table {
     width: 90%;
     border-collapse: separate;
     border-spacing: 0;
@@ -361,25 +371,25 @@ nav {
     background: #fff;
 }
 
-.faculty-timetable th,
-.faculty-timetable td {
+.student-timetable th,
+.student-timetable td {
     padding: 15px;
     text-align: center;
     border: 1px solid #ddd;
     font-size: 1rem;
 }
 
-.faculty-timetable thead th {
+.student-timetable thead th {
     background: linear-gradient(45deg, #527a58, #2c3e50);
     color: white;
     font-weight: bold;
 }
 
-.faculty-timetable tbody tr:nth-child(even) {
+.student-timetable tbody tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-.faculty-timetable th:first-child {
+.student-timetable th:first-child {
     background-color: #527a58;
     color: white;
     font-weight: bold;

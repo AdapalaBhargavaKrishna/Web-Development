@@ -92,6 +92,10 @@ function logout() {
     window.location.href = "index.html";
 }
 
+function formatRollNumber(roll) {
+    return `160123737${String(roll).padStart(3, '0')}`;
+}
+
 // <--------------------Attendance-------------------->
 
 let rollNumbers = [];
@@ -163,27 +167,52 @@ function updateRollNumberDisplay(roll) {
     });
 }
 
-function finalizeAttendance() {
+async function finalizeAttendance() {
     rollNumbers.forEach(roll => {
         if (!(roll in attendance)) {
             attendance[roll] = 'Absent';
         }
     });
 
-    const attendanceData = rollNumbers.map(roll => ({
-        rollNumber: `160123737${roll}`,            
-        subject: "",                    
-        date: new Date().toISOString(),        
-        status: attendance[roll],
-    }));
+    const selectedSubject = document.getElementById('subject-dropdown');
 
+    if (!selectedSubject.value) {
+        alert("Please select a subject!");
+        return;
+    }
+
+    const attendanceData = {
+        date: new Date().toISOString().split('T')[0], 
+        subject: selectedSubject.value,
+        section: sectionName,
+        students: rollNumbers.map(roll => ({
+            rollNumber: formatRollNumber(roll),
+            status: attendance[roll]
+        }))
+    };
+
+    console.log("Sending Data:", JSON.stringify(attendanceData, null, 2)); // Debugging
     const absentees = Object.keys(attendance).filter(roll => attendance[roll] === 'Absent');
     const absenteesListDiv = document.getElementById('absenteesList');
     absenteesListDiv.innerHTML = `<h3>Absentees: ${absentees.join(', ')}</h3>`;
 
+    try {
+        const response = await fetch('http://localhost:3000/submit-attendance', {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(attendanceData)
+        });
+
+        const result = await response.json();
+        // alert(result.message || result.error);
+    } catch (error) {
+        console.error("Error submitting attendance:", error);
+    }
+
     rollNumbers.forEach(updateRollNumberDisplay);
     document.getElementById("clear-button").style.display = "block";
 }
+
 
 function clearAttendance() {
     attendance = {};

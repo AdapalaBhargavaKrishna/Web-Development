@@ -1,10 +1,39 @@
 // <--------------------roll-Number-------------------->
-const rollNumber = localStorage.getItem("rollNumber");
+const urlParams = new URLSearchParams(window.location.search);
+const rollNumber = urlParams.get("rollNumber");
 if (rollNumber) {
     document.getElementById("rollNumber").innerText = rollNumber
-} else{
+} else {
     document.getElementById("rollNumber").innerText = ""
 }
+
+let sectionName;
+// <--------------------Time Table-------------------->
+
+const timetables = {
+    it1: [
+        ["Monday", "DBMS", "DAA", "PE - 1", "Lunch", "DCCST", "DBMS", "LAB"],
+        ["Tuesday", "DBMS", "Environmental Science", "Mini Project 1", "ALGO Lab", "Mentoring", "PE - 1"],
+        ["Wednesday", "DBMS Lab", "DBMS", "PQT", "DCCST", "PE - 1", "Engineering Economics"],
+        ["Thursday", "PQT", "DAA", "Environmental Science", "DCCST", "DBMS", "LAB"],
+        ["Friday", "DBMS", "PE - 1", "DBMS Lab", "Engineering Economics", "ALGO Lab", "Mini Project 1"]
+    ],
+    it2: [
+        ["Monday", "DBMS", "PQT", "DAA", "Lunch", "DCCST", "PE - 1", "LAB"],
+        ["Tuesday", "ALGO Lab", "Mentoring", "Environmental Science", "Mini Project 1", "DBMS", "PQT"],
+        ["Wednesday", "DBMS", "DBMS Lab", "PQT", "PE - 1", "Engineering Economics", "DCCST"],
+        ["Thursday", "PE - 1", "DAA", "DBMS", "DCCST", "Environmental Science", "LAB"],
+        ["Friday", "Mini Project 1", "ALGO Lab", "DBMS", "Engineering Economics", "PQT", "DBMS Lab"]
+    ],
+    it3: [
+        ["Monday", "DAA", "DBMS", "PE - 1", "Lunch", "PQT", "DCCST", "LAB"],
+        ["Tuesday", "Mini Project 1", "Environmental Science", "DBMS", "Mentoring", "ALGO Lab", "PQT"],
+        ["Wednesday", "DBMS", "DBMS Lab", "DAA", "PQT", "Engineering Economics", "PE - 1"],
+        ["Thursday", "DCCST", "PE - 1", "Environmental Science", "DBMS", "DAA", "LAB"],
+        ["Friday", "Engineering Economics", "ALGO Lab", "Mini Project 1", "DBMS Lab", "DBMS", "PQT"]
+    ]
+};
+
 
 // <--------------------Sections-------------------->
 
@@ -17,6 +46,7 @@ function showSection(section) {
             // Wait for DOM update before executing section-specific code
             requestAnimationFrame(() => {
 
+                if (section === "timetable") updateTimetable(sectionName);
                 if (section === "assignments") AssignmentsFunction();
                 if (section === "Fees") feesSection();
             });
@@ -60,30 +90,249 @@ gsap.from(".ani2", {
 
 // <--------------------Attendance-------------------->
 
+document.addEventListener("DOMContentLoaded", () => {
+    const attendanceButton = document.getElementById("attendanceBtn");
+
+    if (attendanceButton) {
+        attendanceButton.addEventListener("click", async () => {
+            // Wait until the attendance section appears
+            setTimeout(async () => {
+                await updateAttendanceTable(rollNumber);
+                console.log(sectionName)
+            }, 100); // Small delay to ensure table is visible
+        });
+    } else {
+        console.error("Attendance button not found!");
+    }
+});
+
+
+
+// Function to fetch attendance data from backend
+async function fetchAttendance(rollNumber) {
+    try {
+        const response = await fetch(`http://localhost:3000/get-attendance?rollNumber=${rollNumber}`);
+        const data = await response.json();
+
+        console.log(data)
+        sectionName = data[0]["section"]
+        populateDateDropdown(data);
+
+        return data;
+    } catch (error) {
+        console.error("Error fetching attendance data:", error);
+        return [];
+    }
+}
+
+function populateDateDropdown(attendanceData) {
+    const dateDropdown = document.getElementById("dateDropdown");
+
+    if (!dateDropdown) {
+        console.error("Date dropdown not found!");
+        return;
+    }
+
+    const uniqueDates = [...new Set(attendanceData.map(record => record.date))];
+
+    dateDropdown.innerHTML = '<option value="">---Select date---</option>';
+
+    uniqueDates.forEach(date => {
+        const option = document.createElement("option");
+        option.value = date;
+        option.textContent = date;
+        dateDropdown.appendChild(option);
+    });
+
+    dateDropdown.addEventListener("change", () => {
+        const selectedDate = dateDropdown.value;
+        displayAttendanceByDate(selectedDate, attendanceData);
+    });
+}
+
+function displayAttendanceByDate(selectedDate, attendanceData) {
+    const table = document.querySelector(".date-attendance table");
+
+    if (!table) {
+        console.error("Attendance table not found!");
+        return;
+    }
+
+    table.innerHTML = `
+        <tr>
+          <th>Date</th>
+          <th>Subject</th>
+          <th>Status</th>
+        </tr>
+    `;
+
+    const filteredData = attendanceData.filter(record => record.date === selectedDate);
+
+    filteredData.forEach(record => {
+        record.students.forEach(student => {
+            if (student.rollNumber === rollNumber) {
+                const row = document.createElement("tr");
+                const statusClass = student.status.toLowerCase() === "present" ? "present" : "absent";
+                const statusText = student.status.charAt(0).toUpperCase() + student.status.slice(1).toLowerCase();
+                row.innerHTML = `
+                    <td>${record.date}</td>
+                    <td>${record.subject}</td>
+                    <td class="${statusClass}">${statusText}</td>
+                `;
+                table.appendChild(row);
+            }
+        });
+    });
+}
+
+// Function to process attendance data
+function processAttendance(attendanceData) {
+    let attendanceSummary = {};
+
+    attendanceData.forEach(record => {
+        const subject = record.subject;
+
+        if (!attendanceSummary[subject]) {
+            attendanceSummary[subject] = { held: 0, attended: 0 };
+        }
+
+        attendanceSummary[subject].held += 1;
+
+        const student = record.students.find(s => s.rollNumber === rollNumber);
+
+        if (student && student.status.toLowerCase() === "present") {
+            attendanceSummary[subject].attended += 1;
+        }
+    });
+
+    return attendanceSummary;
+}
+
+// Function to update the table
+async function updateAttendanceTable(rollNumber) {
+    const tableBody = document.querySelector(".subject-attendance-table tbody");
+
+    if (!tableBody) {
+        console.error("Error: Attendance table body not found! Ensure the section is visible before updating.");
+        return;
+    }
+
+    try {
+        const attendanceData = await fetchAttendance(rollNumber);
+        const attendanceSummary = processAttendance(attendanceData);
+
+        let totalClassesHeld = 0;
+        let totalClassesAttended = 0;
+
+        for (let i = 0; i < tableBody.rows.length; i++) {
+            let subjectCell = tableBody.rows[i].cells[1]; // Subject name
+            let heldCell = tableBody.rows[i].cells[2]; // Classes Held
+            let attendedCell = tableBody.rows[i].cells[3]; // Classes Attended
+            let percentageCell = tableBody.rows[i].cells[4]; // Attendance %
+
+            let subject = subjectCell.textContent.trim();
+            if (attendanceSummary[subject]) {
+                let held = attendanceSummary[subject].held;
+                let attended = attendanceSummary[subject].attended;
+                let percentage = ((attended / held) * 100).toFixed(2);
+
+                heldCell.textContent = held;
+                attendedCell.textContent = attended;
+                percentageCell.textContent = `${percentage}%`;
+
+                totalClassesHeld += held;
+                totalClassesAttended += attended;
+            }
+        }
+
+        // Update "Total" row
+
+
+        TotalAttendance = totalClassesHeld > 0 ? `${((totalClassesAttended / totalClassesHeld) * 100).toFixed(2)}%` : "0%";
+
+
+        let totalRow = tableBody.rows[tableBody.rows.length - 1];
+        totalRow.cells[2].textContent = totalClassesHeld;
+        totalRow.cells[3].textContent = totalClassesAttended;
+        totalRow.cells[4].textContent = TotalAttendance
+
+        document.querySelector(".att-percentage").textContent = TotalAttendance
+
+        let message = "";
+        let messageColor = "green";
+
+        if (TotalAttendance >= 90) {
+            message = "Excellent attendance! Keep it up.";
+        } else if (TotalAttendance >= 75) {
+            message = "Good attendance. Maintain consistency.";
+        } else if (TotalAttendance >= 60) {
+            message = "Your attendance is low. Try to attend more classes.";
+            messageColor = "red";
+        } else if (TotalAttendance >= 45) {
+            message = "Warning: Your attendance is below the required level.";
+            messageColor = "red";
+        } else {
+            message = "Critical alert: Immediate improvement needed.";
+            messageColor = "red";
+        }
+
+        const messageElement = document.querySelector(".att-message");
+        messageElement.textContent = message;
+        messageElement.style.color = messageColor;
+
+    } catch (error) {
+        console.error("Error updating attendance table:", error);
+    }
+}
+
+
 // Function to show Date-Wise Attendance
 function showDateWise() {
     gsap.to(".subject-wise", { opacity: 0, y: -20, duration: 0.3, display: "none" });
-    gsap.fromTo(".date-wise", 
-        { opacity: 0, y: 50, display: "none" }, 
+    gsap.fromTo(".date-wise",
+        { opacity: 0, y: 50, display: "none" },
         { opacity: 1, y: 0, duration: 0.5, display: "flex" }
     );
 }
 
 // Function to show Subject-Wise Attendance
-function showSubjectWise() {
+function showOverall() {
     gsap.to(".date-wise", { opacity: 0, y: -50, duration: 0.5, display: "none" });
-    gsap.fromTo(".subject-wise", 
-        { opacity: 0, y: 50, display: "none" }, 
+    gsap.fromTo(".subject-wise",
+        { opacity: 0, y: 50, display: "none" },
         { opacity: 1, y: 0, duration: 0.5, display: "flex" }
     );
 }
 
-gsap.from(".faculty-timetable table", {
-    opacity: 0,
-    y: 30,
-    duration: 1,
-    ease: "power2.out"
-});
+// <--------------------Time Table-------------------->
+
+function updateTimetable(section) {
+    if (section) {
+
+
+        const timetableBody = document.getElementById("timetableBody");
+        timetableBody.innerHTML = ""; // Clear existing timetable
+        console.log("triggered out")
+        timetables[section].forEach((row) => {
+            let tr = "<tr>";
+            tr += `<th>${row[0]}</th>`; // Day
+            console.log(timetableBody.innerHTML)
+            row.slice(1).forEach(subject => {
+                if (subject === "Lunch") {
+                    console.log("triggered in")
+                    tr += '<td rowspan="5" class="lunch-break">Lunch Break</td>';
+                } else {
+                    tr += `<td>${subject}</td>`;
+                }
+            });
+
+            tr += "</tr>";
+            timetableBody.innerHTML += tr;
+        });
+    }
+}
+
+
 
 // <--------------------Assignment-------------------->
 
@@ -93,23 +342,27 @@ function AssignmentsFunction() {
     const assignmentDetails = document.querySelector(".assignment-details");
     const backButton = document.querySelector(".details-heading button");
 
-assignmentItems.forEach(item => {
-    item.addEventListener("click", () => {
-        gsap.to(assignmentView, { x: 2000, duration: 0.5, onComplete: () => {
-            assignmentView.style.display = "none";
-            assignmentDetails.style.display = "flex";
-            gsap.fromTo(assignmentDetails, { opacity: 0, x: -500 }, { opacity: 1, x: 0, duration: 0.5 });
-        }});
+    assignmentItems.forEach(item => {
+        item.addEventListener("click", () => {
+            gsap.to(assignmentView, {
+                x: 2000, duration: 0.5, onComplete: () => {
+                    assignmentView.style.display = "none";
+                    assignmentDetails.style.display = "flex";
+                    gsap.fromTo(assignmentDetails, { opacity: 0, x: -500 }, { opacity: 1, x: 0, duration: 0.5 });
+                }
+            });
+        });
     });
-});
 
-backButton.addEventListener("click", () => {
-    gsap.to(assignmentDetails, { opacity: 0, duration: 0.5, onComplete: () => {
-        assignmentDetails.style.display = "none";
-        assignmentView.style.display = "flex";
-        gsap.fromTo(assignmentView, { opacity: 0, x: -100 }, { opacity: 1, x: 0, duration: 0.5 });
-    }});
-});
+    backButton.addEventListener("click", () => {
+        gsap.to(assignmentDetails, {
+            opacity: 0, duration: 0.5, onComplete: () => {
+                assignmentDetails.style.display = "none";
+                assignmentView.style.display = "flex";
+                gsap.fromTo(assignmentView, { opacity: 0, x: -100 }, { opacity: 1, x: 0, duration: 0.5 });
+            }
+        });
+    });
 }
 
 // <--------------------Fees-------------------->
@@ -139,7 +392,7 @@ function showFees(fee) {
         updatePaymentDetails();
         return;
     }
-    
+
 
     if (fees[fee]) {
         fees[fee].style.display = "table-row";
@@ -224,21 +477,21 @@ function showPaymodes() {
 
     if (paymentType === "upi") {
         upiSection.style.display = "flex";
-        gsap.fromTo(upiSection, 
+        gsap.fromTo(upiSection,
             { y: -20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.5 } 
+            { y: 0, opacity: 1, duration: 0.5 }
         );
     } else if (paymentType === "credit-card") {
         creditCardSection.style.display = "flex";
-        gsap.fromTo(creditCardSection, 
-            { y: -20, opacity: 0 },  
+        gsap.fromTo(creditCardSection,
+            { y: -20, opacity: 0 },
             { y: 0, opacity: 1, duration: 0.5 }
         );
     }
 }
 
 function feesSection() {
-    
+
     console.log("Fees section loaded!");
 
     document.getElementById("fee-select").addEventListener("change", function () {
@@ -271,14 +524,14 @@ const closePopup = document.getElementById("close-popup");
 gsap.set(popup, { opacity: 0, y: -600 });
 
 notificationBtn.addEventListener("click", () => {
-  if (popup.classList.contains("hidden")) {
-    popup.classList.remove("hidden");
-    gsap.to(popup, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
-  } else {
-    gsap.to(popup, { opacity: 0, y: -600, duration: 0.6, ease: "power2.in", onComplete: () => popup.classList.add("hidden") });
-  }
+    if (popup.classList.contains("hidden")) {
+        popup.classList.remove("hidden");
+        gsap.to(popup, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
+    } else {
+        gsap.to(popup, { opacity: 0, y: -600, duration: 0.6, ease: "power2.in", onComplete: () => popup.classList.add("hidden") });
+    }
 });
 
 closePopup.addEventListener("click", () => {
-  gsap.to(popup, { opacity: 0, y: 600, duration: 0.6, ease: "power2.in", onComplete: () => popup.classList.add("hidden") });
+    gsap.to(popup, { opacity: 0, y: 600, duration: 0.6, ease: "power2.in", onComplete: () => popup.classList.add("hidden") });
 });
