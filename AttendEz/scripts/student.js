@@ -46,9 +46,13 @@ function showSection(section) {
             // Wait for DOM update before executing section-specific code
             requestAnimationFrame(() => {
 
-                if (section === "timetable") updateTimetable(sectionName);
-                if (section === "assignments") AssignmentsFunction();
+                if (section === "timetable") updateTimetable();
                 if (section === "Fees") feesSection();
+                if (section === "assignments") {
+                    openDatabase(function () {
+                        AssignmentsFunction();
+                    });
+                }
             });
         })
         .catch(error => {
@@ -56,6 +60,7 @@ function showSection(section) {
             document.getElementById("mainbar").innerHTML = `<h2>Error Loading ${section}</h2>`;
         });
 }
+
 
 function logout() {
     window.location.href = "index.html";
@@ -336,16 +341,43 @@ function updateTimetable(section) {
 
 // <--------------------Assignment-------------------->
 
+let db;
+
+function openDatabase(callback) {
+    const request = indexedDB.open("AttendZ_DB", 1);
+
+    request.onupgradeneeded = function (event) {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains("assignments")) {
+            const assignmentStore = db.createObjectStore("assignments", { keyPath: "id" });
+            assignmentStore.createIndex("title", "title", { unique: false });
+        }
+    };
+
+    request.onsuccess = function (event) {
+        db = event.target.result;
+        console.log("IndexedDB opened successfully.");
+        if (callback) callback();  // Call the callback once the database is ready
+    };
+
+    request.onerror = function (event) {
+        console.error("IndexedDB error:", event.target.errorCode);
+    };
+}
+
 function AssignmentsFunction() {
     const assignmentItems = document.querySelectorAll(".assignment-item");
     const assignmentView = document.querySelector(".assignment-view");
     const assignmentDetails = document.querySelector(".assignment-details");
     const backButton = document.querySelector(".details-heading button");
 
+    // Add event listeners to assignment items (click to view details)
     assignmentItems.forEach(item => {
         item.addEventListener("click", () => {
             gsap.to(assignmentView, {
-                x: 2000, duration: 0.5, onComplete: () => {
+                x: 2000,
+                duration: 0.5,
+                onComplete: () => {
                     assignmentView.style.display = "none";
                     assignmentDetails.style.display = "flex";
                     gsap.fromTo(assignmentDetails, { opacity: 0, x: -500 }, { opacity: 1, x: 0, duration: 0.5 });
@@ -354,16 +386,196 @@ function AssignmentsFunction() {
         });
     });
 
+    // Handle the back button to go back to the assignment list
     backButton.addEventListener("click", () => {
         gsap.to(assignmentDetails, {
-            opacity: 0, duration: 0.5, onComplete: () => {
+            opacity: 0,
+            duration: 0.5,
+            onComplete: () => {
                 assignmentDetails.style.display = "none";
                 assignmentView.style.display = "flex";
                 gsap.fromTo(assignmentView, { opacity: 0, x: -100 }, { opacity: 1, x: 0, duration: 0.5 });
             }
         });
     });
+
+    console.log("called")
+    getAssignmentsBySection('it2', displayAssignments);
 }
+
+// Function to get all assignments with sectionName 'it2' from IndexedDB
+function getAssignmentsBySection(sectionName, callback) {
+    const transaction = db.transaction(['assignments'], 'readonly');
+    const store = transaction.objectStore('assignments');
+    const request = store.openCursor();
+
+    const assignments = [];
+
+    request.onsuccess = function (event) {
+        const cursor = event.target.result;
+        console.log("YUP")
+        if (cursor) {
+            const assignment = cursor.value;
+
+            if (assignment.sectionName === sectionName) {
+                assignments.push(assignment);
+            }
+            cursor.continue();
+        } else {
+            console.log(assignments)
+            console.log("Finished")
+            callback(assignments);
+        }
+    };
+
+    request.onerror = function (event) {
+        console.error('Error fetching assignments:', event.target.error);
+    };
+}
+
+function displayAssignments(assignments) {
+    const assignmentContainer = document.querySelector('.assignment-items'); // Assuming this is where assignment titles will go
+    assignmentContainer.innerHTML = ''; // Clear any existing assignments
+
+    assignments.forEach(assignment => {
+        const assignmentItem = document.createElement('li');
+        assignmentItem.classList.add('assignment-item');
+        assignmentItem.textContent = assignment.title;
+
+        assignmentItem.setAttribute('data-assignment-title', assignment.title);
+
+        // Add click event to each assignment to show its details
+        assignmentItem.addEventListener('click', () => {
+            // Remove 'clicked' class from all assignment items
+            document.querySelectorAll('.assignment-item').forEach(item => item.classList.remove('clicked'));
+            console.log("Removed")
+            // Add 'clicked' class to the current item
+            assignmentItem.classList.add('clicked');
+
+            showAssignmentDetails(assignment); // Call the function to show details when clicked
+        });
+
+        assignmentContainer.appendChild(assignmentItem); // Append each assignment item to the list
+    });
+}
+
+
+// Function to show assignment details
+function showAssignmentDetails(assignment) {
+    const assignmentDetails = document.querySelector('.assignment-details');
+    const assignmentView = document.querySelector('.assignment-view');
+    const assignmentInfoContainer = document.getElementById('assignment-info'); // To display detailed assignment info
+    const fileInput = document.getElementById('assignmentFile');
+    const fileNameDisplay = document.getElementById('file-name');
+    fileInput.value = '';
+    fileNameDisplay.textContent = 'No file chosen';
+
+    // Fill the assignment details section with the selected assignment's details
+    assignmentInfoContainer.innerHTML = `
+        <div><h3>Title:</h3><p>${assignment.title}</p></div>
+        <div><h3>Description:</h3><p>${assignment.description}</p></div>
+        <div><h3>File:</h3><button class="view-file" onclick="viewAssignmentFile('${assignment.file}')">View File</button></div>
+    `;
+
+    // Hide the assignment list and show the assignment details using GSAP
+    gsap.to(assignmentView, {
+        opacity: 0, duration: 0.5, onComplete: () => {
+            assignmentView.style.display = 'none'; // Hide the assignment list
+            assignmentDetails.style.display = 'flex'; // Show the assignment details
+            gsap.fromTo(assignmentDetails, { opacity: 0, x: -500 }, { opacity: 1, x: 0, duration: 0.5 }); // Animate the details view
+        }
+    });
+}
+
+
+function viewAssignmentFile(fileData) {
+    const link = document.createElement('a');
+    link.href = fileData;  // The file data (base64 string)
+    link.download = 'assignment.pdf';  // Download the file as assignment.pdf
+    link.click();
+}
+
+function submitAssignment() {
+    const fileInput = document.getElementById('assignmentFile');
+    const fileNameDisplay = document.getElementById('file-name');
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert('Please choose a file to submit.');
+        return;
+    }
+
+    console.log(file.name);
+    fileNameDisplay.textContent = file.name;
+
+    const section = getStudentSection();
+    const assignmentItem = document.querySelector('.assignment-item.clicked'); 
+    const assignmentName = assignmentItem ? assignmentItem.getAttribute('data-assignment-title') : 'Unknown Assignment';
+    const assignmentId = Date.now();  // Unique ID
+
+    const reader = new FileReader();
+    
+    reader.onload = function(event) {
+        const fileData = event.target.result; // Base64 data (data URL format)
+
+        const assignmentData = {
+            id: assignmentId,
+            rollNumber: rollNumber,
+            section: section,
+            assignmentName: assignmentName,
+            fileName: file.name,
+            file: fileData,  // Store file as Base64
+        };
+
+        saveAssignmentData(assignmentData);  // Store in IndexedDB
+    };
+
+    // Read file as a Data URL (Base64 format)
+    reader.readAsDataURL(file);
+}
+
+// Function to save assignment data (either in IndexedDB or send to server)
+function saveAssignmentData(data) {
+    const request = indexedDB.open('studentAssignmentsDB', 1); // Open the database
+
+    request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains('assignments')) {
+            // Create object store with unique 'id' as key
+            db.createObjectStore('assignments', { keyPath: 'id' });
+        }
+    };
+
+    request.onsuccess = (event) => {
+        const db = event.target.result;
+
+        const transaction = db.transaction(['assignments'], 'readwrite');
+        const store = transaction.objectStore('assignments');
+
+        // Use add() to store multiple assignments without overwriting
+        store.add(data);
+
+        transaction.oncomplete = () => {
+            alert('Assignment submitted successfully!');
+            console.log('Assignment saved:', data);
+        };
+
+        transaction.onerror = (error) => {
+            console.error('Error saving assignment:', error);
+        };
+    };
+
+    request.onerror = (error) => {
+        console.error('Error opening IndexedDB:', error);
+    };
+}
+
+// Function to get student section
+function getStudentSection() {
+    return sectionName || "it2";  // Return section, default to "it2" if not found
+}
+
+
 
 // <--------------------Fees-------------------->
 
