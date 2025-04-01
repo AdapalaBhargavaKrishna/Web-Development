@@ -34,7 +34,6 @@ const timetables = {
     ]
 };
 
-
 // <--------------------Sections-------------------->
 
 function showSection(section) {
@@ -60,7 +59,6 @@ function showSection(section) {
             document.getElementById("mainbar").innerHTML = `<h2>Error Loading ${section}</h2>`;
         });
 }
-
 
 function logout() {
     window.location.href = "index.html";
@@ -100,20 +98,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (attendanceButton) {
         attendanceButton.addEventListener("click", async () => {
-            // Wait until the attendance section appears
             setTimeout(async () => {
                 await updateAttendanceTable(rollNumber);
                 console.log(sectionName)
-            }, 100); // Small delay to ensure table is visible
+            }, 100);
         });
     } else {
         console.error("Attendance button not found!");
     }
 });
 
-
-
-// Function to fetch attendance data from backend
 async function fetchAttendance(rollNumber) {
     try {
         const response = await fetch(`http://localhost:3000/get-attendance?rollNumber=${rollNumber}`);
@@ -190,7 +184,6 @@ function displayAttendanceByDate(selectedDate, attendanceData) {
     });
 }
 
-// Function to process attendance data
 function processAttendance(attendanceData) {
     let attendanceSummary = {};
 
@@ -213,7 +206,6 @@ function processAttendance(attendanceData) {
     return attendanceSummary;
 }
 
-// Function to update the table
 async function updateAttendanceTable(rollNumber) {
     const tableBody = document.querySelector(".subject-attendance-table tbody");
 
@@ -230,10 +222,10 @@ async function updateAttendanceTable(rollNumber) {
         let totalClassesAttended = 0;
 
         for (let i = 0; i < tableBody.rows.length; i++) {
-            let subjectCell = tableBody.rows[i].cells[1]; // Subject name
-            let heldCell = tableBody.rows[i].cells[2]; // Classes Held
-            let attendedCell = tableBody.rows[i].cells[3]; // Classes Attended
-            let percentageCell = tableBody.rows[i].cells[4]; // Attendance %
+            let subjectCell = tableBody.rows[i].cells[1];
+            let heldCell = tableBody.rows[i].cells[2];
+            let attendedCell = tableBody.rows[i].cells[3];
+            let percentageCell = tableBody.rows[i].cells[4];
 
             let subject = subjectCell.textContent.trim();
             if (attendanceSummary[subject]) {
@@ -250,11 +242,7 @@ async function updateAttendanceTable(rollNumber) {
             }
         }
 
-        // Update "Total" row
-
-
         TotalAttendance = totalClassesHeld > 0 ? `${((totalClassesAttended / totalClassesHeld) * 100).toFixed(2)}%` : "0%";
-
 
         let totalRow = tableBody.rows[tableBody.rows.length - 1];
         totalRow.cells[2].textContent = totalClassesHeld;
@@ -290,8 +278,6 @@ async function updateAttendanceTable(rollNumber) {
     }
 }
 
-
-// Function to show Date-Wise Attendance
 function showDateWise() {
     gsap.to(".subject-wise", { opacity: 0, y: -20, duration: 0.3, display: "none" });
     gsap.fromTo(".date-wise",
@@ -300,7 +286,6 @@ function showDateWise() {
     );
 }
 
-// Function to show Subject-Wise Attendance
 function showOverall() {
     gsap.to(".date-wise", { opacity: 0, y: -50, duration: 0.5, display: "none" });
     gsap.fromTo(".subject-wise",
@@ -316,11 +301,11 @@ function updateTimetable(section) {
 
 
         const timetableBody = document.getElementById("timetableBody");
-        timetableBody.innerHTML = ""; // Clear existing timetable
+        timetableBody.innerHTML = "";
         console.log("triggered out")
         timetables[section].forEach((row) => {
             let tr = "<tr>";
-            tr += `<th>${row[0]}</th>`; // Day
+            tr += `<th>${row[0]}</th>`;
             console.log(timetableBody.innerHTML)
             row.slice(1).forEach(subject => {
                 if (subject === "Lunch") {
@@ -330,14 +315,11 @@ function updateTimetable(section) {
                     tr += `<td>${subject}</td>`;
                 }
             });
-
             tr += "</tr>";
             timetableBody.innerHTML += tr;
         });
     }
 }
-
-
 
 // <--------------------Assignment-------------------->
 
@@ -357,7 +339,7 @@ function openDatabase(callback) {
     request.onsuccess = function (event) {
         db = event.target.result;
         console.log("IndexedDB opened successfully.");
-        if (callback) callback();  // Call the callback once the database is ready
+        if (callback) callback();
     };
 
     request.onerror = function (event) {
@@ -371,7 +353,6 @@ function AssignmentsFunction() {
     const assignmentDetails = document.querySelector(".assignment-details");
     const backButton = document.querySelector(".details-heading button");
 
-    // Add event listeners to assignment items (click to view details)
     assignmentItems.forEach(item => {
         item.addEventListener("click", () => {
             gsap.to(assignmentView, {
@@ -386,7 +367,6 @@ function AssignmentsFunction() {
         });
     });
 
-    // Handle the back button to go back to the assignment list
     backButton.addEventListener("click", () => {
         gsap.to(assignmentDetails, {
             opacity: 0,
@@ -400,10 +380,9 @@ function AssignmentsFunction() {
     });
 
     console.log("called")
-    getAssignmentsBySection('it2', displayAssignments);
+    getAssignmentsBySection(sectionName, displayAssignments);
 }
 
-// Function to get all assignments with sectionName 'it2' from IndexedDB
 function getAssignmentsBySection(sectionName, callback) {
     const transaction = db.transaction(['assignments'], 'readonly');
     const store = transaction.objectStore('assignments');
@@ -434,8 +413,8 @@ function getAssignmentsBySection(sectionName, callback) {
 }
 
 function displayAssignments(assignments) {
-    const assignmentContainer = document.querySelector('.assignment-items'); // Assuming this is where assignment titles will go
-    assignmentContainer.innerHTML = ''; // Clear any existing assignments
+    const assignmentContainer = document.querySelector('.assignment-items');
+    assignmentContainer.innerHTML = '';
 
     assignments.forEach(assignment => {
         const assignmentItem = document.createElement('li');
@@ -444,54 +423,45 @@ function displayAssignments(assignments) {
 
         assignmentItem.setAttribute('data-assignment-title', assignment.title);
 
-        // Add click event to each assignment to show its details
         assignmentItem.addEventListener('click', () => {
-            // Remove 'clicked' class from all assignment items
             document.querySelectorAll('.assignment-item').forEach(item => item.classList.remove('clicked'));
             console.log("Removed")
-            // Add 'clicked' class to the current item
             assignmentItem.classList.add('clicked');
 
-            showAssignmentDetails(assignment); // Call the function to show details when clicked
+            showAssignmentDetails(assignment);
         });
-
-        assignmentContainer.appendChild(assignmentItem); // Append each assignment item to the list
+        assignmentContainer.appendChild(assignmentItem);
     });
 }
 
-
-// Function to show assignment details
 function showAssignmentDetails(assignment) {
     const assignmentDetails = document.querySelector('.assignment-details');
     const assignmentView = document.querySelector('.assignment-view');
-    const assignmentInfoContainer = document.getElementById('assignment-info'); // To display detailed assignment info
+    const assignmentInfoContainer = document.getElementById('assignment-info');
     const fileInput = document.getElementById('assignmentFile');
     const fileNameDisplay = document.getElementById('file-name');
     fileInput.value = '';
     fileNameDisplay.textContent = 'No file chosen';
 
-    // Fill the assignment details section with the selected assignment's details
     assignmentInfoContainer.innerHTML = `
         <div><h3>Title:</h3><p>${assignment.title}</p></div>
         <div><h3>Description:</h3><p>${assignment.description}</p></div>
         <div><h3>File:</h3><button class="view-file" onclick="viewAssignmentFile('${assignment.file}')">View File</button></div>
     `;
 
-    // Hide the assignment list and show the assignment details using GSAP
     gsap.to(assignmentView, {
         opacity: 0, duration: 0.5, onComplete: () => {
-            assignmentView.style.display = 'none'; // Hide the assignment list
-            assignmentDetails.style.display = 'flex'; // Show the assignment details
-            gsap.fromTo(assignmentDetails, { opacity: 0, x: -500 }, { opacity: 1, x: 0, duration: 0.5 }); // Animate the details view
+            assignmentView.style.display = 'none';
+            assignmentDetails.style.display = 'flex';
+            gsap.fromTo(assignmentDetails, { opacity: 0, x: -500 }, { opacity: 1, x: 0, duration: 0.5 });
         }
     });
 }
 
-
 function viewAssignmentFile(fileData) {
     const link = document.createElement('a');
-    link.href = fileData;  // The file data (base64 string)
-    link.download = 'assignment.pdf';  // Download the file as assignment.pdf
+    link.href = fileData;
+    link.download = 'assignment.pdf';
     link.click();
 }
 
@@ -511,12 +481,12 @@ function submitAssignment() {
     const section = getStudentSection();
     const assignmentItem = document.querySelector('.assignment-item.clicked'); 
     const assignmentName = assignmentItem ? assignmentItem.getAttribute('data-assignment-title') : 'Unknown Assignment';
-    const assignmentId = Date.now();  // Unique ID
+    const assignmentId = Date.now();
 
     const reader = new FileReader();
     
     reader.onload = function(event) {
-        const fileData = event.target.result; // Base64 data (data URL format)
+        const fileData = event.target.result;
 
         const assignmentData = {
             id: assignmentId,
@@ -524,24 +494,21 @@ function submitAssignment() {
             section: section,
             assignmentName: assignmentName,
             fileName: file.name,
-            file: fileData,  // Store file as Base64
+            file: fileData,
         };
 
-        saveAssignmentData(assignmentData);  // Store in IndexedDB
+        saveAssignmentData(assignmentData);
     };
 
-    // Read file as a Data URL (Base64 format)
     reader.readAsDataURL(file);
 }
 
-// Function to save assignment data (either in IndexedDB or send to server)
 function saveAssignmentData(data) {
-    const request = indexedDB.open('studentAssignmentsDB', 1); // Open the database
+    const request = indexedDB.open('studentAssignmentsDB', 1);
 
     request.onupgradeneeded = (event) => {
         const db = event.target.result;
         if (!db.objectStoreNames.contains('assignments')) {
-            // Create object store with unique 'id' as key
             db.createObjectStore('assignments', { keyPath: 'id' });
         }
     };
@@ -552,7 +519,6 @@ function saveAssignmentData(data) {
         const transaction = db.transaction(['assignments'], 'readwrite');
         const store = transaction.objectStore('assignments');
 
-        // Use add() to store multiple assignments without overwriting
         store.add(data);
 
         transaction.oncomplete = () => {
@@ -570,12 +536,9 @@ function saveAssignmentData(data) {
     };
 }
 
-// Function to get student section
 function getStudentSection() {
-    return sectionName || "it2";  // Return section, default to "it2" if not found
+    return sectionName || "it2";
 }
-
-
 
 // <--------------------Fees-------------------->
 
@@ -605,12 +568,10 @@ function showFees(fee) {
         return;
     }
 
-
     if (fees[fee]) {
         fees[fee].style.display = "table-row";
         updatePaymentDetails();
     }
-
 }
 
 function updatePaymentDetails() {
@@ -627,7 +588,6 @@ function updatePaymentDetails() {
 
             const feeStatusElement = feeRow.querySelector(".status");
 
-            // Update status based on amount
             if (feeAmount > 0) {
                 feeStatusElement.innerText = "Unpaid";
                 feeStatusElement.classList.remove("paid");
@@ -644,7 +604,6 @@ function updatePaymentDetails() {
     document.querySelector(".to-pay").innerText = `Amount to Pay: ₹${amountToPay.toLocaleString()}`;
     document.querySelector(".total-amount strong").innerText = `₹${amountToPay.toLocaleString()}`;
 
-    // Update proceed button
     const proceedButton = document.querySelector(".proceed-payment");
     const payButton = document.querySelector(".pay-btn");
     if (amountToPay > 0) {
@@ -668,11 +627,11 @@ function showPayments() {
     const feeHeadRight = document.querySelector(".fee-head-right");
 
     if (paymentContainer) {
-        paymentContainer.style.display = "flex"; // Show the payment section
+        paymentContainer.style.display = "flex";
     }
 
     if (feeHeadRight) {
-        feeHeadRight.style.display = "flex"; // Show the fee head
+        feeHeadRight.style.display = "flex";
     }
 
     const feeDetailsLeft = document.querySelector(".fee-details-left");
@@ -705,7 +664,6 @@ function showPaymodes() {
 function feesSection() {
 
     console.log("Fees section loaded!");
-
     document.getElementById("fee-select").addEventListener("change", function () {
         showFees(this.value);
     });
@@ -714,7 +672,6 @@ function feesSection() {
         showPaymodes();
     });
 
-    // Set today's date for receipt
     const today = new Date().toISOString().split("T")[0];
     document.getElementById("receipt-date").value = today;
 }

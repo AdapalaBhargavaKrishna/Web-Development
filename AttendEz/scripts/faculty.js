@@ -80,7 +80,7 @@ function showSection(section) {
                 if (section === "assignments") {
                     if (!db) { 
                         openDatabase(() => {
-                            getAssignmentsFromDB(); // Load assignments after IndexedDB is ready
+                            getAssignmentsFromDB();
                             AssignmentsFunction();
                         });
                     } else {
@@ -201,7 +201,7 @@ async function finalizeAttendance() {
         }))
     };
 
-    console.log("Sending Data:", JSON.stringify(attendanceData, null, 2)); // Debugging
+    console.log("Sending Data:", JSON.stringify(attendanceData, null, 2));
     const absentees = Object.keys(attendance).filter(roll => attendance[roll] === 'Absent');
     const absenteesListDiv = document.getElementById('absenteesList');
     absenteesListDiv.innerHTML = `<h3>Absentees: ${absentees.join(', ')}</h3>`;
@@ -214,7 +214,6 @@ async function finalizeAttendance() {
         });
 
         const result = await response.json();
-        // alert(result.message || result.error);
     } catch (error) {
         console.error("Error submitting attendance:", error);
     }
@@ -318,20 +317,20 @@ function populateFeeTable() {
         editButton.textContent = "Edit";
         editButton.className = "due-edit";
         editButton.onclick = function () {
-            dueInput.disabled = false; // Enable input field
-            dueInput.focus(); // Focus input for editing
-            editButton.style.display = "none"; // Hide Edit button
-            saveButton.style.display = "inline-block"; // Show Save button
+            dueInput.disabled = false;
+            dueInput.focus();
+            editButton.style.display = "none";
+            saveButton.style.display = "inline-block";
         };
 
         let saveButton = document.createElement("button");
         saveButton.textContent = "Save";
         saveButton.className = "due-edit";
-        saveButton.style.display = "none"; // Initially hidden
+        saveButton.style.display = "none";
         saveButton.onclick = function () {
-            dueInput.disabled = true; // Disable input field
-            saveButton.style.display = "none"; // Hide Save button
-            editButton.style.display = "inline-block"; // Show Edit button
+            dueInput.disabled = true;
+            saveButton.style.display = "none";
+            editButton.style.display = "inline-block";
         };
 
         actionCell.appendChild(editButton);
@@ -356,7 +355,6 @@ function updateFeeStatus(dueInput, statusCell) {
 
 function populateRecords() {
 
-    
     const subjectSelect = document.getElementById("subject-select");
     
     subjects.forEach(subject => {
@@ -365,7 +363,6 @@ function populateRecords() {
         subjectSelect.appendChild(option);
     });
     
-
     const overallMarksBtn = document.querySelector(".marks-buttons button");
     const searchRollNosDiv = document.querySelector(".search-rollnos");
     
@@ -388,10 +385,10 @@ function toggleSidebar() {
 
     if (isVisible) {
         sidebar.classList.remove('active');
-        mainbar.classList.remove('hidden'); // Show mainbar
+        mainbar.classList.remove('hidden');
     } else {
         sidebar.classList.add('active');
-        mainbar.classList.add('hidden'); // Hide mainbar
+        mainbar.classList.add('hidden');
     }
 }
 
@@ -422,7 +419,6 @@ function togglePostButton() {
         inputField.disabled = true;
         postButton.disabled = true;
     }
-
     loadAnnouncements();
 }
 
@@ -559,7 +555,7 @@ function createAssignment() {
     };
 
     if (file) {
-        reader.readAsDataURL(file); // Convert file to Base64 for storage
+        reader.readAsDataURL(file);
     } else {
         const assignment = {
             id: Date.now(),
@@ -579,7 +575,6 @@ function createAssignment() {
             getAssignmentsFromDB();
         };
     }
-
     clearAssignmentForm();
 }
 
@@ -601,10 +596,9 @@ function getAssignmentsFromDB() {
 
 function updateAssignmentsList() {
     const assignmentItems = document.getElementById('assignmentItems');
-    assignmentItems.innerHTML = ''; // Clear previous list
+    assignmentItems.innerHTML = '';
     console.log("This shi is it ", assignments);
 
-    // Filter assignments based on sectionName
     const filteredAssignments = assignments.filter(assignment => assignment.sectionName === sectionName);
 
     filteredAssignments.forEach(assignment => {
@@ -628,7 +622,6 @@ function showAssignmentDetails(id) {
     const submissionsList = document.getElementById('submissions-list');
     const submissionSection = document.querySelector('.assignments-submissions');
 
-    // Reset the submissions list
     submissionsList.innerHTML = '';
 
     let fileHTML = "<p>No file attached</p>";
@@ -648,31 +641,27 @@ function showAssignmentDetails(id) {
         fileHTML = `<a class="assignment-download" href="${fileURL}" download="${assignment.fileName}">📂 Download Assignment</a>`;
     }
 
-    // Display assignment details
     info.innerHTML = `
         <div><b>Title:</b><p>${assignment.title}</p></div>
         <div><b>Description:</b><p>${assignment.description}</p></div>
         <div><b>File:</b>${fileHTML}</div>
     `;
 
-    // Open IndexedDB and fetch submissions
-    const request = indexedDB.open('studentAssignmentsDB', 1); // Open the database
+    const request = indexedDB.open('studentAssignmentsDB', 1);
     request.onsuccess = function (event) {
         const db = event.target.result;
         const transaction = db.transaction(['assignments'], 'readonly');
         const store = transaction.objectStore('assignments');
-        const submissions = store.getAll(); // Get all submissions
+        const submissions = store.getAll();
 
         submissions.onsuccess = function () {
             const submittedAssignments = submissions.result;
             let submittedCount = 0;
 
-            // Filter submissions based on sectionName and assignmentName
             submittedAssignments.forEach(submission => {
                 if (submission.section === assignment.sectionName && submission.assignmentName === assignment.title) {
                     const li = document.createElement('li');
                     
-                    // Create a downloadable/viewable file link
                     const fileLink = `<a href="${submission.file}" target="_blank" download="${submission.fileName}">${submission.fileName}</a>`;
 
                     li.innerHTML = `<div><span><b>Roll No:</b> ${submission.rollNumber}</span>.<span><b>File:</b> ${fileLink}</span></div>`;
@@ -681,7 +670,6 @@ function showAssignmentDetails(id) {
                 }
             });
 
-            // Update the count of submitted students
             count.textContent = submittedCount;
         };
 
@@ -694,7 +682,6 @@ function showAssignmentDetails(id) {
         console.error('Error opening IndexedDB:', error);
     };
 
-    // Use GSAP to animate the transition
     gsap.to([createSection, listSection], {
         opacity: 0,
         y: -20,
@@ -709,7 +696,6 @@ function showAssignmentDetails(id) {
     submissionSection.style.display = 'block';
     gsap.fromTo([detailsSection, submissionSection], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
 
-    // 🛑 Attach delete functionality to the button
     document.querySelector(".delete-assignments button").onclick = function () {
         deleteAssignment(assignment.id);
     };
@@ -727,17 +713,16 @@ function deleteAssignment(assignmentId) {
     const deleteRequest = store.delete(assignmentId);
 
     deleteRequest.onsuccess = function () {
-        console.log(`✅ Assignment ${assignmentId} deleted successfully`);
+        console.log(` Assignment ${assignmentId} deleted successfully`);
 
-        // Remove from local array
         assignments = assignments.filter(a => a.id !== assignmentId);
 
         updateAssignmentsList();
-        assignmentBack(); // Go back to list after deletion
+        assignmentBack();
     };
 
     deleteRequest.onerror = function (event) {
-        console.error("❌ Error deleting assignment:", event.target.error);
+        console.error(" Error deleting assignment:", event.target.error);
     };
 }
 
