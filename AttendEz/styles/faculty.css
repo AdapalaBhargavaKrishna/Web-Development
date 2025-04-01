@@ -722,6 +722,35 @@ th {
     padding: 0;
 }
 
+.assignments-submissions{
+    display: none;
+    max-height: 44vh;
+    background: whitesmoke;
+    padding: 1rem;
+    margin: 1rem;
+    border-radius: 1rem;
+}
+
+#submissions-list{
+    list-style-type: decimal;
+    background: white;
+    border-left: 2px solid green;
+}
+
+#submissions-list li{
+    padding: 1rem;
+    margin-bottom: 10px;
+}
+
+#submissions-list li div{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#submissions-list li span a{
+    color: #4CAF50;
+}
 /* <---------------------Mobile---------------------> */
 
 @media (max-width: 600px) {
