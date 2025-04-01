@@ -19,12 +19,12 @@ const timetables = {
         ["Friday", "DBMS", "PE - 1", "DBMS Lab", "Engineering Economics", "ALGO Lab", "Mini Project 1"]
     ],
     it2: [
-        ["Monday", "DBMS", "PQT", "DAA", "Lunch", "DCCST", "PE - 1", "LAB"],
-        ["Tuesday", "ALGO Lab", "Mentoring", "Environmental Science", "Mini Project 1", "DBMS", "PQT"],
-        ["Wednesday", "DBMS", "DBMS Lab", "PQT", "PE - 1", "Engineering Economics", "DCCST"],
-        ["Thursday", "PE - 1", "DAA", "DBMS", "DCCST", "Environmental Science", "LAB"],
-        ["Friday", "Mini Project 1", "ALGO Lab", "DBMS", "Engineering Economics", "PQT", "DBMS Lab"]
-    ],
+        ["Monday", "PQT", "DAA", "PE-1", "Lunch", "DCCST", "DBMS LAB", "DBMS LAB"],
+        ["Tuesday", "MP LAB", "MP LAB", "PQT","ES", "EEA", "SPORTS"],
+        ["Wednesday", "DBMS", "DAA", "PQT", "PE - 1", "ES", "DCCST"],
+        ["Thursday", "PE - 1", "EEA", "DCCST", "DBMS", "MENTORING", "PQT"],
+        ["Friday", "EEA", "DAA", "ALGO LAB", "ALGO LAB ", "DBMS", "LIBRARY"]
+    ],
     it3: [
         ["Monday", "DAA", "DBMS", "PE - 1", "Lunch", "PQT", "DCCST", "LAB"],
         ["Tuesday", "Mini Project 1", "Environmental Science", "DBMS", "Mentoring", "ALGO Lab", "PQT"],
