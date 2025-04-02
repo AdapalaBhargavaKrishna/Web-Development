@@ -45,7 +45,7 @@ function showSection(section) {
             // Wait for DOM update before executing section-specific code
             requestAnimationFrame(() => {
 
-                if (section === "timetable") updateTimetable();
+                if (section === "timetable") updateTimetable(sectionName);
                 if (section === "Fees") feesSection();
                 if (section === "assignments") {
                     openDatabase(function () {
@@ -242,14 +242,15 @@ async function updateAttendanceTable(rollNumber) {
             }
         }
 
-        TotalAttendance = totalClassesHeld > 0 ? `${((totalClassesAttended / totalClassesHeld) * 100).toFixed(2)}%` : "0%";
+        TotalAttendance = totalClassesHeld > 0 ? `${((totalClassesAttended / totalClassesHeld) * 100).toFixed(2)}` : "0";
 
         let totalRow = tableBody.rows[tableBody.rows.length - 1];
         totalRow.cells[2].textContent = totalClassesHeld;
         totalRow.cells[3].textContent = totalClassesAttended;
         totalRow.cells[4].textContent = TotalAttendance
 
-        document.querySelector(".att-percentage").textContent = TotalAttendance
+        document.querySelector(".att-percentage").textContent = TotalAttendance + "%"
+        console.log(TotalAttendance)
 
         let message = "";
         let messageColor = "green";
@@ -299,17 +300,15 @@ function showOverall() {
 function updateTimetable(section) {
     if (section) {
 
-
         const timetableBody = document.getElementById("timetableBody");
         timetableBody.innerHTML = "";
-        console.log("triggered out")
         timetables[section].forEach((row) => {
             let tr = "<tr>";
             tr += `<th>${row[0]}</th>`;
             console.log(timetableBody.innerHTML)
             row.slice(1).forEach(subject => {
                 if (subject === "Lunch") {
-                    console.log("triggered in")
+                    
                     tr += '<td rowspan="5" class="lunch-break">Lunch Break</td>';
                 } else {
                     tr += `<td>${subject}</td>`;
