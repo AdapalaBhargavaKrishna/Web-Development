@@ -59,7 +59,7 @@ console.log("Batches:", batchData);
         "DAA : Design and Analysis of Algorithms",
         "EEA : Engineering Economics and Accountancy",
         "ES : Environmental Science",
-        "MAD : Mobile Application Development",
+        "PE - 1 : Professional Elective - 1",
         "DBMS Lab : Database Management Systems Lab",
         "ALG Lab : Algorithms Lab",
         "MP-I : Mini Project – I",
