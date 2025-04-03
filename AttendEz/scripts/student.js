@@ -7,7 +7,22 @@ if (rollNumber) {
     document.getElementById("rollNumber").innerText = ""
 }
 
-let sectionName;
+let sectionName
+// <--------------------SectionName-------------------->
+
+document.addEventListener("DOMContentLoaded", () => {
+    const getSection = roll => {
+        const num = parseInt(roll.slice(-3), 10);
+        return (num >= 1 && num <= 70) || (num >= 301 && num <= 307) ? "it1" :
+               (num >= 71 && num <= 137) || (num >= 308 && num <= 314) ? "it2" :
+               (num >= 138 && num <= 210) || (num >= 315 && num <= 320) ? "it3" : "it2";
+    };
+
+    console.log(getSection(rollNumber));
+    sectionName = getSection(rollNumber);
+});
+
+
 // <--------------------Time Table-------------------->
 
 const timetables = {
@@ -47,6 +62,7 @@ function showSection(section) {
 
                 if (section === "timetable") updateTimetable(sectionName);
                 if (section === "Fees") feesSection();
+                if (section === "announcements") loadAnnouncements();
                 if (section === "assignments") {
                     openDatabase(function () {
                         AssignmentsFunction();
@@ -100,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
         attendanceButton.addEventListener("click", async () => {
             setTimeout(async () => {
                 await updateAttendanceTable(rollNumber);
-                console.log(sectionName)
+
             }, 100);
         });
     } else {
@@ -114,7 +130,7 @@ async function fetchAttendance(rollNumber) {
         const data = await response.json();
 
         console.log(data)
-        sectionName = data[0]["section"]
+
         populateDateDropdown(data);
 
         return data;
@@ -537,6 +553,43 @@ function saveAssignmentData(data) {
 
 function getStudentSection() {
     return sectionName || "it2";
+}
+
+// <--------------------Assignment-------------------->
+
+function loadAnnouncements() {
+    fetch("http://localhost:3000/get-announcements")
+        .then(response => response.json())
+        .then(data => {
+            let announcementList = document.querySelector(".announcement-list");
+
+            // Clear previous announcements
+            announcementList.innerHTML = ""; 
+
+            // Filter announcements based on sectionName
+            let filteredAnnouncements = data.filter(announcement => 
+                announcement.section.toUpperCase() === sectionName.toUpperCase()
+            );
+
+            if (filteredAnnouncements.length === 0) {
+                announcementList.innerHTML = "<p>No announcements for your section.</p>";
+                return;
+            }
+
+            filteredAnnouncements.forEach(announcement => {
+                let announcementDiv = document.createElement("div");
+                announcementDiv.classList.add("announce-card");
+
+                announcementDiv.innerHTML = `
+                    <h3>${announcement.subject}</h3>
+                    <p>${announcement.message}</p>
+                    <small>${new Date(announcement.date).toLocaleString()} | Section: <strong>${announcement.section.toUpperCase()}</strong></small>
+                `;
+
+                announcementList.appendChild(announcementDiv);
+            });
+        })
+        .catch(error => console.error("Error loading announcements:", error));
 }
 
 // <--------------------Fees-------------------->
