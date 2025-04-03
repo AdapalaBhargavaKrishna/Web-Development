@@ -641,7 +641,16 @@ nav {
 
 .announce-card h3 {
     color: #2c3e50;
-    margin-bottom: 8px;
+}
+
+.announce-card div{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.announcement-date{
+    text-align: left;
 }
 
 .announce-card p {

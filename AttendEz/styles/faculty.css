@@ -483,10 +483,19 @@ th {
     font-weight: bold;
 }
 
+/* announcement */
+
 .select-sec-sub{
     display: flex;
     justify-content: space-around;
     align-items: center;
+}
+.select-sec-sub input{
+    text-align: center;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid black;
+    font-size: 16px;
 }
 
 .select-sec-sub select{
@@ -546,11 +555,15 @@ th {
 }
 
 .announcement-item button {
-    background: red;
     position: absolute;
     right: 10px;
     top: 10px;
-    padding: 5px;
+    padding: 1px;
+}
+
+.announcement-item button img{
+    height: 15px;
+    width: 15px;
 }
 
 /* <--------------------Assignments--------------------> */

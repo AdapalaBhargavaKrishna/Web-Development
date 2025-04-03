@@ -20,7 +20,7 @@ function showToast() {
 }
 
 // <--------------------Section Name-------------------->
-const sectionName = new URLSearchParams(window.location.search).get("section");
+const sectionName = new URLSearchParams(window.location.search).get("section") || "it2";
 
 // <--------------------Total Students-------------------->
 
@@ -406,81 +406,104 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+/*<---------------Announcement--------------->*/
+
 function togglePostButton() {
-    let section = document.getElementById("sectionSelect").value;
     let dropSubject = document.getElementById("subjectDropdown").value;
     let inputField = document.getElementById("announcementInput");
     let postButton = document.getElementById("postButton");
 
-    if (section !== "" && dropSubject !== "") {
+    if (dropSubject !== "") {
         inputField.disabled = false;
         postButton.disabled = false;
     } else {
         inputField.disabled = true;
         postButton.disabled = true;
     }
-    loadAnnouncements();
 }
 
 function addAnnouncement() {
     let input = document.getElementById("announcementInput").value.trim();
-    let section = document.getElementById("sectionSelect").value;
+    let section = document.getElementById("current-section").value;
+    let subject = document.getElementById("subjectDropdown").value;
 
-    if (input === "") {
-        alert("Please enter an announcement!");
+    if (input === "" || section === "" || subject === "") {
+        alert("Please fill out all fields!");
         return;
     }
-
-    if (section === "") {
-        alert("Please select a section first!");
-        return;
-    }
-
-    let announcements = JSON.parse(localStorage.getItem(`announcements_${section}`)) || [];
 
     let newAnnouncement = {
-        text: input,
-        time: new Date().toLocaleString()
+        date: new Date().toISOString(),
+        subject: subject,
+        section: section,
+        message: input
     };
-    announcements.unshift(newAnnouncement);
 
-    localStorage.setItem(`announcements_${section}`, JSON.stringify(announcements));
-    document.getElementById("announcementInput").value = "";
-
-    loadAnnouncements();
+    fetch("http://localhost:3000/submit-announcement", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newAnnouncement)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Announcement added:", data);
+        alert("Announcement added successfully!");
+        document.getElementById("announcementInput").value = "";
+        loadAnnouncements();
+    })
+    .catch(error => console.error("Error adding announcement:", error));
 }
 
 function loadAnnouncements() {
-    let section = document.getElementById("sectionSelect").value;
-    let announcementList = document.getElementById("announcementsList");
+    console.log("HI")
+    fetch("http://localhost:3000/get-announcements")
+        .then(response => response.json())
+        .then(data => {
+            let announcementList = document.getElementById("announcementsList");
+            let sectionInput = document.getElementById("current-section");
+            sectionInput.value = sectionName.toUpperCase(); 
 
-    announcementList.innerHTML = ""; 
+            announcementList.innerHTML = "";
 
-    if (section === "") return;
+            let filteredAnnouncements = data.filter(announcement => announcement.section.toLowerCase() === sectionName.toLowerCase());
 
-    let announcements = JSON.parse(localStorage.getItem(`announcements_${section}`)) || [];
+            if (filteredAnnouncements.length === 0) {
+                announcementList.innerHTML = "<p>No announcements yet.</p>";
+                return;
+            }
 
-    announcements.forEach((announcement, index) => {
-        let announcementDiv = document.createElement("div");
-        announcementDiv.classList.add("announcement-item");
-        announcementDiv.innerHTML = `
-            <p>${announcement.text}</p>
-            <small>${announcement.time} | Section: ${section}</small>
-            <button onclick="deleteAnnouncement(${index})">X</button>
-        `;
-        announcementList.appendChild(announcementDiv);
-    });
+            filteredAnnouncements.forEach(announcement => {
+                let announcementDiv = document.createElement("div");
+                announcementDiv.classList.add("announcement-item");
+                announcementDiv.innerHTML = `
+                    <p>${announcement.message}</p>
+                    <small>
+                        ${new Date(announcement.date).toLocaleString()} | 
+                        Section: <strong>${announcement.section.toUpperCase()}</strong> | 
+                        Subject: ${announcement.subject}
+                    </small>
+                    <button onclick="deleteAnnouncement('${announcement._id}', '${sectionName}')">
+                        <img src="../../assets/delete.svg" alt="Delete">
+                    </button>
+                `;
+                announcementList.appendChild(announcementDiv);
+            });
+        })
+        .catch(error => console.error("Error loading announcements:", error));
 }
 
-function deleteAnnouncement(index) {
-    let section = document.getElementById("sectionSelect").value;
-    let announcements = JSON.parse(localStorage.getItem(`announcements_${section}`)) || [];
-    
-    announcements.splice(index, 1);
-    localStorage.setItem(`announcements_${section}`, JSON.stringify(announcements));
-    
-    loadAnnouncements();
+function deleteAnnouncement(id, sectionName) {
+    fetch(`http://localhost:3000/delete-announcement/${id}`, { method: "DELETE" })
+        .then(response => response.json())
+        .then(() => {
+            alert("Announcement deleted successfully!");
+            loadAnnouncements(sectionName); // Reload with the correct section filter
+        })
+        .catch(error => console.error("Error deleting announcement:", error));
 }
+
 
 /*<---------------Assignments--------------->*/
 
