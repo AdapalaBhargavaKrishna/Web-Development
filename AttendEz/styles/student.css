@@ -658,6 +658,47 @@ nav {
     color: #777;
 }
 
+/* <----------Student Records----------> */
+
+.Student-Records h1{
+    margin: 10px;
+}
+
+.marks-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.marks-buttons button{
+    padding: 10px;
+    margin-top: 10px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 10rem;
+}
+
+.marks-buttons select{
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 10rem;
+}
+
+.marks-details{
+    margin-top: 1rem;
+    width: 100%;
+    max-height: 71vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+    background-color: #f9f9f9;
+    border-radius: 15px;
+}
+
 /* <---------------------Fees---------------------> */
 
 .fees {
