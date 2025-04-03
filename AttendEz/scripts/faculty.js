@@ -504,7 +504,6 @@ function deleteAnnouncement(id, sectionName) {
         .catch(error => console.error("Error deleting announcement:", error));
 }
 
-
 /*<---------------Assignments--------------->*/
 
 let db;

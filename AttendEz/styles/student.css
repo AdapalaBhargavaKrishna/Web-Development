@@ -602,7 +602,7 @@ nav {
 /* <---------------------Announcements---------------------> */
 
 .announcements {
-    width: 91%;
+    width: 95%;
     margin: 0 auto 1rem auto;
     padding: 1rem;
     background: #f8f9fa;
@@ -632,6 +632,7 @@ nav {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border-left: 7px solid #4CAF50;
+    margin-bottom: 15px;
 }
 
 .announce-card:hover {
@@ -641,21 +642,20 @@ nav {
 
 .announce-card h3 {
     color: #2c3e50;
-}
-
-.announce-card div{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.announcement-date{
-    text-align: left;
+    margin-bottom: 8px;
 }
 
 .announce-card p {
     color: #555;
     line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.announce-card small {
+    display: block;
+    text-align: left;
+    font-size: 0.9rem;
+    color: #777;
 }
 
 /* <---------------------Fees---------------------> */
