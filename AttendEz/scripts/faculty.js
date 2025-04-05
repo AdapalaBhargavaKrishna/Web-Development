@@ -376,7 +376,6 @@ function moveSlider(index, btn) {
     }
 }
 
-// When subject is selected
 document.getElementById("subject-records-dropdown").addEventListener("change", async function () {
     const subject = this.value;
     if (subject) {
@@ -386,7 +385,6 @@ document.getElementById("subject-records-dropdown").addEventListener("change", a
     }
 });
 
-// When lab is selected
 document.getElementById("lab-records-dropdown").addEventListener("change", async function () {
     const lab = this.value;
     if (lab) {
@@ -425,10 +423,9 @@ async function loadSubjectCIE(subject) {
         tbody.insertAdjacentHTML("beforeend", rowHTML);
     }
 
-    // ⚠️ Make sure DOM is updated before running calculations
     requestAnimationFrame(() => {
         document.querySelectorAll("#subject-cie-table tbody tr").forEach(updateSubjectRow);
-        setupSubjectLiveUpdate(); // still needed for real-time updates
+        setupSubjectLiveUpdate();
     });
 }
 
@@ -550,7 +547,6 @@ function averageTopTwo(arr) {
     const sorted = arr.sort((a, b) => b - a);
     return Math.round((sorted[0] + sorted[1]) / 2);
 }
-
 
 /*<---------------SideBar--------------->*/
 
