@@ -77,6 +77,7 @@ function showSection(section) {
             requestAnimationFrame(() => {
                 if (section === "Fees") populateFeeTable();
                 if (section === "announcements") loadAnnouncements();
+                if (section === "records") displayStudents();
                 if (section === "assignments") {
                     if (!db) { 
                         openDatabase(() => {
@@ -353,30 +354,205 @@ function updateFeeStatus(dueInput, statusCell) {
 
 /*<---------------Records--------------->*/
 
-function populateRecords() {
+function moveSlider(index, btn) {
+    const slider = document.querySelector('.record-slider');
+    const buttons = document.querySelectorAll('.record-header button');
 
-    const subjectSelect = document.getElementById("subject-select");
+    slider.style.transform = `translateX(${index * 100}%)`;
+
+    buttons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Toggle CIE sections based on slider index
+    const subjectCIE = document.querySelector('.subject-cie-section');
+    const fullCIE = document.querySelector('.full-cie-table-section');
+
+    if (index === 0) {
+        subjectCIE.style.display = 'block';
+        fullCIE.style.display = 'none';
+    } else if (index === 1) {
+        subjectCIE.style.display = 'none';
+        fullCIE.style.display = 'block';
+    }
+}
+
+// When subject is selected
+document.getElementById("subject-records-dropdown").addEventListener("change", async function () {
+    const subject = this.value;
+    if (subject) {
+        document.getElementById("subject-cie-table").style.display = "block";
+        document.getElementById("lab-cie-table").style.display = "none";
+        await loadSubjectCIE(subject);
+    }
+});
+
+// When lab is selected
+document.getElementById("lab-records-dropdown").addEventListener("change", async function () {
+    const lab = this.value;
+    if (lab) {
+        document.getElementById("lab-cie-table").style.display = "block";
+        document.getElementById("subject-cie-table").style.display = "none";
+        await loadLabCIE(lab);
+    }
+});
+
+async function loadSubjectCIE(subject) {
+    const tbody = document.querySelector("#subject-cie-table tbody");
+    tbody.innerHTML = "";
+
+    for (const roll of TotStudents) {
+        const res = await fetch(`http://localhost:3000/get-subject-cie/${roll}/${encodeURIComponent(subject)}`);
+        const s = await res.json();
+
+        const rowHTML = `
+        <tr>
+            <td class="roll">${s.rollNo}</td>
+            <td contenteditable class="slip1">${s.sliptests[0]}</td>
+            <td contenteditable class="slip2">${s.sliptests[1]}</td>
+            <td contenteditable class="slip3">${s.sliptests[2]}</td>
+            <td class="slipAvg">0</td>
+            <td contenteditable class="assign1">${s.assignments[0]}</td>
+            <td contenteditable class="assign2">${s.assignments[1]}</td>
+            <td class="assignAvg">0</td>
+            <td contenteditable class="mid1">${s.mids[0]}</td>
+            <td contenteditable class="mid2">${s.mids[1]}</td>
+            <td class="midAvg">0</td>
+            <td contenteditable class="attendance">${s.attendance}</td>
+            <td class="totalCIE">0</td>
+            <td><button onclick="saveSubjectRow(this, '${subject}')">Save</button></td>
+        </tr>`;
     
-    subjects.forEach(subject => {
-        let option = document.createElement("option");
-        option.textContent = subject;
-        subjectSelect.appendChild(option);
-    });
-    
-    const overallMarksBtn = document.querySelector(".marks-buttons button");
-    const searchRollNosDiv = document.querySelector(".search-rollnos");
-    
-    overallMarksBtn.addEventListener("click", function () {
-        searchRollNosDiv.style.display = "flex";
-        displayoverallMarks();
-    });
-    
-    subjectSelect.addEventListener("change", function () {
-        if (subjectSelect.value !== "") {
-            searchRollNosDiv.style.display = "flex";  
-        }
+        tbody.insertAdjacentHTML("beforeend", rowHTML);
+    }
+
+    // ⚠️ Make sure DOM is updated before running calculations
+    requestAnimationFrame(() => {
+        document.querySelectorAll("#subject-cie-table tbody tr").forEach(updateSubjectRow);
+        setupSubjectLiveUpdate(); // still needed for real-time updates
     });
 }
+
+function setupSubjectLiveUpdate() {
+    document.querySelectorAll("#subject-cie-table tbody tr").forEach(row => {
+        row.querySelectorAll("[contenteditable]").forEach(cell => {
+            cell.addEventListener("input", () => updateSubjectRow(row));
+        });
+    });
+}
+
+function updateSubjectRow(row) {
+    const get = cls => parseInt(row.querySelector("." + cls)?.innerText) || 0;
+
+    const slips = [get("slip1"), get("slip2"), get("slip3")];
+    const assigns = [get("assign1"), get("assign2")];
+    const mids = [get("mid1"), get("mid2")];
+    const attendanceMarks = get("attendance");
+
+    const slipAvg = averageTopTwo(slips);
+    const assignAvg = average(assigns);
+    const midAvg = average(mids);
+    const total = slipAvg + assignAvg + midAvg + attendanceMarks;
+
+    row.querySelector(".slipAvg").innerText = slipAvg;
+    row.querySelector(".assignAvg").innerText = assignAvg;
+    row.querySelector(".midAvg").innerText = midAvg;
+    row.querySelector(".totalCIE").innerText = total;
+}
+
+async function saveSubjectRow(button, subject) {
+    const row = button.closest("tr");
+    const rollNo = parseInt(row.querySelector(".roll").innerText);
+
+    const sliptests = [".slip1", ".slip2", ".slip3"].map(cls => parseInt(row.querySelector(cls).innerText));
+    const assignments = [".assign1", ".assign2"].map(cls => parseInt(row.querySelector(cls).innerText));
+    const mids = [".mid1", ".mid2"].map(cls => parseInt(row.querySelector(cls).innerText));
+    const attendance = parseInt(row.querySelector(".attendance").innerText);
+
+    const res = await fetch(`http://localhost:3000/update-subject-cie/${rollNo}/${encodeURIComponent(subject)}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sliptests, assignments, mids, attendance })
+    });
+
+    const data = await res.json();
+    alert(data.message || "Subject CIE updated!");
+}
+
+async function loadLabCIE(lab) {
+    const tbody = document.querySelector("#lab-cie-table tbody");
+    tbody.innerHTML = "";
+
+    for (const roll of TotStudents) {
+        const res = await fetch(`http://localhost:3000/get-lab-cie/${roll}/${encodeURIComponent(lab)}`);
+        const s = await res.json();
+
+        const rowHTML = `
+        <tr>
+            <td class="roll">${s.rollNo}</td>
+            <td contenteditable class="int1">${s.internals[0]}</td>
+            <td contenteditable class="int2">${s.internals[1]}</td>
+            <td class="intAvg">0</td>
+            <td contenteditable class="record">${s.record}</td>
+            <td class="totalCIE">0</td>
+            <td><button onclick="saveLabRow(this, '${lab}')">Save</button></td>
+        </tr>`;
+
+        tbody.insertAdjacentHTML("beforeend", rowHTML);
+    }
+
+    // ⚠️ Make sure DOM is updated before running calculations
+    requestAnimationFrame(() => {
+        document.querySelectorAll("#lab-cie-table tbody tr").forEach(updateLabRow);
+        setupLabLiveUpdate(); // Needed for real-time updates
+    });
+}
+
+function setupLabLiveUpdate() {
+    document.querySelectorAll("#lab-cie-table tbody tr").forEach(row => {
+        row.querySelectorAll("[contenteditable]").forEach(cell => {
+            cell.addEventListener("input", () => updateLabRow(row));
+        });
+    });
+}
+
+function updateLabRow(row) {
+    const get = cls => parseInt(row.querySelector("." + cls)?.innerText) || 0;
+    const intAvg = average([get("int1"), get("int2")]);
+    const total = intAvg + get("record");
+
+    row.querySelector(".intAvg").innerText = intAvg;
+    row.querySelector(".totalCIE").innerText = total;
+}
+
+async function saveLabRow(button, lab) {
+    const row = button.closest("tr");
+    const rollNo = parseInt(row.querySelector(".roll").innerText);
+    const internals = [".int1", ".int2"].map(cls => parseInt(row.querySelector(cls).innerText));
+    const record = parseInt(row.querySelector(".record").innerText);
+
+    const res = await fetch(`http://localhost:3000/update-lab-cie/${rollNo}/${encodeURIComponent(lab)}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ internals, record })
+    });
+
+    const data = await res.json();
+    alert(data.message || "Lab CIE updated!");
+}
+
+function average(arr) {
+    const valid = arr.filter(n => !isNaN(n));
+    if (valid.length === 0) return 0;
+    return Math.round(valid.reduce((a, b) => a + b, 0) / valid.length);
+}
+
+function averageTopTwo(arr) {
+    const sorted = arr.sort((a, b) => b - a);
+    return Math.round((sorted[0] + sorted[1]) / 2);
+}
+
+
+/*<---------------SideBar--------------->*/
 
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
@@ -457,13 +633,14 @@ function addAnnouncement() {
 }
 
 function loadAnnouncements() {
-    console.log("HI")
+
+    let sectionInput = document.getElementById("current-section");
+    sectionInput.value = sectionName.toUpperCase();
+
     fetch("http://localhost:3000/get-announcements")
         .then(response => response.json())
         .then(data => {
-            let announcementList = document.getElementById("announcementsList");
-            let sectionInput = document.getElementById("current-section");
-            sectionInput.value = sectionName.toUpperCase(); 
+            let announcementList = document.getElementById("announcementsList"); 
 
             announcementList.innerHTML = "";
 
@@ -473,7 +650,7 @@ function loadAnnouncements() {
                 announcementList.innerHTML = "<p>No announcements yet.</p>";
                 return;
             }
-
+            
             filteredAnnouncements.forEach(announcement => {
                 let announcementDiv = document.createElement("div");
                 announcementDiv.classList.add("announcement-item");

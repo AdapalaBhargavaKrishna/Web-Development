@@ -130,6 +130,155 @@ app.delete('/delete-announcement/:id', async (req, res) => {
     }
 });
 
+app.get('/get-subject-cie/:subject', async (req, res) => {
+    const subject = req.params.subject;
+    const data = await db.collection('subject_cie').find({ subject }).toArray();
+    res.json(data);
+});
+
+// Update subject CIE data for a student
+app.put('/update-subject-cie/:rollNo/:subject', async (req, res) => {
+    try {
+        const rollNo = parseInt(req.params.rollNo);
+        const subject = req.params.subject;
+        const { sliptests, assignments, mids, attendance } = req.body;
+
+        const slipAvg = averageTopTwo(sliptests);
+        const assignAvg = average(assignments);
+        const midAvg = average(mids);
+        const attendanceMarks = attendance;
+        const totalCIE = slipAvg + assignAvg + midAvg + attendanceMarks;
+
+        await db.collection('subject_cie').updateOne(
+            { rollNo, subject },
+            {
+                $set: {
+                    rollNo,
+                    subject,
+                    sliptests,
+                    assignments,
+                    mids,
+                    attendance,
+                    slipAvg,
+                    assignAvg,
+                    midAvg,
+                    attendanceMarks,
+                    totalCIE
+                }
+            },
+            { upsert: true }
+        );
+
+        res.json({ message: "Subject CIE updated successfully!" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+// ---------- LAB CIE ROUTES ----------
+
+// Get all lab CIE data for a given lab
+app.get('/get-lab-cie/:lab', async (req, res) => {
+    const lab = req.params.lab;
+    const data = await db.collection('lab_cie').find({ lab }).toArray();
+    res.json(data);
+});
+
+// Update lab CIE data for a student
+app.put('/update-lab-cie/:rollNo/:lab', async (req, res) => {
+    try {
+        const rollNo = parseInt(req.params.rollNo);
+        const lab = req.params.lab;
+        const { internals, record } = req.body;
+
+        const internalAvg = average(internals);
+        const totalCIE = internalAvg + record;
+
+        await db.collection('lab_cie').updateOne(
+            { rollNo, lab },
+            {
+                $set: {
+                    rollNo,
+                    lab,
+                    internals,
+                    record,
+                    internalAvg,
+                    totalCIE
+                }
+            },
+            { upsert: true }
+        );
+
+        res.json({ message: "Lab CIE updated!" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+// Get subject CIE for a specific student and subject
+app.get('/get-subject-cie/:rollNo/:subject', async (req, res) => {
+    const rollNo = parseInt(req.params.rollNo);
+    const subject = req.params.subject;
+
+    const data = await db.collection('subject_cie').findOne({ rollNo, subject });
+
+    if (data) {
+        res.json(data);
+    } else {
+        // Return default data if not found
+        res.json({
+            rollNo,
+            subject,
+            sliptests: [0, 0, 0],
+            assignments: [0, 0],
+            mids: [0, 0],
+            attendance: 0,
+            slipAvg: 0,
+            assignAvg: 0,
+            midAvg: 0,
+            attendanceMarks: 0,
+            totalCIE: 0
+        });
+    }
+});
+
+// Get lab CIE for a specific student and lab
+app.get('/get-lab-cie/:rollNo/:lab', async (req, res) => {
+    const rollNo = parseInt(req.params.rollNo);
+    const lab = req.params.lab;
+
+    const data = await db.collection('lab_cie').findOne({ rollNo, lab });
+
+    if (data) {
+        res.json(data);
+    } else {
+        // Return default data if not found
+        res.json({
+            rollNo,
+            lab,
+            internals: [0, 0],
+            record: 0,
+            internalAvg: 0,
+            totalCIE: 0
+        });
+    }
+});
+
+// ---------- UTILITY FUNCTIONS ----------
+
+function average(arr) {
+    const valid = arr.filter(n => !isNaN(n));
+    if (valid.length === 0) return 0;
+    return Math.round(valid.reduce((a, b) => a + b, 0) / valid.length);
+}
+
+function averageTopTwo(arr) {
+    const sorted = arr.filter(n => !isNaN(n)).sort((a, b) => b - a);
+    return sorted.length >= 2 ? Math.round((sorted[0] + sorted[1]) / 2) : sorted[0] || 0;
+}
+
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
