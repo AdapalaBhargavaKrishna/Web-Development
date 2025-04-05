@@ -244,6 +244,41 @@ app.get('/get-subject-cie/:rollNo/:subject', async (req, res) => {
     }
 });
 
+app.get('/get-total-cie/:rollNo', async (req, res) => {
+
+    const rollNo = parseInt(req.params.rollNo);
+    
+    const subjects = [
+        "PQT : Probability and Queueing Theory",
+        "DCCST : DC Circuits Sensors and Transducers",
+        "DBMS : Database Management Systems",
+        "DAA : Design and Analysis of Algorithms",
+        "EEA : Engineering Economics and Accountancy",
+        "PE - 1 : Professional Elective - 1"
+    ];
+
+    const labs = [
+        "DBMS Lab : Database Management Systems Lab",
+        "ALG Lab : Algorithms Lab",
+        "MP-I : Mini Project – I"
+    ];
+
+    const cieData = { rollNo };
+
+    for (const subject of subjects) {
+        const subData = await db.collection('subject_cie').findOne({ rollNo, subject });
+        cieData[subject] = subData ? subData.totalCIE : 0;
+    }
+
+    // Get all lab CIEs
+    for (const lab of labs) {
+        const labData = await db.collection('lab_cie').findOne({ rollNo, lab });
+        cieData[lab] = labData ? labData.totalCIE : 0;
+    }
+
+    res.json(cieData);
+});
+
 // Get lab CIE for a specific student and lab
 app.get('/get-lab-cie/:rollNo/:lab', async (req, res) => {
     const rollNo = parseInt(req.params.rollNo);

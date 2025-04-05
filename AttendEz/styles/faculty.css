@@ -423,7 +423,6 @@ th {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    margin-top: 1rem;
 }
 
 .subject-records-dropdown > div{
@@ -442,26 +441,24 @@ th {
     width: 17vw;
 }
 
-.cie-table-section {
-    padding: 0;
+.cie-table-section{
+    margin-top: 1rem;
     overflow-x: auto;
 }
 
-#cie-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: center;
-    font-family: sans-serif;
+#subject-cie-table table thead th{
+    background-color: beige;
+    white-space: nowrap;
 }
 
-#cie-table th,
-#cie-table td {
-    border: 1px solid #ccc;
-    padding: 10px;
+#lab-cie-table table thead th{
+    background-color: beige;
+    white-space: nowrap;
 }
 
-#cie-table th {
-    background-color: #f4f4f4;
+#full-cie-table thead th{
+    background-color: beige;
+    /* white-space: nowrap; */
 }
 
 

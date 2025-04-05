@@ -31,9 +31,9 @@ if (sectionName === "it1") {
         .concat([...Array(7).keys()].map(i => (301 + i).toString()));
 
 } else if (sectionName === "it2") {
-    TotStudents = [...Array(70).keys()].map(i => (71 + i).toString())
+    TotStudents = [...Array(67).keys()].map(i => (71 + i).toString())
         .concat([...Array(7).keys()].map(i => (308 + i).toString()));
-        
+
 } else if (sectionName === "it3") {
     TotStudents = [...Array(70).keys()].map(i => (138 + i).toString())
         .concat([...Array(6).keys()].map(i => (315 + i).toString()));
@@ -43,30 +43,31 @@ if (sectionName === "it1") {
 }
 
 const batchData = {
-    "Batch-1": TotStudents.slice(0, 26),         
-    "Batch-2": TotStudents.slice(26, 51),        
-    "Batch-3": TotStudents.slice(51)             
+    "Batch-1": TotStudents.slice(0, 26),
+    "Batch-2": TotStudents.slice(26, 51),
+    "Batch-3": TotStudents.slice(51)
 };
 
 console.log("Batches:", batchData);
 
 // <--------------------Total Subjects-------------------->
 
-    const subjects = [
-        "PQT : Probability and Queueing Theory",
-        "DCCST : DC Circuits Sensors and Transducers",
-        "DBMS : Database Management Systems",
-        "DAA : Design and Analysis of Algorithms",
-        "EEA : Engineering Economics and Accountancy",
-        "ES : Environmental Science",
-        "PE - 1 : Professional Elective - 1",
-        "DBMS Lab : Database Management Systems Lab",
-        "ALG Lab : Algorithms Lab",
-        "MP-I : Mini Project – I",
-        "MENTORING : MENTORING"
-    ];
+const subjects = [
+    "PQT : Probability and Queueing Theory",
+    "DCCST : DC Circuits Sensors and Transducers",
+    "DBMS : Database Management Systems",
+    "DAA : Design and Analysis of Algorithms",
+    "EEA : Engineering Economics and Accountancy",
+    "ES : Environmental Science",
+    "PE - 1 : Professional Elective - 1",
+    "DBMS Lab : Database Management Systems Lab",
+    "ALG Lab : Algorithms Lab",
+    "MP-I : Mini Project – I",
+    "MENTORING : MENTORING"
+];
 
 // <--------------------Show Sections-------------------->
+let db;
 
 function showSection(section) {
     fetch(`sections/faculty/${section}.html`)
@@ -77,9 +78,9 @@ function showSection(section) {
             requestAnimationFrame(() => {
                 if (section === "Fees") populateFeeTable();
                 if (section === "announcements") loadAnnouncements();
-                if (section === "records") displayStudents();
+                if (section === "records") recordsLoad();
                 if (section === "assignments") {
-                    if (!db) { 
+                    if (!db) {
                         openDatabase(() => {
                             getAssignmentsFromDB();
                             AssignmentsFunction();
@@ -127,7 +128,7 @@ function selectType(type) {
 
     if (type === "class") {
         batchSelect.value = "";
-        rollNumbers = [...TotStudents]; 
+        rollNumbers = [...TotStudents];
     } else if (type === "batch") {
         const selectedBatch = batchSelect.value;
         rollNumbers = batchData[selectedBatch] || [];
@@ -147,7 +148,7 @@ function selectType(type) {
 
 function markAttendance(roll) {
     const rollNumberDiv = document.querySelector(`.roll-number[data-roll="${roll}"]`);
-    
+
     if (!attendance[roll]) {
         attendance[roll] = 'present';
     } else if (attendance[roll] === 'present') {
@@ -159,11 +160,11 @@ function markAttendance(roll) {
     gsap.to(rollNumberDiv, {
         scale: 0,
         duration: 0.1,
-        onComplete: () =>{
+        onComplete: () => {
             updateRollNumberDisplay(roll);
             gsap.to(rollNumberDiv, {
                 scale: 1,
-                duration:0.1
+                duration: 0.1
             })
         }
     })
@@ -193,7 +194,7 @@ async function finalizeAttendance() {
     }
 
     const attendanceData = {
-        date: new Date().toISOString().split('T')[0], 
+        date: new Date().toISOString().split('T')[0],
         subject: selectedSubject.value,
         section: sectionName,
         students: rollNumbers.map(roll => ({
@@ -202,7 +203,6 @@ async function finalizeAttendance() {
         }))
     };
 
-    console.log("Sending Data:", JSON.stringify(attendanceData, null, 2));
     const absentees = Object.keys(attendance).filter(roll => attendance[roll] === 'Absent');
     const absenteesListDiv = document.getElementById('absenteesList');
     absenteesListDiv.innerHTML = `<h3>Absentees: ${absentees.join(', ')}</h3>`;
@@ -263,7 +263,7 @@ function BreakText() {
     var h1Text = h1tag.textContent;
     var splittedText = h1Text.split("");
     var clutter = ""
-    splittedText.forEach(function(elem){
+    splittedText.forEach(function (elem) {
         clutter += `<span>${elem}</span>`
     })
     h1tag.innerHTML = clutter;
@@ -354,6 +354,45 @@ function updateFeeStatus(dueInput, statusCell) {
 
 /*<---------------Records--------------->*/
 
+function recordsLoad() {
+    const subjectDropdown = document.getElementById("subject-records-dropdown");
+    const labDropdown = document.getElementById("lab-records-dropdown");
+
+    if (subjectDropdown) {
+        subjectDropdown.addEventListener("change", async function () {
+            const subject = this.value;
+            if (subject) {
+                document.getElementById("subject-cie-table").style.display = "block";
+                document.getElementById("lab-cie-table").style.display = "none";
+                await loadSubjectCIE(subject);
+            }
+        });
+
+        if (subjectDropdown.value) {
+            document.getElementById("subject-cie-table").style.display = "block";
+            document.getElementById("lab-cie-table").style.display = "none";
+            loadSubjectCIE(subjectDropdown.value);
+        }
+    }
+
+    if (labDropdown) {
+        labDropdown.addEventListener("change", async function () {
+            const lab = this.value;
+            if (lab) {
+                document.getElementById("lab-cie-table").style.display = "block";
+                document.getElementById("subject-cie-table").style.display = "none";
+                await loadLabCIE(lab);
+            }
+        });
+
+        if (labDropdown.value) {
+            document.getElementById("lab-cie-table").style.display = "block";
+            document.getElementById("subject-cie-table").style.display = "none";
+            loadLabCIE(labDropdown.value);
+        }
+    }
+}
+
 function moveSlider(index, btn) {
     const slider = document.querySelector('.record-slider');
     const buttons = document.querySelectorAll('.record-header button');
@@ -363,40 +402,38 @@ function moveSlider(index, btn) {
     buttons.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
 
-    // Toggle CIE sections based on slider index
     const subjectCIE = document.querySelector('.subject-cie-section');
     const fullCIE = document.querySelector('.full-cie-table-section');
 
     if (index === 0) {
         subjectCIE.style.display = 'block';
         fullCIE.style.display = 'none';
+
+        const subjectDropdown = document.getElementById("subject-records-dropdown");
+        const labDropdown = document.getElementById("lab-records-dropdown");
+
+        if (subjectDropdown.value) {
+            loadSubjectCIE(subjectDropdown.value);
+            document.getElementById("subject-cie-table").style.display = "block";
+            document.getElementById("lab-cie-table").style.display = "none";
+        } else if (labDropdown.value) {
+            loadLabCIE(labDropdown.value);
+            document.getElementById("lab-cie-table").style.display = "block";
+            document.getElementById("subject-cie-table").style.display = "none";
+        }
     } else if (index === 1) {
         subjectCIE.style.display = 'none';
         fullCIE.style.display = 'block';
+        populateCieTable();
+        console.log("frequent")
     }
 }
 
-document.getElementById("subject-records-dropdown").addEventListener("change", async function () {
-    const subject = this.value;
-    if (subject) {
-        document.getElementById("subject-cie-table").style.display = "block";
-        document.getElementById("lab-cie-table").style.display = "none";
-        await loadSubjectCIE(subject);
-    }
-});
-
-document.getElementById("lab-records-dropdown").addEventListener("change", async function () {
-    const lab = this.value;
-    if (lab) {
-        document.getElementById("lab-cie-table").style.display = "block";
-        document.getElementById("subject-cie-table").style.display = "none";
-        await loadLabCIE(lab);
-    }
-});
-
 async function loadSubjectCIE(subject) {
+    
     const tbody = document.querySelector("#subject-cie-table tbody");
     tbody.innerHTML = "";
+    
 
     for (const roll of TotStudents) {
         const res = await fetch(`http://localhost:3000/get-subject-cie/${roll}/${encodeURIComponent(subject)}`);
@@ -419,7 +456,7 @@ async function loadSubjectCIE(subject) {
             <td class="totalCIE">0</td>
             <td><button onclick="saveSubjectRow(this, '${subject}')">Save</button></td>
         </tr>`;
-    
+
         tbody.insertAdjacentHTML("beforeend", rowHTML);
     }
 
@@ -473,6 +510,7 @@ async function saveSubjectRow(button, subject) {
 
     const data = await res.json();
     alert(data.message || "Subject CIE updated!");
+
 }
 
 async function loadLabCIE(lab) {
@@ -548,6 +586,56 @@ function averageTopTwo(arr) {
     return Math.round((sorted[0] + sorted[1]) / 2);
 }
 
+const subjectsAndLabs = [
+    "PQT : Probability and Queueing Theory",
+    "DCCST : DC Circuits Sensors and Transducers",
+    "DBMS : Database Management Systems",
+    "DAA : Design and Analysis of Algorithms",
+    "EEA : Engineering Economics and Accountancy",
+    "PE - 1 : Professional Elective - 1",
+    "DBMS Lab : Database Management Systems Lab",
+    "ALG Lab : Algorithms Lab",
+    "MP-I : Mini Project – I"
+];
+
+function createHeader() {
+    const table = document.getElementById("full-cie-table");
+    const thead = table.querySelector("thead");
+    thead.innerHTML = "";
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<th>Roll No</th>`;
+    for (const sub of subjectsAndLabs) {
+        tr.innerHTML += `<th>${sub}</th>`;
+    }
+    tr.innerHTML += `<th>Total</th>`;
+    thead.appendChild(tr);
+}
+
+async function populateCieTable() {
+    const table = document.getElementById("full-cie-table");
+    const tbody = table.querySelector("tbody");
+    tbody.innerHTML = "";
+    createHeader();
+
+    for (const roll of TotStudents) {
+        const res = await fetch(`http://localhost:3000/get-total-cie/${roll}`);
+        const data = await res.json();
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${data.rollNo}</td>`;
+
+        let total = 0;
+        for (const sub of subjectsAndLabs) {
+            const cie = data[sub] || 0;
+            total += cie;
+            tr.innerHTML += `<td>${cie}</td>`;
+        }
+
+        tr.innerHTML += `<td><strong>${total}</strong></td>`;
+        tbody.appendChild(tr);
+    }
+}
+
 /*<---------------SideBar--------------->*/
 
 function toggleSidebar() {
@@ -618,14 +706,14 @@ function addAnnouncement() {
         },
         body: JSON.stringify(newAnnouncement)
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Announcement added:", data);
-        alert("Announcement added successfully!");
-        document.getElementById("announcementInput").value = "";
-        loadAnnouncements();
-    })
-    .catch(error => console.error("Error adding announcement:", error));
+        .then(response => response.json())
+        .then(data => {
+            console.log("Announcement added:", data);
+            alert("Announcement added successfully!");
+            document.getElementById("announcementInput").value = "";
+            loadAnnouncements();
+        })
+        .catch(error => console.error("Error adding announcement:", error));
 }
 
 function loadAnnouncements() {
@@ -636,7 +724,7 @@ function loadAnnouncements() {
     fetch("http://localhost:3000/get-announcements")
         .then(response => response.json())
         .then(data => {
-            let announcementList = document.getElementById("announcementsList"); 
+            let announcementList = document.getElementById("announcementsList");
 
             announcementList.innerHTML = "";
 
@@ -646,7 +734,7 @@ function loadAnnouncements() {
                 announcementList.innerHTML = "<p>No announcements yet.</p>";
                 return;
             }
-            
+
             filteredAnnouncements.forEach(announcement => {
                 let announcementDiv = document.createElement("div");
                 announcementDiv.classList.add("announcement-item");
@@ -679,12 +767,11 @@ function deleteAnnouncement(id, sectionName) {
 
 /*<---------------Assignments--------------->*/
 
-let db;
 
 function openDatabase(callback) {
     const request = indexedDB.open("AttendZ_DB", 1);
 
-    request.onupgradeneeded = function(event) {
+    request.onupgradeneeded = function (event) {
         const db = event.target.result;
         if (!db.objectStoreNames.contains("assignments")) {
             const assignmentStore = db.createObjectStore("assignments", { keyPath: "id" });
@@ -692,13 +779,13 @@ function openDatabase(callback) {
         }
     };
 
-    request.onsuccess = function(event) {
+    request.onsuccess = function (event) {
         db = event.target.result;
         console.log("IndexedDB opened successfully.");
         if (callback) callback();
     };
 
-    request.onerror = function(event) {
+    request.onerror = function (event) {
         console.error("IndexedDB error:", event.target.errorCode);
     };
 }
@@ -720,7 +807,7 @@ function createAssignment() {
     }
 
     const reader = new FileReader();
-    reader.onload = function(event) {
+    reader.onload = function (event) {
         const fileData = event.target.result;
 
         const assignment = {
@@ -732,19 +819,16 @@ function createAssignment() {
             fileName: file ? file.name : null,
             submissions: []
         };
-        console.log("HII")
-        console.log(assignment)
 
         const transaction = db.transaction(["assignments"], "readwrite");
         const store = transaction.objectStore("assignments");
         const request = store.add(assignment);
 
-        request.onsuccess = function() {
-            console.log("Assignment saved!");
+        request.onsuccess = function () {
             getAssignmentsFromDB();
         };
 
-        request.onerror = function() {
+        request.onerror = function () {
             console.error("Error saving assignment.");
         };
     };
@@ -762,10 +846,9 @@ function createAssignment() {
             submissions: []
         };
 
-        console.log("Riyal")
         const transaction = db.transaction(["assignments"], "readwrite");
         const store = transaction.objectStore("assignments");
-        store.add(assignment).onsuccess = function() {
+        store.add(assignment).onsuccess = function () {
             console.log("Assignment saved without file!");
             getAssignmentsFromDB();
         };
@@ -778,13 +861,12 @@ function getAssignmentsFromDB() {
     const store = transaction.objectStore("assignments");
     const request = store.getAll();
 
-    request.onsuccess = function(event) {
+    request.onsuccess = function (event) {
         assignments = event.target.result;
-        console.log("Eni")
         updateAssignmentsList();
     };
 
-    request.onerror = function() {
+    request.onerror = function () {
         console.error("Error retrieving assignments.");
     };
 }
@@ -792,7 +874,6 @@ function getAssignmentsFromDB() {
 function updateAssignmentsList() {
     const assignmentItems = document.getElementById('assignmentItems');
     assignmentItems.innerHTML = '';
-    console.log("This shi is it ", assignments);
 
     const filteredAssignments = assignments.filter(assignment => assignment.sectionName === sectionName);
 
@@ -822,7 +903,7 @@ function showAssignmentDetails(id) {
     let fileHTML = "<p>No file attached</p>";
     if (assignment.file) {
         console.log(assignment.file)
-        const byteCharacters = atob(assignment.file.split(',')[1]); 
+        const byteCharacters = atob(assignment.file.split(',')[1]);
         const byteNumbers = new Array(byteCharacters.length);
         for (let i = 0; i < byteCharacters.length; i++) {
             byteNumbers[i] = byteCharacters.charCodeAt(i);
@@ -831,8 +912,7 @@ function showAssignmentDetails(id) {
         const blob = new Blob([byteArray], { type: "application/octet-stream" });
 
         const fileURL = URL.createObjectURL(blob);
-        console.log("This is dowwnload",fileURL)
-        
+
         fileHTML = `<a class="assignment-download" href="${fileURL}" download="${assignment.fileName}">📂 Download Assignment</a>`;
     }
 
@@ -856,7 +936,7 @@ function showAssignmentDetails(id) {
             submittedAssignments.forEach(submission => {
                 if (submission.section === assignment.sectionName && submission.assignmentName === assignment.title) {
                     const li = document.createElement('li');
-                    
+
                     const fileLink = `<a href="${submission.file}" target="_blank" download="${submission.fileName}">${submission.fileName}</a>`;
 
                     li.innerHTML = `<div><span><b>Roll No:</b> ${submission.rollNumber}</span>.<span><b>File:</b> ${fileLink}</span></div>`;
@@ -984,14 +1064,14 @@ const closePopup = document.getElementById("close-popup");
 gsap.set(popup, { opacity: 0, y: -600 });
 
 notificationBtn.addEventListener("click", () => {
-  if (popup.classList.contains("hidden")) {
-    popup.classList.remove("hidden");
-    gsap.to(popup, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
-  } else {
-    gsap.to(popup, { opacity: 0, y: -600, duration: 0.6, ease: "power2.in", onComplete: () => popup.classList.add("hidden") });
-  }
+    if (popup.classList.contains("hidden")) {
+        popup.classList.remove("hidden");
+        gsap.to(popup, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
+    } else {
+        gsap.to(popup, { opacity: 0, y: -600, duration: 0.6, ease: "power2.in", onComplete: () => popup.classList.add("hidden") });
+    }
 });
 
 closePopup.addEventListener("click", () => {
-  gsap.to(popup, { opacity: 0, y: 600, duration: 0.6, ease: "power2.in", onComplete: () => popup.classList.add("hidden") });
+    gsap.to(popup, { opacity: 0, y: 600, duration: 0.6, ease: "power2.in", onComplete: () => popup.classList.add("hidden") });
 });
