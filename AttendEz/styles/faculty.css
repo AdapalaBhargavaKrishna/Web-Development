@@ -309,63 +309,113 @@ th {
 
 /* <----------Fees----------> */
 
-.fee-grids {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
+.roll-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 2.5rem;
+    margin-top: 1rem;
 }
 
-.fee-grids th, .fee-grids td {
-    border: 1px solid #ddd;
+.roll {
     padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-left: 2px solid #4CAF50;
+    border-right: 2px solid #4CAF50;
+    border-radius: 8px;
     text-align: center;
-}
-
-.fee-grids th {
-    background-color: #333;
-    color: white;
-}
-
-.paid {
-    color: green;
     font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.roll:hover {
+    scale: 1.04;
 }
 
-.not-paid {
-    color: red;
-    font-weight: bold;
+
+.back-btn{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    margin: 1rem;
 }
 
-.edit-btn {
-    padding: 5px 10px;
-    background: blue;
+#back-btn{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+    padding: 8px;
+    background-color: #007bff;
     color: white;
     border: none;
     cursor: pointer;
     border-radius: 5px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
 }
 
-.edit-btn:hover {
-    background: darkblue;
-}
-
-.price-input {
-    width: 60px;
-    text-align: center;
-}
-
-.due-amount input{
-    border: none;
-    background: transparent;
-    text-align: center;
-}
-
-.due-edit{
-    background-color: green;
-    border: none;
-    color: white;
-    padding: 8px 15px;
+.fee-info {
     border-radius: 15px;
+    margin-top: 1rem;
+    padding: 10px;
+}
+
+.fee-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.fee-heading > h1{
+    margin-top: 0;
+}
+
+.fee-table th,
+.fee-table td {
+    padding: 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.fee-table th {
+    background: #527a58;
+    color: white;
+}
+
+.status {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status.paid {
+    color: green;
+}
+
+.status.unpaid {
+    color: red;
+}
+
+.save-fees{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.save-fees button{
+    margin: 1rem;
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.save-fees button:hover{
+    scale: 1.04;
+    background-color: #43A047;
 }
 
 /* <----------Student Records----------> */

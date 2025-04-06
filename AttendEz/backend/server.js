@@ -282,6 +282,51 @@ app.put('/update-lab-cie/:rollNo/:lab', async (req, res) => {
     }
 });
 
+app.get('/get-fee-details/:rollNo', async (req, res) => {
+    try {
+        const rollNo = parseInt(req.params.rollNo);
+        const feeData = await db.collection('fee_details').findOne({ rollNo });
+
+        if (!feeData) {
+            return res.json({
+                rollNo,
+                fees: [
+                    { type: "College Fee", amount: 0, status: "paid" },
+                    { type: "Transport Fee", amount: 0, status: "paid" },
+                    { type: "Hostel Fee", amount: 0, status: "paid" }
+                ]
+            });
+        }
+
+        res.json(feeData);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+app.put('/update-fee-details/:rollNo', async (req, res) => {
+    try {
+        const rollNo = parseInt(req.params.rollNo);
+        const { fees } = req.body;
+
+        await db.collection('fee_details').updateOne(
+            { rollNo },
+            {
+                $set: {
+                    rollNo,
+                    fees
+                }
+            },
+            { upsert: true }
+        );
+
+        res.json({ message: "Fee details updated successfully!" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
+    }
+});
 
 
 // ---------- UTILITY FUNCTIONS ----------
