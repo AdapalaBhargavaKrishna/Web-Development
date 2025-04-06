@@ -447,18 +447,33 @@ th {
 }
 
 #subject-cie-table table thead th{
-    background-color: beige;
+    background-color: #8bda8d;
     white-space: nowrap;
+}
+
+#subject-cie-table table tbody tr button, #lab-cie-table table tbody tr button{
+    border: none;
+    padding: 10px;
+    background-color: #43A047  ;
+    border-radius: 15px;
+    cursor: pointer;
+    color: white;
+}
+#subject-cie-table table tbody tr button:hover, #lab-cie-table table tbody tr button:hover{
+    scale: 1.02;;
 }
 
 #lab-cie-table table thead th{
-    background-color: beige;
+    background-color: #8bda8d;
     white-space: nowrap;
 }
 
+#full-cie-table{
+    width: 75vw;
+}
+
 #full-cie-table thead th{
-    background-color: beige;
-    /* white-space: nowrap; */
+    background-color: #8bda8d;
 }
 
 
