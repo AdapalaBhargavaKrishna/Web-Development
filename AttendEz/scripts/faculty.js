@@ -76,7 +76,7 @@ function showSection(section) {
             document.getElementById("mainbar").innerHTML = data;
 
             requestAnimationFrame(() => {
-                if (section === "Fees") populateFeeTable();
+                if (section === "Fees") loadFeesSection();
                 if (section === "announcements") loadAnnouncements();
                 if (section === "records") recordsLoad();
                 if (section === "assignments") {
@@ -279,77 +279,137 @@ gsap.from("#heading span", {
 
 /*<---------------Fees--------------->*/
 
-function populateFeeTable() {
-    let feeTable = document.getElementById("feeTable");
-    feeTable.innerHTML = "";
+function loadFeesSection() {
+    const rollContainer = document.getElementById('roll-container');
+    const feeDetailsDiv = document.getElementById('fee-details');
+    const backBtn = document.getElementById('back-btn');
 
-    TotStudents.forEach(roll => {
-        let row = document.createElement("tr");
+    for (const i of TotStudents) {
+        createRollDiv(i);
+    }
 
-        // Roll No Column
-        let rollCell = document.createElement("td");
-        rollCell.textContent = roll;
-        row.appendChild(rollCell);
+    function createRollDiv(rollNo) {
+        const rollDiv = document.createElement('div');
+        rollDiv.classList.add('roll');
+        rollDiv.textContent = `Roll No: ${rollNo}`;
+        rollDiv.addEventListener('click', () => showFeeDetails(rollNo));
+        rollContainer.appendChild(rollDiv);
+    }
 
-        // Status Column
-        let statusCell = document.createElement("td");
-        statusCell.className = "fee-status";
-        statusCell.textContent = "Unpaid";
-        statusCell.style.color = "red";
-        row.appendChild(statusCell);
+    function showFeeDetails(rollNo) {
+        const feeHeading = document.querySelector('.fee-heading h1');
+        feeHeading.textContent = `Fee details for Roll No: ${rollNo}`;
 
-        // Due Amount Column
-        let dueAmountCell = document.createElement("td");
-        let dueInput = document.createElement("input");
-        dueAmountCell.className = "due-amount";
-        dueInput.type = "number";
-        dueInput.placeholder = "Due Amount";
-        dueInput.disabled = true;
-        dueInput.addEventListener("input", function () {
-            updateFeeStatus(dueInput, statusCell);
+        fetch(`http://localhost:3000/get-fee-details/${rollNo}`)
+            .then(response => response.json())
+            .then(data => {
+                renderFeeTable(data.fees);
+                animateInFeeDetails();
+            })
+            .catch(err => console.error('Error fetching fee details:', err));
+    }
+
+    function renderFeeTable(fees) {
+        const table = document.querySelector('.fee-table tbody');
+        table.innerHTML = '';
+
+        fees.forEach(fee => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>${fee.type}</td>
+                <td contenteditable="true">${fee.amount}</td>
+                <td contenteditable="true" class="status ${fee.status.toLowerCase()}">${fee.status}</td>
+            `;
+
+            const amountCell = row.querySelector('td:nth-child(2)');
+            const statusCell = row.querySelector('td:nth-child(3)');
+
+            amountCell.addEventListener('input', () => {
+                const amount = parseFloat(amountCell.textContent.trim()) || 0;
+                const newStatus = amount > 0 ? 'Unpaid' : 'Paid';
+
+                statusCell.textContent = newStatus;
+                statusCell.classList.remove('paid', 'unpaid');
+                statusCell.classList.add(newStatus.toLowerCase());
+            });
+
+            table.appendChild(row);
         });
-        dueAmountCell.appendChild(dueInput);
-        row.appendChild(dueAmountCell);
+    }
 
-        // Action Column
-        let actionCell = document.createElement("td");
+    function animateInFeeDetails() {
+        gsap.to(rollContainer, {
+            duration: 0.5,
+            opacity: 0,
+            y: -50,
+            onComplete: () => {
+                rollContainer.style.display = "none";
+                feeDetailsDiv.classList.remove('hidden');
+                gsap.fromTo(feeDetailsDiv,
+                    { opacity: 0, y: 50 },
+                    { duration: 0.5, opacity: 1, y: 0 }
+                );
+            }
+        });
+    }
 
-        let editButton = document.createElement("button");
-        editButton.textContent = "Edit";
-        editButton.className = "due-edit";
-        editButton.onclick = function () {
-            dueInput.disabled = false;
-            dueInput.focus();
-            editButton.style.display = "none";
-            saveButton.style.display = "inline-block";
-        };
-
-        let saveButton = document.createElement("button");
-        saveButton.textContent = "Save";
-        saveButton.className = "due-edit";
-        saveButton.style.display = "none";
-        saveButton.onclick = function () {
-            dueInput.disabled = true;
-            saveButton.style.display = "none";
-            editButton.style.display = "inline-block";
-        };
-
-        actionCell.appendChild(editButton);
-        actionCell.appendChild(saveButton);
-        row.appendChild(actionCell);
-
-        feeTable.appendChild(row);
+    backBtn.addEventListener('click', () => {
+        gsap.to(feeDetailsDiv, {
+            duration: 0.5,
+            opacity: 0,
+            y: 50,
+            onComplete: () => {
+                feeDetailsDiv.classList.add('hidden');
+                rollContainer.style.display = "grid";
+                gsap.fromTo(rollContainer,
+                    { opacity: 0, y: -50 },
+                    { duration: 0.5, opacity: 1, y: 0 }
+                );
+            }
+        });
     });
+
+    const saveBtn = document.getElementById('save-btn');
+    if (saveBtn) saveBtn.addEventListener('click', saveFeeDetails);
 }
 
-function updateFeeStatus(dueInput, statusCell) {
-    if (dueInput.value == 0 || dueInput.value === "") {
-        statusCell.textContent = "Paid";
-        statusCell.style.color = "green";
-    } else {
-        statusCell.textContent = "Unpaid";
-        statusCell.style.color = "red";
+function saveFeeDetails() {
+    const rows = document.querySelectorAll('.fee-table tbody tr');
+    const fees = [];
+
+    for (const row of rows) {
+        const cells = row.querySelectorAll('td');
+        const type = cells[0].textContent.trim();
+        const amountText = cells[1].textContent.trim();
+
+        if (amountText === '' || isNaN(amountText)) {
+            alert(`Amount for "${type}" cannot be empty or invalid.`);
+            return;
+        }
+
+        const amount = parseFloat(amountText);
+        const status = amount > 0 ? 'unpaid' : 'paid';
+
+        fees.push({ type, amount, status });
     }
+
+    const rollNo = document.querySelector('.fee-heading h1').textContent.split(': ')[1];
+
+    fetch(`http://localhost:3000/update-fee-details/${rollNo}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fees })
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert('Fee details updated successfully!');
+            console.log(data);
+        })
+        .catch(error => {
+            alert('Failed to update fee details.');
+            console.error('Error:', error);
+        });
 }
 
 /*<---------------Records--------------->*/
@@ -430,10 +490,10 @@ function moveSlider(index, btn) {
 }
 
 async function loadSubjectCIE(subject) {
-    
+
     const tbody = document.querySelector("#subject-cie-table tbody");
     tbody.innerHTML = "";
-    
+
 
     for (const roll of TotStudents) {
         const res = await fetch(`http://localhost:3000/get-subject-cie/${roll}/${encodeURIComponent(subject)}`);
