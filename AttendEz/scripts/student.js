@@ -1030,28 +1030,27 @@ function handleCustomPayment(method) {
     const originalEnteredAmount = enteredAmount;
   
     ["college", "transport", "hostel"].forEach(type => {
-      const row = document.getElementById(`${type}-fee`);
-      if (row && row.style.display === "table-row") {
-        const amountText = row.querySelector("td:nth-child(2)").textContent.replace(/,/g, "");
-        const amount = parseInt(amountText) || 0;
-  
-        const status = row.querySelector(".status").innerText.toLowerCase();
-  
-        if (status === "unpaid" && enteredAmount > 0 && amount > 0) {
-          if (enteredAmount >= amount) {
-            updatedFees.push({ type: capitalize(type), amount: amount - enteredAmount, status: "paid" });
-            enteredAmount -= amount;
+        const row = document.getElementById(`${type}-fee`);
+        if (row) {
+          const amountText = row.querySelector("td:nth-child(2)").textContent.replace(/,/g, "");
+          const amount = parseInt(amountText) || 0;
+          const status = row.querySelector(".status").innerText.toLowerCase();
+      
+          if (status === "unpaid" && enteredAmount > 0 && amount > 0) {
+            if (enteredAmount >= amount) {
+              updatedFees.push({ type: capitalize(type), amount: 0, status: "paid" });
+              enteredAmount -= amount;
+            } else {
+              updatedFees.push({ type: capitalize(type), amount: amount - enteredAmount, status: "unpaid" });
+              enteredAmount = 0;
+            }
           } else {
-            updatedFees.push({ type: capitalize(type), amount: amount - enteredAmount, status: "unpaid" });
-            enteredAmount = 0;
+            updatedFees.push({ type: capitalize(type), amount, status });
           }
-        } else {
-          updatedFees.push({ type: capitalize(type), amount, status });
         }
-      }
-    });
+      });      
     
-    console.log("Updated Fees:", updatedFees);
+    console.log(JSON.stringify({ fees: updatedFees }));
     fetch(`http://localhost:3000/update-fee-details/${shortRoll}`, {
       method: "PUT",
       headers: {
