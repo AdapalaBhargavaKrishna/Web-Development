@@ -1,23 +1,40 @@
 // <--------------------Toast-------------------->
 
-function showToast() {
-    Toastify({
-        text: "⚠ Please Select a Subject",
-        duration: 3000,
-        close: true,
-        gravity: "top",
-        position: "right",
-        offset: {
-            x: 50,
-            y: 100
-        },
-        style: {
-            background: "#ff5656",
-            color: "#fff",
-            fontWeight: "bold",
-        },
-    }).showToast();
-}
+const attendanceToast = new Notyf({
+    position: {
+      x: 'center', // or 'left' / 'center'
+      y: 'top'    // or 'bottom'
+    }
+  });
+
+const feeToast = new Notyf({
+    position: {
+      x: 'right', // or 'left' / 'center'
+      y: 'top'    // or 'bottom'
+    }
+  });
+
+const recordsToast = new Notyf({
+    position: {
+      x: 'right', // or 'left' / 'center'
+      y: 'top'    // or 'bottom'
+    }
+  });
+
+const announcementToast = new Notyf({
+    position: {
+      x: 'center', // or 'left' / 'center'
+      y: 'top'    // or 'bottom'
+    }
+  });
+
+const assignmentToast = new Notyf({
+    position: {
+      x: 'center', // or 'left' / 'center'
+      y: 'top'    // or 'bottom'
+    }
+  });
+  
 
 // <--------------------Section Name-------------------->
 const sectionName = new URLSearchParams(window.location.search).get("section") || "it2";
@@ -120,7 +137,7 @@ function selectType(type) {
     rollNumbersDiv.innerHTML = '';
 
     if (!subjectSelect.value) {
-        showToast()
+        attendanceToast.error({message: "Select a subject",className: "attendance-toast"});
         return;
     }
 
@@ -189,7 +206,7 @@ async function finalizeAttendance() {
     const selectedSubject = document.getElementById('subject-dropdown');
 
     if (!selectedSubject.value) {
-        alert("Please select a subject!");
+        attendanceToast.error({message: "Please select a subject!",className: "attendance-toast"});
         return;
     }
 
@@ -384,7 +401,7 @@ function saveFeeDetails() {
         const amountText = cells[1].textContent.trim();
 
         if (amountText === '' || isNaN(amountText)) {
-            alert(`Amount for "${type}" cannot be empty or invalid.`);
+            feeToast.error({message: `Amount for "${type}" cannot be empty or invalid.`,className: 'fee-toast-error'});
             return;
         }
 
@@ -403,11 +420,11 @@ function saveFeeDetails() {
     })
         .then(response => response.json())
         .then(data => {
-            alert('Fee details updated successfully!');
+            feeToast.success({message: 'Fee details updated successfully!',className: 'fee-toast-success'});
             console.log(data);
         })
         .catch(error => {
-            alert('Failed to update fee details.');
+            feeToast.error({message: 'Failed to update fee details.',className: 'fee-toast-error'});
             console.error('Error:', error);
         });
 }
@@ -569,7 +586,8 @@ async function saveSubjectRow(button, subject) {
     });
 
     const data = await res.json();
-    alert(data.message || "Subject CIE updated!");
+    recordsToast.success({message: data.message || "Subject CIE updated!",className: "records-toast"});
+      
 
 }
 
@@ -632,7 +650,7 @@ async function saveLabRow(button, lab) {
     });
 
     const data = await res.json();
-    alert(data.message || "Lab CIE updated!");
+    recordsToast.success({message: data.message || "Lab CIE updated!",className: "records-toast"});
 }
 
 function average(arr) {
@@ -748,7 +766,8 @@ function addAnnouncement() {
     let subject = document.getElementById("subjectDropdown").value;
 
     if (input === "" || section === "" || subject === "") {
-        alert("Please fill out all fields!");
+        announcementToast.error({message: "Please fill out all fields!",className: "announcement-toast-error"});
+          
         return;
     }
 
@@ -769,7 +788,7 @@ function addAnnouncement() {
         .then(response => response.json())
         .then(data => {
             console.log("Announcement added:", data);
-            alert("Announcement added successfully!");
+            announcementToast.success({message: "Announcement added successfully!",className: "announcement-toast-success"});
             document.getElementById("announcementInput").value = "";
             loadAnnouncements();
         })
@@ -819,7 +838,7 @@ function deleteAnnouncement(id, sectionName) {
     fetch(`http://localhost:3000/delete-announcement/${id}`, { method: "DELETE" })
         .then(response => response.json())
         .then(() => {
-            alert("Announcement deleted successfully!");
+            announcementToast.error({message: "Announcement deleted successfully!",className: "announcement-toast-error"});
             loadAnnouncements(sectionName); // Reload with the correct section filter
         })
         .catch(error => console.error("Error deleting announcement:", error));
@@ -862,7 +881,8 @@ function createAssignment() {
     const file = fileInput.files[0];
 
     if (!title || !description) {
-        alert('Please fill in both the title and description.');
+        assignmentToast.error({message: 'Please fill in both the title and description.',className: 'assignment-toast'});
+          
         return;
     }
 

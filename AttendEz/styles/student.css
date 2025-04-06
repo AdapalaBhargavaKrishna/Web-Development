@@ -1,3 +1,27 @@
+/* <--------------------Toast--------------------> */
+
+.fee-toast-error {
+    width: 440px !important;
+    max-width: 90vw;
+    top: 55px !important;
+    background-color: #ed3d3d !important;
+    border-radius: 15px;
+}
+
+.fee-toast-success {
+    width: 400px !important;
+    max-width: 90vw;
+    top: 55px !important;
+    background-color: #3dc763 !important;
+    border-radius: 15px;
+}
+
+.assignment-toast{
+    max-width: 90vw;
+    top: 55px !important;
+    border-radius: 15px;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -993,18 +1017,20 @@ nav {
 
 #upi {
     display: none;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 10px;
     padding: 15px;
     width: 50%;
-    height: 90%;
+    height: 100%;
 }
 
 #upi img {
     width: 85%;
     object-fit: cover;
     border-radius: 15px;
-    height: 80%;
+    height: 28vh;
 }
 
 .payment-method {
@@ -1022,11 +1048,40 @@ nav {
     justify-content: center;
 }
 
-.total-amount {
+.total-amount-upi, .total-amount-credit{
     text-align: center;
     font-size: 16px;
     color: #333;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
+}
+
+.willing-amount-credit{
+    display: flex;
+    margin: 1rem;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.willing-amount-upi{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#credit-willing-amount{
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    padding: 10px;
+    width: 25%;
+    text-align: center;
+}
+
+#upi-willing-amount{
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    padding: 10px;
+    text-align: center;
 }
 
 .input-group {
