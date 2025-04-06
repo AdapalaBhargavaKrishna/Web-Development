@@ -65,12 +65,22 @@
       </div>
         
         <div id="upi" class="payment-method">
+          <p class="total-amount-upi">Total Amount Payable: <strong>₹163</strong></p>
+          <div class="willing-amount-upi">
+            Amount willing to pay ₹<input type="number" id="upi-willing-amount" min="1">
+          </div>
           <img src="assets/upi.png" alt="UPI QR Code" class="scanner-image">
+          <button class="pay-btn" onclick="handleCustomPayment('upi')">Pay Now</button>
         </div>
 
         <div id="credit-card" class="payment-method">
           <h3>Add Card</h3>
-          <p class="total-amount">Total Amount Payable: <strong>₹163</strong></p>
+          <div class="total-amount-div">  
+            <p class="total-amount-credit">Total Amount Payable: <strong>₹163</strong></p>
+            <div class="willing-amount-credit">
+              Amount willing to pay ₹<input type="number" id="credit-willing-amount" min="1">
+            </div>
+          </div>
       
           <div class="card-container">
               <div class="input-group">
@@ -89,7 +99,7 @@
                   </div>
               </div>
       
-              <button class="pay-btn">Pay Now</button>
+              <button class="pay-btn" onclick="handleCustomPayment('credit')">Pay Now</button>
           </div>
       </div>
       

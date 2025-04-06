@@ -1,3 +1,19 @@
+// <--------------------Toast-------------------->
+
+const feeToast = new Notyf({
+    position: {
+      x: 'right',
+      y: 'top' 
+    }
+  });
+
+const assignmentToast = new Notyf({
+    position: {
+      x: 'right',
+      y: 'top'
+    }
+  });
+
 // <--------------------roll-Number-------------------->
 const urlParams = new URLSearchParams(window.location.search);
 const rollNumber = urlParams.get("rollNumber");
@@ -58,11 +74,10 @@ function showSection(section) {
         .then(data => {
             document.getElementById("mainbar").innerHTML = data;
 
-            // Wait for DOM update before executing section-specific code
             requestAnimationFrame(() => {
 
                 if (section === "timetable") updateTimetable(sectionName);
-                if (section === "Fees") feesSection();
+                if (section === "Fees") fetchFees(shortRoll);
                 if (section === "announcements") loadAnnouncements();
                 if (section === "records") recordsLoad();
                 if (section === "assignments") {
@@ -488,7 +503,7 @@ function submitAssignment() {
     const file = fileInput.files[0];
 
     if (!file) {
-        alert('Please choose a file to submit.');
+        assignmentToast.error({message: 'Please choose a file to submit.',className: 'assignment-toast'});
         return;
     }
 
@@ -539,7 +554,8 @@ function saveAssignmentData(data) {
         store.add(data);
 
         transaction.oncomplete = () => {
-            alert('Assignment submitted successfully!');
+            
+        assignmentToast.success({message: 'Assignment submitted successfully!',className: 'assignment-toast'});
             console.log('Assignment saved:', data);
         };
 
@@ -782,11 +798,31 @@ async function loadFullCIE() {
 
 // <--------------------Fees-------------------->
 
-const feeAmounts = {
-    college: 165000,
-    transport: 45000,
-    hostel: 115000
-};
+async function fetchFees(rollNo) {
+    const today = new Date().toISOString().split("T")[0];
+    document.getElementById("receipt-date").value = today;
+
+    const res = await fetch(`http://localhost:3000/get-fee-details/${rollNo}`);
+    const data = await res.json();
+    updateFeeTable(data);
+    updatePaymentDetails(data.fees);
+}
+
+function updateFeeTable(data) {
+    data.fees.forEach(fee => {
+        const typeKey = fee.type.toLowerCase().split(" ")[0];
+        const row = document.getElementById(`${typeKey}-fee`);
+        if (!row) return;
+
+        row.querySelector("td:nth-child(2)").textContent = fee.amount.toLocaleString();
+
+        const statusTd = row.querySelector(".status");
+        statusTd.innerText = fee.status.charAt(0).toUpperCase() + fee.status.slice(1);
+        statusTd.className = `status ${fee.status.toLowerCase()}`;
+
+        row.style.display = "table-row";
+    });
+}
 
 function showFees(fee) {
     const fees = {
@@ -797,85 +833,103 @@ function showFees(fee) {
 
     Object.values(fees).forEach(feeElement => {
         feeElement.style.display = "none";
-        document.querySelector(".proceed-payment").style.background = "#818181";
     });
 
     if (!fee) {
         Object.values(fees).forEach(feeElement => {
             feeElement.style.display = "table-row";
         });
-        updatePaymentDetails();
-        return;
+    } else if (fees[fee]) {
+        fees[fee].style.display = "table-row";
     }
 
-    if (fees[fee]) {
-        fees[fee].style.display = "table-row";
-        updatePaymentDetails();
-    }
+    // Recalculate payment after filtering
+    updatePaymentDetailsFromDOM();
 }
 
-function updatePaymentDetails() {
+const feeAmounts = {
+    college: 165000,
+    transport: 45000,
+    hostel: 115000
+  };
+  
+function updatePaymentDetailsFromDOM() {
     let totalFee = 0;
     let amountToPay = 0;
+  
+    ["college", "transport", "hostel"].forEach(type => {
+      const row = document.getElementById(`${type}-fee`);
+  
+      if (row && row.style.display === "table-row") {
+        totalFee += feeAmounts[type]; 
+  
 
-    Object.keys(feeAmounts).forEach(fee => {
-        const feeRow = document.getElementById(`${fee}-fee`);
-        if (feeRow && feeRow.style.display === "table-row") {
-            totalFee += feeAmounts[fee];
+        const amountText = row.querySelector("td:nth-child(2)").textContent.replace(/,/g, "");
+        const amount = parseInt(amountText) || 0;
 
-            const feeAmount = parseInt(feeRow.getElementsByTagName("td")[1].textContent.replace(/,/g, ""), 10);
-            amountToPay += feeAmount;
-
-            const feeStatusElement = feeRow.querySelector(".status");
-
-            if (feeAmount > 0) {
-                feeStatusElement.innerText = "Unpaid";
-                feeStatusElement.classList.remove("paid");
-                feeStatusElement.classList.add("unpaid");
-            } else {
-                feeStatusElement.innerText = "Paid";
-                feeStatusElement.classList.remove("unpaid");
-                feeStatusElement.classList.add("paid");
-            }
+        const status = row.querySelector(".status").innerText.toLowerCase();
+  
+        if (status === "unpaid" && amount > 0) {
+          amountToPay += amount;
         }
+      }
     });
-
+  
+    // Update footer display
     document.querySelector(".total-fee").innerText = `Total Fee: ₹${totalFee.toLocaleString()}`;
     document.querySelector(".to-pay").innerText = `Amount to Pay: ₹${amountToPay.toLocaleString()}`;
-    document.querySelector(".total-amount strong").innerText = `₹${amountToPay.toLocaleString()}`;
-
+    document.querySelector(".total-amount-upi strong").innerText = `₹${amountToPay.toLocaleString()}`;
+    document.querySelector(".total-amount-credit strong").innerText = `₹${amountToPay.toLocaleString()}`;
+  
+    // Payment button logic
     const proceedButton = document.querySelector(".proceed-payment");
     const payButton = document.querySelector(".pay-btn");
-    if (amountToPay > 0) {
-        proceedButton.style.background = "#ff4d4d";
-        payButton.style.background = "#FF6F61";
-        proceedButton.style.cursor = "pointer";
-        proceedButton.disabled = false;
-
-    } else {
-        proceedButton.style.background = "#818181";
-        payButton.style.background = "#818181";
-        proceedButton.style.cursor = "not-allowed";
-        payButton.style.cursor = "not-allowed";
-        proceedButton.disabled = true;
-    }
+  
+    const enable = amountToPay > 0;
+    proceedButton.style.background = enable ? "#ff4d4d" : "#818181";
+    payButton.style.background = enable ? "#FF6F61" : "#818181";
+    proceedButton.style.cursor = enable ? "pointer" : "not-allowed";
+    payButton.style.cursor = enable ? "pointer" : "not-allowed";
+    proceedButton.disabled = !enable;
+    payButton.disabled = !enable;
 }
-
-
-function showPayments() {
-    const paymentContainer = document.querySelector(".fee-details-right");
-    const feeHeadRight = document.querySelector(".fee-head-right");
-
-    if (paymentContainer) {
-        paymentContainer.style.display = "flex";
-    }
-
-    if (feeHeadRight) {
-        feeHeadRight.style.display = "flex";
-    }
-
-    const feeDetailsLeft = document.querySelector(".fee-details-left");
-    feeDetailsLeft.style.height = "25vh";
+  
+async function updatePaymentDetails(fees) {
+    let totalFee = 0;
+    let amountToPay = 0;
+    Object.keys(feeAmounts).forEach(type => {
+      const row = document.getElementById(`${type}-fee`);
+      
+      // Only count visible rows
+      if (row && row.style.display !== "none") {
+        totalFee += feeAmounts[type];
+  
+        const feeData = fees.find(fee => fee.type.toLowerCase().includes(type));
+        const isUnpaid = feeData?.status?.toLowerCase() === "unpaid";
+  
+        if (isUnpaid) {
+          amountToPay += feeData.amount || 0;
+        }
+      }
+    });
+  
+    // Update summary section only
+    document.querySelector(".total-fee").innerText = `Total Fee: ₹${totalFee.toLocaleString()}`;
+    document.querySelector(".to-pay").innerText = `Amount to Pay: ₹${amountToPay.toLocaleString()}`;
+    document.querySelector(".total-amount-upi strong").innerText = `₹${amountToPay.toLocaleString()}`;
+    document.querySelector(".total-amount-credit strong").innerText = `₹${amountToPay.toLocaleString()}`;
+  
+    // Button UI
+    const proceedButton = document.querySelector(".proceed-payment");
+    const payButton = document.querySelector(".pay-btn");
+  
+    const enable = amountToPay > 0;
+    proceedButton.style.background = enable ? "#ff4d4d" : "#818181";
+    payButton.style.background = enable ? "#FF6F61" : "#818181";
+    proceedButton.style.cursor = enable ? "pointer" : "not-allowed";
+    payButton.style.cursor = enable ? "pointer" : "not-allowed";
+    proceedButton.disabled = !enable;
+    payButton.disabled = !enable;
 }
 
 function showPaymodes() {
@@ -901,28 +955,125 @@ function showPaymodes() {
     }
 }
 
-function feesSection() {
+function showPayments() {
+    const paymentContainer = document.querySelector(".fee-details-right");
+    const feeHeadRight = document.querySelector(".fee-head-right");
 
-    console.log("Fees section loaded!");
-    document.getElementById("fee-select").addEventListener("change", function () {
-        showFees(this.value);
-    });
+    if (paymentContainer) {
+        paymentContainer.style.display = "flex";
+    }
 
-    document.getElementById("pay-options").addEventListener("change", function () {
-        showPaymodes();
-    });
+    if (feeHeadRight) {
+        feeHeadRight.style.display = "flex";
+    }
 
-    const today = new Date().toISOString().split("T")[0];
-    document.getElementById("receipt-date").value = today;
+    const feeDetailsLeft = document.querySelector(".fee-details-left");
+    feeDetailsLeft.style.height = "25vh";
 }
 
-function toggleSidebar() {
-    const sidebar = document.querySelector('.sidebar');
-    const mainbar = document.querySelector('.mainbar');
+function handleCustomPayment(method) {
+    let totalDue = 0;
+    let enteredAmount = 0;
+  
+    if (method === "upi") {
+      totalDue = parseInt(document.querySelector(".total-amount-upi strong").innerText.replace(/[₹,]/g, ""));
+      enteredAmount = parseInt(document.getElementById("upi-willing-amount").value);
+  
+      if (isNaN(enteredAmount) || enteredAmount <= 0) {
+        feeToast.error({message: "Please enter a valid amount.",className: 'fee-toast-error'});
+        return;
+    }
+    if (enteredAmount > totalDue) {
+          feeToast.error({message: "Entered amount exceeds the total amount due.",className: 'fee-toast-error'});
+          return;
+        }
+        
+        feeToast.success({message: `Successfully paid ₹${enteredAmount.toLocaleString()} via UPI! 🎉`,className: 'fee-toast-success'});
+    }
+  
+    else if (method === "credit") {
+      totalDue = parseInt(document.querySelector(".total-amount-credit strong").innerText.replace(/[₹,]/g, ""));
+      enteredAmount = parseInt(document.getElementById("credit-willing-amount").value);
+  
+      const cardNumber = document.getElementById("card-number").value.trim();
+      const expiry = document.getElementById("expiry").value.trim();
+      const cvv = document.getElementById("cvv").value.trim();
+  
+      if (isNaN(enteredAmount) || enteredAmount <= 0) {
+        feeToast.error({message: "Please enter a valid amount.",className: 'fee-toast-error'});
+        return;
+      }
+  
+      if (enteredAmount > totalDue) {
+        feeToast.error({message: "Entered amount exceeds the total amount due.",className: 'fee-toast-error'});
+        return;
+      }
+  
+      if (!cardNumber || cardNumber.length < 16) {
+        feeToast.error({message: "Please enter a valid 16-digit card number.",className: 'fee-toast-error'});
+        return;
+    }
+    
+    if (!expiry || !/^\d{2}\/\d{2}$/.test(expiry)) {
+        feeToast.error({message: "Please enter a valid expiry date in MM/YY format.",className: 'fee-toast-error'});
+        return;
+    }
+    
+    if (!cvv || !/^\d{3}$/.test(cvv)) {
+          feeToast.error({message: "Please enter a valid 3-digit CVV.",className: 'fee-toast-error'});
+        return;
+      }
+      feeToast.success({message: `Successfully paid ₹${enteredAmount.toLocaleString()} via Credit Card 💳!`,className: 'fee-toast-success'});
+    }
 
-    sidebar.classList.toggle('active');
-    mainbar.classList.toggle('hidden');
-}
+    const updatedFees = [];
+    const originalEnteredAmount = enteredAmount;
+  
+    ["college", "transport", "hostel"].forEach(type => {
+      const row = document.getElementById(`${type}-fee`);
+      if (row && row.style.display === "table-row") {
+        const amountText = row.querySelector("td:nth-child(2)").textContent.replace(/,/g, "");
+        const amount = parseInt(amountText) || 0;
+  
+        const status = row.querySelector(".status").innerText.toLowerCase();
+  
+        if (status === "unpaid" && enteredAmount > 0 && amount > 0) {
+          if (enteredAmount >= amount) {
+            updatedFees.push({ type: capitalize(type), amount: amount - enteredAmount, status: "paid" });
+            enteredAmount -= amount;
+          } else {
+            updatedFees.push({ type: capitalize(type), amount: amount - enteredAmount, status: "unpaid" });
+            enteredAmount = 0;
+          }
+        } else {
+          updatedFees.push({ type: capitalize(type), amount, status });
+        }
+      }
+    });
+    
+    console.log("Updated Fees:", updatedFees);
+    fetch(`http://localhost:3000/update-fee-details/${shortRoll}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ fees: updatedFees })
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Updated in DB:", data.message);
+        fetchFees(shortRoll); 
+      })
+      .catch(err => {
+        console.error("Error updating DB:", err);
+        alert("Something went wrong while updating payment. Please try again.");
+      });
+  
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+  }
+  
 
 // <--------------------Notifications-------------------->
 
@@ -944,3 +1095,27 @@ notificationBtn.addEventListener("click", () => {
 closePopup.addEventListener("click", () => {
     gsap.to(popup, { opacity: 0, y: 600, duration: 0.6, ease: "power2.in", onComplete: () => popup.classList.add("hidden") });
 });
+
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const mainbar = document.querySelector('.mainbar');
+
+    sidebar.classList.toggle('active');
+    mainbar.classList.toggle('hidden');
+}
+
+
+// function feesSection() {
+
+//     console.log("Fees section loaded!");
+//     document.getElementById("fee-select").addEventListener("change", function () {
+//         showFees(this.value);
+//     });
+
+//     document.getElementById("pay-options").addEventListener("change", function () {
+//         showPaymodes();
+//     });
+
+    
+// }
+
