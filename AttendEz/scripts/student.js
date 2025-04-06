@@ -6,7 +6,8 @@ if (rollNumber) {
 } else {
     document.getElementById("rollNumber").innerText = ""
 }
-
+const shortRoll = parseInt(rollNumber.slice(-3));
+console.log(shortRoll)
 let sectionName
 // <--------------------SectionName-------------------->
 
@@ -63,6 +64,7 @@ function showSection(section) {
                 if (section === "timetable") updateTimetable(sectionName);
                 if (section === "Fees") feesSection();
                 if (section === "announcements") loadAnnouncements();
+                if (section === "records") recordsLoad();
                 if (section === "assignments") {
                     openDatabase(function () {
                         AssignmentsFunction();
@@ -591,6 +593,192 @@ function loadAnnouncements() {
         })
         .catch(error => console.error("Error loading announcements:", error));
 }
+
+// <--------------------Marks Details-------------------->
+function moveSlider(index, btn) {
+    const slider = document.querySelector('.record-slider');
+    const buttons = document.querySelectorAll('.record-header button');
+    const subjectDropdown = document.getElementById("subject-records-dropdown");
+
+    slider.style.transform = `translateX(${index * 100}%)`;
+
+    buttons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const subjectCIE = document.querySelector('.subject-cie-section');
+    const fullCIE = document.querySelector('.full-cie-table-section');
+
+    subjectCIE.style.display = index === 0 ? 'block' : 'none';
+    fullCIE.style.display = index === 1 ? 'block' : 'none';
+
+    if (index === 0) {
+        subjectDropdown.value = "";
+        const dropdown = document.getElementById("subject-records-dropdown");
+        const selectedValue = dropdown.value;
+
+        if (selectedValue === "Theory") {
+            loadSubjectCIE(); // call function to load theory data
+        } else if (selectedValue === "Labs") {
+            loadLabCIE(); // call function to load lab data
+        } 
+    } else if (index === 1) {
+        const dropdown = document.getElementById("subject-records-dropdown");
+        const selectedValue = dropdown.value;
+        loadFullCIE(); 
+    }
+}
+
+function recordsLoad() {
+    const dropdown = document.getElementById("subject-records-dropdown");
+    const subjectTable = document.getElementById("subject-cie-table");
+    const labTable = document.getElementById("lab-cie-table");
+
+    const theorySubjects = [
+        "PQT : Probability and Queueing Theory",
+        "DCCST : DC Circuits Sensors and Transducers",
+        "DBMS : Database Management Systems",
+        "DAA : Design and Analysis of Algorithms",
+        "EEA : Engineering Economics and Accountancy",
+        "PE - 1 : Professional Elective - 1"
+    ];
+
+    const labSubjects = [
+        "DBMS Lab : Database Management Systems Lab",
+        "ALG Lab : Algorithms Lab",
+        "MP-I : Mini Project – I"
+    ];
+
+    if (dropdown) {
+        dropdown.addEventListener("change", async function () {
+            const selected = this.value;
+
+            if (selected === "Theory") {
+                subjectTable.style.display = "block";
+                labTable.style.display = "none";
+                await loadSubjectCIE(theorySubjects);
+            } else if (selected === "Labs") {
+                subjectTable.style.display = "none";
+                labTable.style.display = "block";
+                await loadLabCIE(labSubjects);
+            } else {
+                selected = "";
+                subjectTable.style.display = "none";
+                labTable.style.display = "none";
+            }
+        });
+
+        // Auto-load if already selected
+        if (dropdown.value === "Theory") {
+            subjectTable.style.display = "block";
+            labTable.style.display = "none";
+            loadSubjectCIE(theorySubjects);
+        } else if (dropdown.value === "Labs") {
+            subjectTable.style.display = "none";
+            labTable.style.display = "block";
+            loadLabCIE(labSubjects);
+        }
+    }
+}
+
+async function loadSubjectCIE(subjects) {
+    const tbody = document.querySelector("#subject-cie-table tbody");
+    tbody.innerHTML = "";
+
+    for (const subject of subjects) {
+        const res = await fetch(`http://localhost:3000/get-subject-cie/${shortRoll}/${encodeURIComponent(subject)}`);
+        const data = await res.json();
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${subject}</td>
+            <td>${data.sliptests[0]}</td>
+            <td>${data.sliptests[1]}</td>
+            <td>${data.sliptests[2]}</td>
+            <td>${data.slipAvg}</td>
+            <td>${data.assignments[0]}</td>
+            <td>${data.assignments[1]}</td>
+            <td>${data.assignAvg}</td>
+            <td>${data.mids[0]}</td>
+            <td>${data.mids[1]}</td>
+            <td>${data.midAvg}</td>
+            <td>${data.attendanceMarks}</td>
+            <td>${data.totalCIE}</td>
+        `;
+        tbody.appendChild(row);
+    }
+}
+
+async function loadLabCIE(labs) {
+    const tbody = document.querySelector("#lab-cie-table tbody");
+    tbody.innerHTML = "";
+
+    for (const lab of labs) {
+        const res = await fetch(`http://localhost:3000/get-lab-cie/${shortRoll}/${encodeURIComponent(lab)}`);
+        const data = await res.json();
+        console.log(data)
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${lab}</td>
+            <td>${data.internals[0]}</td>
+            <td>${data.internals[1]}</td>
+            <td>${data.internalAvg}</td>
+            <td>${data.record}</td>
+            <td>${data.totalCIE}</td>
+        `;
+        tbody.appendChild(row);
+    }
+}
+
+async function loadFullCIE() {
+    const tableHead = document.querySelector("#full-cie-table thead");
+    const tableBody = document.querySelector("#full-cie-table tbody");
+
+    // Clear previous content
+    tableHead.innerHTML = "";
+    tableBody.innerHTML = "";
+
+    try {
+        const response = await fetch(`http://localhost:3000/get-total-cie/${shortRoll}`);
+        const data = await response.json();
+
+        const allKeys = [
+            "PQT : Probability and Queueing Theory",
+            "DCCST : DC Circuits Sensors and Transducers",
+            "DBMS : Database Management Systems",
+            "DAA : Design and Analysis of Algorithms",
+            "EEA : Engineering Economics and Accountancy",
+            "PE - 1 : Professional Elective - 1",
+            "DBMS Lab : Database Management Systems Lab",
+            "ALG Lab : Algorithms Lab",
+            "MP-I : Mini Project – I"
+        ];
+
+        tableHead.innerHTML = `
+            <tr>
+                <th>Subject / Lab</th>
+                <th>Total CIE Marks</th>
+            </tr>
+        `;
+
+        allKeys.forEach(name => {
+            const tr = document.createElement("tr");
+            const total = data[name] || 0;
+
+            tr.innerHTML = `
+                <td>${name}</td>
+                <td>${total}</td>
+            `;
+
+            tableBody.appendChild(tr);
+        });
+
+    } catch (error) {
+        console.error("Error loading Full CIE:", error);
+    }
+}
+
+
 
 // <--------------------Fees-------------------->
 
