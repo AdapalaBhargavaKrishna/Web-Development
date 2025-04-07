@@ -581,10 +581,8 @@ function loadAnnouncements() {
         .then(data => {
             let announcementList = document.querySelector(".announcement-list");
 
-            // Clear previous announcements
             announcementList.innerHTML = ""; 
 
-            // Filter announcements based on sectionName
             let filteredAnnouncements = data.filter(announcement => 
                 announcement.section.toUpperCase() === sectionName.toUpperCase()
             );
@@ -633,9 +631,9 @@ function moveSlider(index, btn) {
         const selectedValue = dropdown.value;
 
         if (selectedValue === "Theory") {
-            loadSubjectCIE(); // call function to load theory data
+            loadSubjectCIE();
         } else if (selectedValue === "Labs") {
-            loadLabCIE(); // call function to load lab data
+            loadLabCIE();
         } 
     } else if (index === 1) {
         const dropdown = document.getElementById("subject-records-dropdown");
@@ -683,7 +681,6 @@ function recordsLoad() {
             }
         });
 
-        // Auto-load if already selected
         if (dropdown.value === "Theory") {
             subjectTable.style.display = "block";
             labTable.style.display = "none";
@@ -750,7 +747,6 @@ async function loadFullCIE() {
     const tableHead = document.querySelector("#full-cie-table thead");
     const tableBody = document.querySelector("#full-cie-table tbody");
 
-    // Clear previous content
     tableHead.innerHTML = "";
     tableBody.innerHTML = "";
 
@@ -793,8 +789,6 @@ async function loadFullCIE() {
         console.error("Error loading Full CIE:", error);
     }
 }
-
-
 
 // <--------------------Fees-------------------->
 
@@ -843,7 +837,6 @@ function showFees(fee) {
         fees[fee].style.display = "table-row";
     }
 
-    // Recalculate payment after filtering
     updatePaymentDetailsFromDOM();
 }
 
@@ -874,14 +867,12 @@ function updatePaymentDetailsFromDOM() {
         }
       }
     });
-  
-    // Update footer display
+
     document.querySelector(".total-fee").innerText = `Total Fee: ₹${totalFee.toLocaleString()}`;
     document.querySelector(".to-pay").innerText = `Amount to Pay: ₹${amountToPay.toLocaleString()}`;
     document.querySelector(".total-amount-upi strong").innerText = `₹${amountToPay.toLocaleString()}`;
     document.querySelector(".total-amount-credit strong").innerText = `₹${amountToPay.toLocaleString()}`;
-  
-    // Payment button logic
+
     const proceedButton = document.querySelector(".proceed-payment");
     const payButton = document.querySelector(".pay-btn");
   
@@ -899,8 +890,7 @@ async function updatePaymentDetails(fees) {
     let amountToPay = 0;
     Object.keys(feeAmounts).forEach(type => {
       const row = document.getElementById(`${type}-fee`);
-      
-      // Only count visible rows
+
       if (row && row.style.display !== "none") {
         totalFee += feeAmounts[type];
   
@@ -912,14 +902,12 @@ async function updatePaymentDetails(fees) {
         }
       }
     });
-  
-    // Update summary section only
+
     document.querySelector(".total-fee").innerText = `Total Fee: ₹${totalFee.toLocaleString()}`;
     document.querySelector(".to-pay").innerText = `Amount to Pay: ₹${amountToPay.toLocaleString()}`;
     document.querySelector(".total-amount-upi strong").innerText = `₹${amountToPay.toLocaleString()}`;
     document.querySelector(".total-amount-credit strong").innerText = `₹${amountToPay.toLocaleString()}`;
-  
-    // Button UI
+
     const proceedButton = document.querySelector(".proceed-payment");
     const payButton = document.querySelector(".pay-btn");
   
@@ -1072,28 +1060,6 @@ function handleCustomPayment(method) {
       return str.charAt(0).toUpperCase() + str.slice(1);
     }
   }
-  
-
-// <--------------------Notifications-------------------->
-
-const notificationBtn = document.getElementById("notification-btn");
-const popup = document.getElementById("notification-popup");
-const closePopup = document.getElementById("close-popup");
-
-gsap.set(popup, { opacity: 0, y: -600 });
-
-notificationBtn.addEventListener("click", () => {
-    if (popup.classList.contains("hidden")) {
-        popup.classList.remove("hidden");
-        gsap.to(popup, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
-    } else {
-        gsap.to(popup, { opacity: 0, y: -600, duration: 0.6, ease: "power2.in", onComplete: () => popup.classList.add("hidden") });
-    }
-});
-
-closePopup.addEventListener("click", () => {
-    gsap.to(popup, { opacity: 0, y: 600, duration: 0.6, ease: "power2.in", onComplete: () => popup.classList.add("hidden") });
-});
 
 function toggleSidebar() {
     const sidebar = document.querySelector('.sidebar');
@@ -1102,19 +1068,3 @@ function toggleSidebar() {
     sidebar.classList.toggle('active');
     mainbar.classList.toggle('hidden');
 }
-
-
-// function feesSection() {
-
-//     console.log("Fees section loaded!");
-//     document.getElementById("fee-select").addEventListener("change", function () {
-//         showFees(this.value);
-//     });
-
-//     document.getElementById("pay-options").addEventListener("change", function () {
-//         showPaymodes();
-//     });
-
-    
-// }
-

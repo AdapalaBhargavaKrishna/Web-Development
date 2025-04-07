@@ -14,7 +14,6 @@ const client = new MongoClient(process.env.MONGO_URI);
 client.connect();
 
 const db = client.db(process.env.DB_NAME);
-const attendanceCollection = db.collection('attendance');
 
 app.use(express.json());
 app.use(bodyParser.json());
@@ -37,7 +36,7 @@ app.post('/submit-attendance', async (req, res) => {
         const attendanceData = {
             date,
             subject,
-            section,  // Store section in MongoDB
+            section,
             students
         };
 
@@ -51,11 +50,9 @@ app.post('/submit-attendance', async (req, res) => {
     }
 });
 
-
-
 app.get('/get-attendance', async (req, res) => {
     try {
-        const { rollNumber } = req.query; // Get roll number from frontend
+        const { rollNumber } = req.query;
 
         if (!rollNumber) {
             return res.status(400).json({ error: "Roll number is required" });
@@ -91,7 +88,7 @@ app.post('/submit-announcement', async (req, res) => {
 
         const announcement = await db.collection('announcements').insertOne(announcementData);
 
-        res.json({ message: "Announcement added successfully!", insertedId: announcement.insertedId }); // ✅ Fixed success message
+        res.json({ message: "Announcement added successfully!", insertedId: announcement.insertedId });
 
     } catch (error) {
         console.error("Error posting announcement:", error);
@@ -113,7 +110,7 @@ app.delete('/delete-announcement/:id', async (req, res) => {
     try {
         const { id } = req.params;
         
-        if (!ObjectId.isValid(id)) {  // ✅ Validate ObjectId
+        if (!ObjectId.isValid(id)) {
             return res.status(400).json({ error: "Invalid announcement ID" });
         }
 
@@ -139,7 +136,6 @@ app.get('/get-subject-cie/:rollNo/:subject', async (req, res) => {
     if (data) {
         res.json(data);
     } else {
-        // Return default data if not found
         res.json({
             rollNo,
             subject,
@@ -165,7 +161,6 @@ app.get('/get-lab-cie/:rollNo/:lab', async (req, res) => {
     if (data) {
         res.json(data);
     } else {
-        // Return default data if not found
         res.json({
             rollNo,
             lab,
@@ -203,7 +198,6 @@ app.get('/get-total-cie/:rollNo', async (req, res) => {
         cieData[subject] = subData ? subData.totalCIE : 0;
     }
 
-    // Get all lab CIEs
     for (const lab of labs) {
         const labData = await db.collection('lab_cie').findOne({ rollNo, lab });
         cieData[lab] = labData ? labData.totalCIE : 0;
@@ -327,9 +321,6 @@ app.put('/update-fee-details/:rollNo', async (req, res) => {
         res.status(500).json({ error: "Server error" });
     }
 });
-
-
-// ---------- UTILITY FUNCTIONS ----------
 
 function average(arr) {
     const valid = arr.filter(n => !isNaN(n));
