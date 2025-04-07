@@ -842,7 +842,6 @@ function deleteAnnouncement(id, sectionName) {
 
 /*<---------------Assignments--------------->*/
 
-
 function openDatabase(callback) {
     const request = indexedDB.open("AttendZ_DB", 1);
 
