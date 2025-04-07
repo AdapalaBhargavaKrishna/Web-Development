@@ -2,36 +2,36 @@
 
 const attendanceToast = new Notyf({
     position: {
-      x: 'center', // or 'left' / 'center'
-      y: 'top'    // or 'bottom'
+      x: 'center',
+      y: 'top'    
     }
   });
 
 const feeToast = new Notyf({
     position: {
-      x: 'right', // or 'left' / 'center'
-      y: 'top'    // or 'bottom'
+      x: 'right',
+      y: 'top'    
     }
   });
 
 const recordsToast = new Notyf({
     position: {
-      x: 'right', // or 'left' / 'center'
-      y: 'top'    // or 'bottom'
+      x: 'right',
+      y: 'top'    
     }
   });
 
 const announcementToast = new Notyf({
     position: {
-      x: 'center', // or 'left' / 'center'
-      y: 'top'    // or 'bottom'
+      x: 'center',
+      y: 'top'    
     }
   });
 
 const assignmentToast = new Notyf({
     position: {
-      x: 'center', // or 'left' / 'center'
-      y: 'top'    // or 'bottom'
+      x: 'center',
+      y: 'top'    
     }
   });
   
@@ -239,7 +239,6 @@ async function finalizeAttendance() {
     rollNumbers.forEach(updateRollNumberDisplay);
     document.getElementById("clear-button").style.display = "block";
 }
-
 
 function clearAttendance() {
     attendance = {};
@@ -586,8 +585,7 @@ async function saveSubjectRow(button, subject) {
     });
 
     const data = await res.json();
-    recordsToast.success({message: data.message || "Subject CIE updated!",className: "records-toast"});
-      
+    recordsToast.success({message: data.message || "Subject CIE updated!",className: "records-toast"});    
 
 }
 
@@ -613,10 +611,9 @@ async function loadLabCIE(lab) {
         tbody.insertAdjacentHTML("beforeend", rowHTML);
     }
 
-    // ⚠️ Make sure DOM is updated before running calculations
     requestAnimationFrame(() => {
         document.querySelectorAll("#lab-cie-table tbody tr").forEach(updateLabRow);
-        setupLabLiveUpdate(); // Needed for real-time updates
+        setupLabLiveUpdate();
     });
 }
 
@@ -766,8 +763,7 @@ function addAnnouncement() {
     let subject = document.getElementById("subjectDropdown").value;
 
     if (input === "" || section === "" || subject === "") {
-        announcementToast.error({message: "Please fill out all fields!",className: "announcement-toast-error"});
-          
+        announcementToast.error({message: "Please fill out all fields!",className: "announcement-toast-error"});     
         return;
     }
 
@@ -839,7 +835,7 @@ function deleteAnnouncement(id, sectionName) {
         .then(response => response.json())
         .then(() => {
             announcementToast.error({message: "Announcement deleted successfully!",className: "announcement-toast-error"});
-            loadAnnouncements(sectionName); // Reload with the correct section filter
+            loadAnnouncements(sectionName);
         })
         .catch(error => console.error("Error deleting announcement:", error));
 }
@@ -1134,24 +1130,3 @@ function AssignmentsFunction() {
         }
     }, 100);
 }
-
-// <--------------------Notifications-------------------->
-
-const notificationBtn = document.getElementById("notification-btn");
-const popup = document.getElementById("notification-popup");
-const closePopup = document.getElementById("close-popup");
-
-gsap.set(popup, { opacity: 0, y: -600 });
-
-notificationBtn.addEventListener("click", () => {
-    if (popup.classList.contains("hidden")) {
-        popup.classList.remove("hidden");
-        gsap.to(popup, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
-    } else {
-        gsap.to(popup, { opacity: 0, y: -600, duration: 0.6, ease: "power2.in", onComplete: () => popup.classList.add("hidden") });
-    }
-});
-
-closePopup.addEventListener("click", () => {
-    gsap.to(popup, { opacity: 0, y: 600, duration: 0.6, ease: "power2.in", onComplete: () => popup.classList.add("hidden") });
-});

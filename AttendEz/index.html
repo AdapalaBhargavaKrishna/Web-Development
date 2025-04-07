@@ -6,26 +6,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AttendZ Login</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+    
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f4f4f4;
+            background: linear-gradient(135deg, #dbeafe, #fce7f3);
+            animation: fadeInBody 1s ease-in;
         }
-
+    
+        @keyframes fadeInBody {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    
         .container {
             display: flex;
+            flex-direction: row;
             align-items: center;
             justify-content: center;
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            position: relative;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+            animation: popUp 0.6s ease-in-out;
+            transition: all 0.3s ease-in-out;
         }
-
+    
+        @keyframes popUp {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    
         .left {
             display: flex;
             flex-direction: column;
@@ -33,58 +62,61 @@
             justify-content: center;
             width: 25vw;
             height: 50vh;
-            border-radius: 10px 0 0 10px;
+            padding: 10px;
         }
-
+    
         h1 {
-            font-size: 24px;
-            opacity: 0;
+            font-size: 26px;
+            color: #333;
+            margin-bottom: 25px;
+            animation: fadeSlide 0.6s ease-out forwards;
             transform: translateY(20px);
-            animation: fadeSlide 0.5s ease-out forwards;
+            opacity: 0;
         }
-
+    
         @keyframes fadeSlide {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-
+    
         .buttons {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             transition: transform 0.5s ease-in-out;
         }
-
+    
         .buttons.vertical {
             flex-direction: column;
         }
-
+    
         button {
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            font-size: 14px;
-            width: 10rem;
-            transition: all 0.5s ease-in-out;
+            font-size: 15px;
+            width: 11rem;
+            transition: all 0.3s ease-in-out;
+            font-weight: 500;
         }
-
+    
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    
         .student-btn {
             background-color: #4CAF50;
             color: white;
         }
-
+    
         .faculty-btn {
             background-color: #2196F3;
             color: white;
         }
-
+    
         .right {
             display: none;
             width: 25vw;
@@ -94,83 +126,90 @@
             justify-content: center;
             transition: all 0.5s ease-in-out;
         }
-
+    
         .login-form {
             display: none;
-            width: 200px;
+            width: 220px;
             text-align: center;
             animation: fadeIn 0.5s ease-in-out;
         }
-
-        .login-form input {
-            width: 100%;
-            padding: 8px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+    
+        .login-form h2 {
+            color: #333;
+            margin-bottom: 16px;
         }
-
+    
+        .login-form input,
+        .section-select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+    
+        .login-form input:focus,
+        .section-select:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
+        }
+    
         .login-form button {
             background-color: #333;
             color: white;
-            width: 100%;
+            padding: 10px;
+            font-size: 15px;
         }
-
-        .section-select {
-            width: 13.5rem;
-            padding: 8px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
+    
         @keyframes fadeIn {
             from {
                 opacity: 0;
                 transform: translateX(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateX(0);
             }
         }
-
+    
         @media (max-width: 700px) {
+            .container {
+                width: 90%;
+                flex-direction: column;
+                height: auto;
+                padding: 20px;
+            }
+    
+            .left,
+            .right {
+                width: 100%;
+                height: auto;
+            }
+    
             .buttons {
                 flex-direction: column;
             }
-
-            .container {
-                width: 70%;
-                flex-direction: column;
-                height: 65%;
-                background-color: whitesmoke;
-            }
-
-            .left {
-                width: 85%;
-            }
-
+    
             @keyframes fadeIn {
                 from {
                     opacity: 0;
-                    transform: translateY(-80px);
+                    transform: translateY(-60px);
                 }
-
                 to {
                     opacity: 1;
                     transform: translateY(0);
                 }
             }
-
+    
             .loginButton {
                 margin-top: 10px;
             }
-
-
         }
     </style>
+    
 </head>
 
 <body>
@@ -225,7 +264,6 @@
     const usernameInput = document.getElementById("username");
     const password = document.getElementById("password").value;
 
-    // Faculty Login
     if (facultyDropdown && facultyDropdown.value) { 
         const selectedSection = facultyDropdown.value;
         if (password === selectedSection) {
@@ -234,7 +272,6 @@
             alert("Invalid Credentials");
         }
     } 
-    // Student Login
     else if (usernameInput && usernameInput.value.length === 12) {
         const username = usernameInput.value;
         if (password === username) {
