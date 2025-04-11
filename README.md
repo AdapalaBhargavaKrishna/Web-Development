@@ -1,32 +1,40 @@
 # 🌐 Web Development Projects
 
-Welcome to my **Web Development** repository! 🚀 This repository contains various frontend and full-stack projects that I have built while learning and exploring **HTML, CSS, JavaScript, React.js, and more**. Each project is structured to enhance my skills and apply concepts practically.
+Welcome to my **Web Development** repository! 🚀  
+This repository is a collection of projects I’ve built while learning and exploring **HTML, CSS, JavaScript, React.js, MongoDB**, and more. Each project is a milestone in my full-stack web development journey.
 
 ---
 
-## 📂 **Projects in This Repository**
-| Project Name      | Tech Stack Used  | Description |
-|------------------|----------------|-------------|
-| **Recipe Mate** | React.js, Tailwind CSS | A recipe management app for saving and searching recipes. |
-| **Task Focus** | React.js, Tailwind CSS | A to-do list app to boost productivity. |
-| **AttendZ** | HTML, CSS, JavaScript | A college management system with attendance tracking. |
-| **Class Performance Dashboard** | HTML, CSS, JavaScript | A dashboard for visualizing student performance. |
+## 📁 Projects
 
-> **More projects will be added soon!** 🎯
+| Project Name              | Tech Stack                             | Purpose / Description |
+|---------------------------|----------------------------------------|------------------------|
+| **AttendZ**               | Node.js, HTML, CSS, MongoDB            | A full-fledged college management system with attendance tracking. |
+| **SafePass**              | React.js, MongoDB                      | A password manager app built to learn MongoDB integration with React. |
+| **Recipe Mate**           | React.js, Tailwind CSS, API Integration| A recipe app to search and save meals, built to practice working with APIs and state management. |
+| **Task Focus**            | React.js, Tailwind CSS                 | A minimal to-do list app created to learn React fundamentals and Tailwind. |
+| **Weather Website**       | HTML, CSS, JavaScript (API Integration)| A weather forecast app built to understand REST APIs and dynamic rendering. |
+| **Spotify Clone**         | HTML, CSS, JavaScript                  | Built to learn DOM manipulation and improve JavaScript logic. |
+| **X Clone**               | HTML, Tailwind CSS                     | A clone of Twitter's UI to practice Tailwind and responsive layouts. |
+| **Class Performance Dashboard** | HTML, CSS, JavaScript         | A dashboard to visualize and manage student academic performance. |
+| **Netflix Clone**         | HTML, CSS                              | My first ever project focused on layout and styling with CSS. |
 
----
-
-## 🚀 **Tech Stack**
-- **Frontend:** HTML, CSS, JavaScript, React.js, Tailwind CSS
-- **Backend:** (Planned) Node.js, Express.js
-- **Database:** (Planned) MongoDB, Firebase
-- **Version Control:** Git, GitHub
-- **Tools:** VS Code, Postman, Figma (for UI design)
+> 📌 **More exciting projects will be added soon!** Stay tuned. 🎯
 
 ---
 
-## 📜 **How to Use This Repository**
+## 🚀 Tech Stack
+
+- **Frontend:** HTML, CSS, JavaScript, React.js, Tailwind CSS  
+- **Backend:** Node.js, Express.js *(planned)*  
+- **Database:** MongoDB, Firebase *(planned)*  
+- **Tools:** Git, GitHub, VS Code, Postman, Figma
+
+---
+
+## 📦 How to Use This Repository
+
 ### ✅ Clone the Repository
-```sh
+```bash
 git clone https://github.com/Bhargava-webdev/web-development.git
 cd web-development
