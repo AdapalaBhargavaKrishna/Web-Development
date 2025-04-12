@@ -9,7 +9,7 @@ This repository is a collection of projects I’ve built while learning and expl
 
 | Project Name              | Tech Stack                             | Purpose / Description |
 |---------------------------|----------------------------------------|------------------------|
-| **AttendZ**               | Node.js, HTML, CSS, MongoDB            | A full-fledged college management system with attendance tracking. |
+| **AttendEZ**               | Node.js, HTML, CSS, MongoDB            |AttendEazy A full-fledged college management system with attendance tracking. |
 | **SafePass**              | React.js, MongoDB                      | A password manager app built to learn MongoDB integration with React. |
 | **Recipe Mate**           | React.js, Tailwind CSS, API Integration| A recipe app to search and save meals, built to practice working with APIs and state management. |
 | **Task Focus**            | React.js, Tailwind CSS                 | A minimal to-do list app created to learn React fundamentals and Tailwind. |
