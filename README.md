@@ -36,5 +36,4 @@ This repository is a collection of projects I’ve built while learning and expl
 
 ### ✅ Clone the Repository
 ```bash
-git clone https://github.com/Bhargava-webdev/web-development.git
-cd web-development
+git clone https://github.com/AdapalaBhargavaKrishna/Web-Development.git
