@@ -54,8 +54,8 @@ export default function Home() {
       <div className="text-white container mx-auto pb-32 pt-14 flex flex-col items-center justify-center">
         <h2 className="text-3xl font-bold text-center mb-14">Learn more about us</h2>
         {/* Responsive youtube embed  */}
-        <div className="w-[90%] h-[40vh] md:w-[50%] md:h-[40vh] lg:w-[50%] lg:h-[40vh] xl:w-[50%] xl:h-[40vh]">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/fjHO4fAfCf0?si=IvXObt5PKpSvBU9m" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+        <div className="w-[100%] h-[40vh] md:w-[50%] md:h-[40vh] lg:w-[50%] lg:h-[40vh] xl:w-[50%] xl:h-[40vh] flex items-center justify-center">
+        <iframe className="md:w-[560px] md:h-[315px] w-[90%] h-[90%]" src="https://www.youtube.com/embed/fjHO4fAfCf0?si=IvXObt5PKpSvBU9m" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
           </div>
       
       </div>
