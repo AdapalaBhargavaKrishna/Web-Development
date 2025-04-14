@@ -22,15 +22,17 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className="bg-[#000000] bg-[radial-gradient(#ffffff33_1px,#00091d_1px)] bg-[size:20px_20px] text-white">
-        <SessionWrapper> 
-          <Navbar />
-          <div className=" min-h-screen bg-[#000000] bg-[radial-gradient(#ffffff33_1px,#00091d_1px)] bg-[size:20px_20px] text-white">
-            {children}
-          </div>
-          <Footer />
-        </SessionWrapper>
-      </body>
-    </html>
-  );
+  <body className="bg-[#000000] bg-[radial-gradient(#ffffff33_1px,#00091d_1px)] bg-[size:20px_20px] text-white">
+    <SessionWrapper> 
+      <Navbar />
+      <main className="flex justify-center">
+        <div className="min-h-screen w-full px-4">
+          {children}
+        </div>
+      </main>
+      <Footer />
+    </SessionWrapper>
+  </body>
+</html>
+ );
 }
