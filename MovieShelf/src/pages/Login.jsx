@@ -1,10 +1,29 @@
-import React from 'react'
+import React from 'react';
 import githublogo from '../assets/github.svg';
 import linkedinlogo from '../assets/linkedin.svg';
 import googlelogo from '../assets/google.svg';
 import arrowsvg from '../assets/arrow.svg';
+import { auth } from '../firebase/firebase';
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const handleGoogleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+  
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      console.log('Logged in as:', user.displayName);
+      localStorage.setItem('user', JSON.stringify(user));
+      navigate('/home');
+    } catch (error) {
+      console.error('Error during Google login:', error);
+    }
+  };
+
   return (
     <>
       <div className="absolute top-0 z-[-2] h-screen w-screen bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
@@ -18,7 +37,7 @@ const Login = () => {
             </div>
           </button>
         </a>
-        <a href="https://github.com/AdapalaBhargavaKrishna/Web-Development/MovieShelf">
+        <a href="https://github.com/AdapalaBhargavaKrishna/Web-Development/tree/main/MovieShelf">
           <button className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-2xl bg-transparent px-6 font-medium text-neutral-200 duration-500">
             <div className="translate-x-0 opacity-100 transition group-hover:-translate-x-[150%] group-hover:opacity-0">Github</div>
             <div className="absolute translate-x-[150%] opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100">
@@ -35,7 +54,7 @@ const Login = () => {
       </div>
 
       <div className="flex items-center justify-center md:mt-10 m-20">
-        <button className="group relative inline-flex h-12 items-center justify-center border overflow-hidden rounded-2xl bg-neutral-950 px-6 font-medium text-neutral-200 duration-500">
+        <button onClick={() => handleGoogleLogin()} className="group relative inline-flex h-12 items-center justify-center border overflow-hidden rounded-2xl bg-neutral-950 px-6 font-medium text-neutral-200 duration-500">
           <div className="relative inline-flex -translate-x-0 items-center transition group-hover:-translate-x-6">
             <div className="absolute translate-x-0 opacity-100 transition group-hover:-translate-x-6 group-hover:opacity-0">
               <img src={googlelogo} width={20} height={20} alt="Google Logo" />
@@ -48,7 +67,7 @@ const Login = () => {
         </button>
       </div>
     </>
-  )
+  );
 }
 
-export default Login
+export default Login;

@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
+import About from "./pages/About";
 import Layout from './components/Layout';
 import Watchlist from "./pages/Watchlist";
 import Login from "./pages/Login";
@@ -17,6 +18,7 @@ function App() {
             <Routes>
               <Route path="/home" element={<Home />} />
               <Route path="/watchlist" element={<Watchlist />} />
+              <Route path="/about" element={<About />} />
             </Routes>
           </Layout>
         }/>
@@ -26,4 +28,3 @@ function App() {
 }
 
 export default App;
-  
