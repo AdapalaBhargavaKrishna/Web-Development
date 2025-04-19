@@ -26,3 +26,13 @@
     scrollbar-color: #4b5563 transparent;
   }
   
+.custom-toast [data-sonner-toast] {
+  width: 400px;  
+}
+
+@media (max-width: 600px) {
+  .custom-toast [data-sonner-toast] {
+    width: 100%;
+    max-width: 315px;  
+  }
+}

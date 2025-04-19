@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { toast } from 'sonner';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { auth } from '../firebase/firebase';
 import userlogo from '../assets/user.svg';
@@ -14,25 +15,32 @@ const Navbar = () => {
   const dropdownRef = useRef(null);
   const mobileDropdownRef = useRef(null);
 
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+  
+    if (storedUser) {
+      setUserName(storedUser.displayName);
+      setUserEmail(storedUser.isGuest ? null : storedUser.email);
+    } else {
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+        if (user) {
+          setUserName(user.displayName || user.email.split('@')[0]);
+          setUserEmail(user.email);
+        } else {
+          setUserName(null);
+          setUserEmail(null);
+        }
+      });
+      return () => unsubscribe();
+    }
+  }, []);
+  
+
   const links = [
     { name: 'Home', path: '/home' },
     { name: 'Watch List', path: '/watchlist' },
     { name: 'About', path: '/about' },
   ];
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUserName(user.displayName || user.email.split('@')[0]);
-        setUserEmail(user.email);
-      } else {
-        setUserName(null);
-        setUserEmail(null);
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -53,7 +61,8 @@ const Navbar = () => {
   const handleSignOut = async () => {
     try {
       await auth.signOut();
-      navigate('/login');
+      navigate('/');
+      toast.warning("Signned Out");
     } catch (error) {
       console.error('Error signing out:', error);
     }
@@ -83,7 +92,7 @@ const Navbar = () => {
                     <li key={link.name}>
                       <Link
                         to={link.path}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-[#0a0a23]"
                         onClick={() => setIsMobileDropdownOpen(false)}
                       >
                         {link.name}
@@ -93,7 +102,7 @@ const Navbar = () => {
                 </ul>
                 <button
                   onClick={handleSignOut}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-[#0a0a23]"
                 >
                   Sign Out
                 </button>
@@ -101,12 +110,14 @@ const Navbar = () => {
             )}
           </div>
         ) : (
-          <Link
-            to="/login"
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
-          >
-            Sign In
+          <Link to="/"
+            className='relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-gray-50'>
+            <span className='absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]' />
+            <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-gray-950 px-8 py-1 text-sm font-medium text-gray-50 backdrop-blur-3xl'>
+              Sign In
+            </span>
           </Link>
+
         )}
       </div>
 
@@ -129,7 +140,7 @@ const Navbar = () => {
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-[#0a0a23]"
                     onClick={() => setIsMobileDropdownOpen(false)}
                   >
                     {link.name}
@@ -144,13 +155,13 @@ const Navbar = () => {
                   handleSignOut();
                   setIsMobileDropdownOpen(false);
                 }}
-                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-[#0a0a23]"
               >
                 Sign Out
               </button>
             ) : (
               <Link
-                to="/login"
+                to="/"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
                 onClick={() => setIsMobileDropdownOpen(false)}
               >

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { auth, db, doc, getDoc, setDoc } from '../firebase/firebase';
 import cancellogo from '../assets/cancel.svg';
 import fallbackImg from '../assets/fallback-img.jpg';
@@ -38,19 +39,18 @@ const Watchlist = () => {
           setWatchlist([]);
         }
       } else {
-        console.log("User is not logged in");
+      toast.warning("User is not logged in");
         setWatchlist([]);
       }
       setLoading(false);
     };
-
     fetchWatchlist();
   }, [apiKey]);
 
   const removeFromWatchlist = async (imdbID) => {
     const user = auth.currentUser;
     if (!user) {
-      console.log("User is not logged in");
+      toast.warning("User is not logged in");
       return;
     }
 
@@ -62,8 +62,10 @@ const Watchlist = () => {
       watchlistIDs = watchlistIDs.filter((movieID) => movieID !== imdbID);
 
       await setDoc(userDocRef, { watchlist: watchlistIDs }, { merge: true });
-      console.log("Movie removed from watchlist");
-
+      toast.info('Movie removed from your Watchlist');
+      
+      setSelectedMovie(null)
+      
       setWatchlist((prev) => prev.filter((movie) => movie.imdbID !== imdbID));
     } else {
       console.log("User document not found");
@@ -76,27 +78,6 @@ const Watchlist = () => {
     setSelectedMovie(data);
   };
 
-  const addToWatchlist = async (movie) => {
-    const user = auth.currentUser;
-    if (!user) {
-      console.log("User is not logged in");
-      return;
-    }
-
-    const userDocRef = doc(db, "users", user.uid);
-    const userDoc = await getDoc(userDocRef);
-    let watchlistIDs = [];
-
-    if (userDoc.exists()) {
-      watchlistIDs = userDoc.data().watchlist || [];
-      if (!watchlistIDs.includes(movie.imdbID)) {
-        watchlistIDs.push(movie.imdbID);
-        await setDoc(userDocRef, { watchlist: watchlistIDs }, { merge: true });
-        setWatchlist((prev) => [...prev, movie]);
-      }
-    }
-  };
-  
   return (
     <div className="flex flex-col justify-center items-center mt-10 text-white gap-4 relative">
 
@@ -141,7 +122,7 @@ const Watchlist = () => {
                 </div>
 
                 <div className='flex items-center justify-start mt-4'>
-                  <button onClick={() => addToWatchlist(selectedMovie)} className="group active:scale-95 animate-background-shine relative inline-flex h-12 items-center justify-center overflow-hidden rounded-2xl bg-[linear-gradient(110deg,transparent,45%,#ff1000,55%,transparent)] bg-[length:200%_100%] px-6 font-medium text-gray-400 transition-colors focus:outline-none">
+                  <button onClick={() => removeFromWatchlist(selectedMovie.imdbID)} className="group active:scale-95 animate-background-shine relative inline-flex h-12 items-center justify-center overflow-hidden rounded-2xl bg-[linear-gradient(110deg,transparent,45%,#ff1000,55%,transparent)] bg-[length:200%_100%] px-6 font-medium text-gray-400 transition-colors focus:outline-none">
                     <div className="translate-y-0 opacity-100 transition group-hover:-translate-y-[150%] group-hover:opacity-0">Remove from Watch List</div>
                     <div className="absolute translate-y-[150%] opacity-0 transition group-hover:translate-y-0 group-hover:opacity-100">
                       <img src={deletelogo} alt="" />
