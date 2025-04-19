@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 import searchlogo from '../assets/search.svg';
 import imdblogo from '../assets/imdb.svg';
 import rottenlogo from '../assets/rotten.svg'
@@ -18,20 +19,20 @@ const Home = () => {
 
   const handleSearch = async () => {
     if (!query.trim()) return;
-
     setLoading(true);
     setSelectedMovie(null);
 
     try {
       const response = await fetch(`https://www.omdbapi.com/?s=${encodeURIComponent(query)}&apikey=${apiKey}`);
       const data = await response.json();
-      console.log(data);
       setMovies(data.Response !== 'False' ? data.Search : []);
+      
     } catch (error) {
-      console.error('Error fetching movies:', error);
+      toast.error('Error fetching movies:', error);
       setMovies([]);
     }
     setLoading(false);
+    setQuery('');
   };
 
   const fetchMovieDetails = async (imdbID) => {
@@ -40,10 +41,9 @@ const Home = () => {
     try {
       const response = await fetch(`https://www.omdbapi.com/?i=${imdbID}&apikey=${apiKey}`);
       const data = await response.json();
-      console.log(data)
       setSelectedMovie(data);
     } catch (error) {
-      console.log(error)
+      toast.error('Error fetching movies:', error);
     }
     setDetailsLoading(false);
   }
@@ -51,7 +51,7 @@ const Home = () => {
   const addToWatchlist = async (movie) => {
     const user = auth.currentUser;
     if (!user) {
-      console.log("User is not logged in i think");
+      toast.error('Please log in first!');
       return;
     }
   
@@ -60,12 +60,19 @@ const Home = () => {
   
     if (userDoc.exists()) {
       const watchlist = userDoc.data().watchlist || [];
-      if (!watchlist.some((item) => item.imdbID === movie.imdbID)) {
+      
+      const isMovieInWatchlist = watchlist.some(item => item === movie.imdbID);
+      
+      if (isMovieInWatchlist) {
+        toast.warning('Movie is already in the watchlist');
+        return;
+      }
+      if (!isMovieInWatchlist) {
         watchlist.push(movie.imdbID);
         await setDoc(userDocRef, { watchlist }, { merge: true });
-        console.log("Movie added to watchlist");
-      } else {
-        console.log("Movie is already in the watchlist");
+        toast.success('Movie Successfully Added to Your Watchlist', {
+          description: 'You can view it anytime in your Watchlist.',
+        });        
       }
     } else {
       await setDoc(userDocRef, {
@@ -74,6 +81,7 @@ const Home = () => {
       console.log("New user document created, movie added to watchlist");
     }
   };
+  
   
 
   return (
@@ -99,14 +107,14 @@ const Home = () => {
       </div>
 
       <div className="text-white flex items-start justify-center h-[55vh] w-full overflow-y-auto mt-10">
-        {/* Loading State */}
+
         {loading && (
           <span className="flex h-11 animate-text-gradient bg-gradient-to-r from-[#b2a8fd] via-[#8678f9] to-[#c7d2fe] bg-[200%_auto] bg-clip-text md:text-4xl text-2xl text-transparent mt-20">
             Loading...
           </span>
         )}
 
-        {/* Movie Details State */}
+
         {!loading && selectedMovie && !detailsLoading && (
           <div className="md:m-0 m-4 relative w-full max-w-4xl overflow-hidden rounded-3xl border border-gray-800 p-[1px] backdrop-blur-3xl">
             <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
@@ -152,8 +160,6 @@ const Home = () => {
                       <img src={addlogo} alt="" />
                     </div>
                   </button>
-
-
                 </div>
               </div>
             </div>
@@ -180,14 +186,12 @@ const Home = () => {
           </div>
         )}
 
-        {/* Empty State */}
         {!loading && !selectedMovie && movies.length === 0 && query.trim() !== '' && (
           <span className="animate-background-shine2 bg-[linear-gradient(110deg,#939393,45%,#1e293b,55%,#939393)] bg-[length:250%_100%] bg-clip-text md:text-xl text-2xl text-center text-transparent md:mt-5 mt-20">
             No movies found! Try another title.
           </span>
         )}
 
-        {/* Initial Message */}
         {!loading && !selectedMovie && movies.length === 0 && query.trim() === '' && (
           <span className="animate-background-shine2 bg-[linear-gradient(110deg,#939393,45%,#1e293b,55%,#939393)] bg-[length:250%_100%] bg-clip-text md:text-xl text-lg text-transparent md:mt-40 mt-20">
             Enter a movie title to begin your journey

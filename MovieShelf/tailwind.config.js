@@ -10,7 +10,7 @@ export default {
         "background-shine": "background-shine 4s linear infinite",
         'background-shine1': 'background-shine 2s linear infinite',
         'background-shine2': 'background-opacity 4s linear infinite',
-        'text-gradient': 'text-gradient 1.5s linear infinite',
+        'text-gradient': 'text-gradient 2s linear infinite',
       },
       keyframes: {
         'background-shine': {
