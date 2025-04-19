@@ -26,7 +26,7 @@ const Watchlist = () => {
           if (watchlistIDs.length > 0) {
             const movieDetails = await Promise.all(
               watchlistIDs.map(async (id) => {
-                const response = await fetch(`http://www.omdbapi.com/?i=${id}&apikey=${apiKey}`);
+                const response = await fetch(`https://www.omdbapi.com/?i=${id}&apikey=${apiKey}`);
                 return await response.json();
               })
             );
@@ -73,7 +73,7 @@ const Watchlist = () => {
   };
 
   const fetchMovieDetails = async (imdbID) => {
-    const response = await fetch(`http://www.omdbapi.com/?i=${imdbID}&apikey=${apiKey}`);
+    const response = await fetch(`https://www.omdbapi.com/?i=${imdbID}&apikey=${apiKey}`);
     const data = await response.json();
     setSelectedMovie(data);
   };
