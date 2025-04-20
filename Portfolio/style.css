@@ -4,7 +4,6 @@
     margin: 0;
     padding: 0;
     font-family: "Poppins", sans-serif;
-    /* box-sizing: border-box; */
 }
 
 body{
@@ -23,8 +22,6 @@ nav{
     color: black;
     width: auto;
     margin: 20px;
-    /* background-color: rgb(28, 28, 28); */
-    /* box-shadow: -4px 5px 4px rgba(0, 0, 0, 0.2); */
 }
 
 .Name{
@@ -74,12 +71,12 @@ nav a:hover{
 
 .profileinfo h1{
     font-weight: 600;
-    font-size: 70px;
+    font-size: 3.4rem;
 }
 
 .profileinfo h2{
     font-weight: 600;
-    font-size: 70px;
+    font-size: 3.4rem;
 }
 
 .profileinfo p{
@@ -147,8 +144,8 @@ nav a:hover{
     gap: 1rem;
     margin-bottom: 1rem;
     margin-top: 2rem;
-    display: grid; /* Change display to grid */
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Define responsive columns */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     
 }
 
@@ -181,10 +178,7 @@ nav a:hover{
     display: flex;
     gap: 10px;
     justify-content: space-between;
-    /* align-items: center;     */
-}
-
-/* animathion */
+ }
 
 .logos{
     overflow: hidden;
@@ -237,10 +231,8 @@ nav a:hover{
     }
 }
 
-/* animation */
 
 #projects{
-    /* background-color: beige; */
     padding: 10px;
 }
 
@@ -276,7 +268,7 @@ nav a:hover{
 
 .project-card {
     display: flex;
-    flex-direction: column; /* Stack items vertically */
+    flex-direction: column;
     justify-content: space-between;
     background: white;
     border: 1px solid #ddd;
@@ -301,14 +293,13 @@ nav a:hover{
 
 .project-card img{
     height: auto;
-    width: 10%;
+    width: 100%;
 }
 
 .project-card h3 {
     font-size: 1.5rem;
-    margin-bottom: 10px;
+    margin: 0;
     color: #333;
-    padding: 20px;
 }
 
 .project-card p{
@@ -319,7 +310,7 @@ nav a:hover{
 
 .project-card .btn {
     text-decoration: none;
-    background: white;
+    background: whitesmoke;
     color: black;
     padding: 10px 20px;
     border-radius: 5px;
@@ -340,7 +331,6 @@ nav a:hover{
     align-items: center;
     flex-direction: column;
     padding: 3%;
-    /* background-color: beige; */
 }
 
 #contact > div{
@@ -395,7 +385,6 @@ nav a:hover{
 }
 
 .copyright{
-    /* padding-top: 5%; */
     margin-top: 100px;
 }
 
@@ -428,7 +417,7 @@ nav a:hover{
     }
 
     .about-containers {
-        grid-template-columns: repeat(2, minmax(200px, 1fr)); /* Define responsive columns */
+        grid-template-columns: repeat(2, minmax(200px, 1fr));
         
     }
 
@@ -473,7 +462,7 @@ nav a:hover{
     }
 
     .about-containers {
-        grid-template-columns: repeat(1, minmax(200px, 1fr)); /* Define responsive columns */
+        grid-template-columns: repeat(1, minmax(200px, 1fr));
         padding: 0 25%;
     }
 
