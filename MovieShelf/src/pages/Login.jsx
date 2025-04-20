@@ -47,7 +47,7 @@ const Login = () => {
       <div className="absolute top-0 z-[-2] h-screen w-screen bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
 
       <nav className="flex justify-end bg-transparent text-white w-full p-5 md:pr-52">
-        <a href="https://www.linkedin.com/in/bhargava-krishna-adapala">
+        <a href="https://www.linkedin.com/in/bhargavakrishnaadapala/">
 
           <button className="group active:scale-95 animate-background-shine relative inline-flex h-12 items-center justify-center overflow-hidden rounded-2xl bg-[linear-gradient(110deg,transparent,45%,#1e2631,55%,transparent)] bg-[length:200%_100%] px-6 font-medium text-white transition-colors focus:outline-none">
           <div className="translate-x-0 opacity-100 transition group-hover:-translate-x-[150%] group-hover:opacity-0">Linked In</div>
