@@ -27,6 +27,7 @@ nav{
 .Name{
     font-weight: 600;
     font-size: x-large;
+    cursor: pointer;
 }
 
 nav ul{
@@ -46,7 +47,6 @@ nav a{
 
 nav a:hover{
     color: black;
-    background-color: white;
     font-weight: 600;
 }
 
