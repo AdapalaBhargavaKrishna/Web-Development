@@ -821,7 +821,7 @@ function loadAnnouncements() {
                         Subject: ${announcement.subject}
                     </small>
                     <button onclick="deleteAnnouncement('${announcement._id}', '${sectionName}')">
-                        <img src="../../assets/delete.svg" alt="Delete">
+                        <img src="assets/delete.svg" alt="Delete">
                     </button>
                 `;
                 announcementList.appendChild(announcementDiv);
