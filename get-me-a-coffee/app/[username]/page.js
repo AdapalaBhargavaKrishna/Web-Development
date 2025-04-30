@@ -10,7 +10,7 @@ const Username = async ({ params }) => {
     await connectDb()
     let u = await User.findOne({ username: params.username })
     if (!u) {
-      return notFound()
+      return "Unknown"
     }
   }
   await checkUser()

@@ -58,11 +58,9 @@ export const updateProfile = async (data, oldusername) => {
         await User.updateOne({email: ndata.email}, ndata)
         // Now update all the usernames in the Payments table 
         await Payment.updateMany({to_user: oldusername}, {to_user: ndata.username})
-        
     }
     else{
 
-        
         await User.updateOne({email: ndata.email}, ndata)
     }
 }
