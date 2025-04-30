@@ -2,6 +2,7 @@
 import React, {useEffect} from 'react'
 import { useSession, signIn, signOut } from "next-auth/react"
 import { useRouter } from 'next/navigation'
+import Link from "next/link";
 
 const Login = () => {
   const { data: session } = useSession()
@@ -22,7 +23,7 @@ const Login = () => {
       <div className="flex flex-col gap-2 min-h-screen items-center  p-10">
 
 
-        <button
+        <Link href={"/dashboard"}
           className="flex items-center w-64 bg-slate-50 text-black border border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium  hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
           <svg className="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
             viewBox="-0.5 0 48 48" version="1.1">
@@ -47,7 +48,7 @@ const Login = () => {
             </g>
           </svg>
           <span>Continue with Google</span>
-        </button>
+        </Link>
 
 
         <button
