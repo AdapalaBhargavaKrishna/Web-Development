@@ -29,7 +29,7 @@
 }
 
 .loader .circle {
-  --color: #fff; /* white balls */
+  --color: #fff;
   --dim: 1.2rem;
   width: var(--dim);
   height: var(--dim);

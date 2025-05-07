@@ -50,7 +50,6 @@ const Home = () => {
     let response = await fetch(url.replace('{API_KEY}', apiKey));
     let data = await response.json();
 
-    // If rate limit is reached, try second key
     if (data?.errors?.[0]?.includes("You have reached your request limit")) {
       console.warn("API limit reached for current key, switching...");
       const newKey = apiKey === apiKey1 ? apiKey2 : apiKey1;
@@ -205,7 +204,7 @@ const Home = () => {
                 </div>
               </button>
             </a>
-            <a href="https://github.com/AdapalaBhargavaKrishna/Web-Development/tree/main/MovieShelf">
+            <a href="https://github.com/AdapalaBhargavaKrishna/Web-Development">
               <button className="group active:scale-95 relative inline-flex h-12 items-center justify-center overflow-hidden rounded-2xl md:px-6 px-2 font-medium text-white transition-colors focus:outline-none">
                 <div className="translate-x-0 opacity-100 transition group-hover:-translate-x-[150%] group-hover:opacity-0">GitHub</div>
                 <div className="absolute translate-x-[150%] opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100">
