@@ -1,3 +1,5 @@
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -12,7 +14,7 @@ import { Filter, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Search = () => {
-  const apiKey = import.meta.env.VITE_GNEWS_API_KEY;
+  const apiKey = import.meta.env.VITE_GNEWS_API_KEY_3;
   const [searchQuery, setSearchQuery] = useState('');
   const [newsData, setNewsData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All')
@@ -224,7 +226,7 @@ const Search = () => {
               >Search Results</h1>
 
               {newsData.map((news, index) => (
-                <div>
+                <div key={index} data-aos="fade-up">
                   <div className='flex flex-col items-center rounded-xl p-2 my-4 md:flex-row cursor-pointer'>
                     <div className='md:w-2/5 flex flex-col items-center'>
                       <img src={news.image} className='md:w-[20vw] w-[90%] rounded-2xl object-contain' alt="" />
