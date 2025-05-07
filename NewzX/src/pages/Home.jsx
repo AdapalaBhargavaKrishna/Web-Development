@@ -43,7 +43,7 @@ const Home = () => {
       once: false,
       mirror: true
     });
-  }, []);  
+  }, []);
 
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -51,32 +51,29 @@ const Home = () => {
     try {
       let response = await fetch(url.replace('{API_KEY}', apiKey));
       let data = await response.json();
-  
-      // If API key 1 is exhausted, try API key 2
+
       if (data?.errors?.[0]?.includes("You have reached your request limit")) {
         console.warn("API limit reached for current key, switching...");
         const newKey = apiKey === apiKey1 ? apiKey2 : apiKey1;
-  
+
         response = await fetch(url.replace('{API_KEY}', newKey));
         data = await response.json();
-  
-        // If second key also fails
+
         if (data?.errors?.[0]?.includes("You have reached your request limit")) {
           console.error("Both API keys have reached their limit.");
           setApiLimitReached(true);
           return null;
         } else {
-          setApiKey(newKey); // switch to valid key
+          setApiKey(newKey);
         }
       }
-  
+
       return data;
     } catch (error) {
       console.error("Fetch error:", error);
       return null;
     }
   };
-  
 
   const fetchLatestNews = async () => {
     const latestUrl = `https://gnews.io/api/v4/top-headlines?&lang=en&apikey={API_KEY}`;
@@ -195,11 +192,10 @@ const Home = () => {
         <p className="animate-background-opacity text-lg md:text-2xl mt-4 font-semibold text-[#454545] text-center">
           API request limit reached. <span className='block md:inline'> Please come back tomorrow.</span>
         </p>
-        
+
       </div>
     );
   }
-   
 
   if (isLoading) {
     return (
@@ -233,7 +229,7 @@ const Home = () => {
                 </div>
               </button>
             </a>
-            <a href="https://github.com/AdapalaBhargavaKrishna/Web-Development">
+            <a href="https://github.com/AdapalaBhargavaKrishna/Web-Development/tree/main/NewzX">
               <button className="group active:scale-95 relative inline-flex h-12 items-center justify-center overflow-hidden rounded-2xl md:px-6 px-2 font-medium text-white transition-colors focus:outline-none">
                 <div className="translate-x-0 opacity-100 transition group-hover:-translate-x-[150%] group-hover:opacity-0">GitHub</div>
                 <div className="absolute translate-x-[150%] opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100">
@@ -274,9 +270,7 @@ const Home = () => {
               </h1>
             </div>
           </motion.button>
-
         </div>
-
 
         <div className='flex flex-col md:flex-row justify-around mt-10 '>
           <div className='flex flex-col w-full md:w-[70%]'>
@@ -286,13 +280,8 @@ const Home = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className='p-5 bg-[#080a0e] shadow-2xl rounded-2xl m-3 gap-2 min-h-96 max-h-[80vh] overflow-y-auto'>
-              <h1
-                onClick={() => goToSearch()}
-                className="newsheadings">
-                Latest News
-              </h1>
+              <h1 onClick={() => goToSearch()} className="newsheadings"> Latest News </h1>
               <hr className="border border-gray-500" />
-
               {latestNews.map((news, index) => (
                 <div className='group flex flex-col bg-[#0e1014] rounded-xl p-2 my-4 md:flex-row cursor-pointer hover:shadow-2xl'>
                   <div className='md:w-2/5 flex flex-col items-center'>
@@ -323,13 +312,8 @@ const Home = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className='m-3 bg-[#080a0e] rounded-2xl min-h-80 p-4 max-h-[80vh] gap-2 overflow-y-auto'>
-              <h1
-                onClick={() => goToSearch()}
-                className='newsheadings'>
-                Local News
-              </h1>
+              <h1 onClick={() => goToSearch()} className='newsheadings'> Local News </h1>
               <hr className='my-2 border border-gray-500' />
-
               <div className='flex text-center items-center justify-between md:mt-10 mt-5'>
                 <p>Search Your City:</p>
                 <div className="relative md:w-[70%]">
@@ -345,13 +329,11 @@ const Home = () => {
               </div>
 
               {localLoading &&
-
                 <div className='flex flex-col items-center justify-center mt-28'>
                   <span className='inline-flex animate-background-opacity bg-[linear-gradient(110deg,#939393,45%,#1e293b,55%,#939393)] bg-[length:250%_100%] bg-clip-text text-xl text-transparent'>
                     Search News Appears Here
                   </span>
                 </div>
-
               }
 
               {!localLoading && localNews.length !== 0 && (
@@ -380,11 +362,10 @@ const Home = () => {
                   ))}
                 </div>
               )}
-
             </motion.div>
           </div>
-
         </div>
+
         <div className='grid md:grid-cols-3 grid-col-1'>
 
           <div style={newstopics} className='gap-2 overflow-y-auto' data-aos="zoom-in-up">
