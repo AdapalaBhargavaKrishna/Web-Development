@@ -25,6 +25,7 @@ const Home = () => {
   const [techNews, setTechNews] = useState([]);
   const [localNews, setLocalNews] = useState([]);
   const [localLoading, setLocalLoading] = useState(true);
+  const [apiLimitReached, setApiLimitReached] = useState(false);
 
   const navigate = useNavigate();
 
@@ -47,19 +48,35 @@ const Home = () => {
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   const handleFetch = async (url) => {
-    let response = await fetch(url.replace('{API_KEY}', apiKey));
-    let data = await response.json();
-
-    if (data?.errors?.[0]?.includes("You have reached your request limit")) {
-      console.warn("API limit reached for current key, switching...");
-      const newKey = apiKey === apiKey1 ? apiKey2 : apiKey1;
-      setApiKey(newKey);
-      response = await fetch(url.replace('{API_KEY}', newKey));
-      data = await response.json();
+    try {
+      let response = await fetch(url.replace('{API_KEY}', apiKey));
+      let data = await response.json();
+  
+      // If API key 1 is exhausted, try API key 2
+      if (data?.errors?.[0]?.includes("You have reached your request limit")) {
+        console.warn("API limit reached for current key, switching...");
+        const newKey = apiKey === apiKey1 ? apiKey2 : apiKey1;
+  
+        response = await fetch(url.replace('{API_KEY}', newKey));
+        data = await response.json();
+  
+        // If second key also fails
+        if (data?.errors?.[0]?.includes("You have reached your request limit")) {
+          console.error("Both API keys have reached their limit.");
+          setApiLimitReached(true);
+          return null;
+        } else {
+          setApiKey(newKey); // switch to valid key
+        }
+      }
+  
+      return data;
+    } catch (error) {
+      console.error("Fetch error:", error);
+      return null;
     }
-
-    return data;
   };
+  
 
   const fetchLatestNews = async () => {
     const latestUrl = `https://gnews.io/api/v4/top-headlines?&lang=en&apikey={API_KEY}`;
@@ -171,6 +188,18 @@ const Home = () => {
     }
   };
 
+  if (apiLimitReached) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white text-center p-4">
+        <span className="inline-flex animate-background-shine bg-[linear-gradient(110deg,#939393,45%,#1e293b,55%,#939393)] bg-[length:250%_100%] bg-clip-text text-4xl md:text-8xl font-bold text-transparent">NewzX</span>
+        <p className="animate-background-opacity text-lg md:text-2xl mt-4 font-semibold text-[#454545] text-center">
+          API request limit reached. <span className='block md:inline'> Please come back tomorrow.</span>
+        </p>
+        
+      </div>
+    );
+  }
+   
 
   if (isLoading) {
     return (
