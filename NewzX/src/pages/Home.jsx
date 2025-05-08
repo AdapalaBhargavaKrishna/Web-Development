@@ -283,7 +283,13 @@ const Home = () => {
               <h1 onClick={() => goToSearch()} className="newsheadings"> Latest News </h1>
               <hr className="border border-gray-500" />
               {latestNews.map((news, index) => (
-                <div className='group flex flex-col bg-[#0e1014] rounded-xl p-2 my-4 md:flex-row cursor-pointer hover:shadow-2xl'>
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  viewport={{ once: false, amount: 0.2 }}
+                  className='group flex flex-col bg-[#0e1014] rounded-xl p-2 my-4 md:flex-row cursor-pointer hover:shadow-2xl'>
                   <div className='md:w-2/5 flex flex-col items-center'>
                     <img src={news.image} className='md:w-[25vw] w-[90%] rounded-2xl object-cover' alt="" />
                     <h1 className='text-center text-sm text-gray-400'>Source: {news.source.name}</h1>
@@ -300,7 +306,7 @@ const Home = () => {
                       <a href={news.url} className='text-blue-500'><span className='inline-flex h-8 animate-background-shine cursor-pointer items-center justify-center rounded-full border border-gray-800 bg-[linear-gradient(110deg,#000,45%,#4D4B4B,55%,#000)] bg-[length:250%_100%] px-3 py-1 text-xs font-medium text-gray-300'>Read More</span></a>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
 
             </motion.div>

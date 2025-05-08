@@ -1,6 +1,4 @@
-import AOS from 'aos';
-import 'aos/dist/aos.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
@@ -226,7 +224,13 @@ const Search = () => {
               >Search Results</h1>
 
               {newsData.map((news, index) => (
-                <div key={index} data-aos="fade-up">
+                <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                viewport={{ once: false, amount: 0.2 }}
+              >
                   <div className='flex flex-col items-center rounded-xl p-2 my-4 md:flex-row cursor-pointer'>
                     <div className='md:w-2/5 flex flex-col items-center'>
                       <img src={news.image} className='md:w-[20vw] w-[90%] rounded-2xl object-contain' alt="" />
@@ -246,7 +250,7 @@ const Search = () => {
                     </div>
                   </div>
                   <hr className='border border-gray-800' />
-                </div>
+                </motion.div>
               ))}
 
             </div>
