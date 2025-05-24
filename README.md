@@ -28,108 +28,22 @@ This repository is a collection of projects I’ve built while learning and expl
 
 ---
 
-### 🚀 **Tech Stack**
+## 🚀 Tech Stack
 
-#### **Frontend**
-<div align="center" style="display: flex; flex-wrap: wrap; gap: 20px;">
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/html.svg" height="40"/><br>HTML
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/css.svg" height="40"/><br>CSS
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/javascript.svg" height="40"/><br>JavaScript
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/reactjs.svg" height="40"/><br>React.js
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/nextjs.svg" height="40"/><br>Next.js
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/tailwind.svg" height="40"/><br>Tailwind
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/framermotion.svg" height="40"/><br>Framer Motion
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/gsap.svg" height="40"/><br>GSAP
-  </div>
-</div>
+- **Frontend:**  
+  HTML, CSS, JavaScript, React.js, Next.js, Tailwind CSS, Framer Motion, GSAP
 
----
+- **Backend:**  
+  Node.js, Express.js, Flask, Python, Java
 
-#### **Backend**
-<div align="center" style="display: flex; flex-wrap: wrap; gap: 20px;">
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/node.svg" height="40"/><br>Node.js
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/expressjs.svg" height="40"/><br>Express.js
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/flask.svg" height="40"/><br>Flask
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/python.svg" height="40"/><br>Python
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/java.svg" height="40"/><br>Java
-  </div>
-</div>
+- **Database:**  
+  MongoDB, MySQL, Firebase
 
----
+- **DevOps & Tools:**  
+  Git, GitHub, npm, VS Code, Postman, Vercel, Netlify, Cloud
 
-#### **Database**
-<div align="center" style="display: flex; flex-wrap: wrap; gap: 20px;">
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/mongodb.svg" height="40"/><br>MongoDB
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/mysql.svg" height="40"/><br>MySQL
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/firebase.svg" height="40"/><br>Firebase
-  </div>
-</div>
-
----
-
-#### **DevOps & Tools**
-<div align="center" style="display: flex; flex-wrap: wrap; gap: 20px;">
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/git.svg" height="40"/><br>Git
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/githubw.svg" height="40"/><br>GitHub
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/npm.svg" height="40"/><br>npm
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/vscode.svg" height="40"/><br>VS Code
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/postman.svg" height="40"/><br>Postman
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/vercel.svg" height="40"/><br>Vercel
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/netlify.svg" height="40"/><br>Netlify
-  </div>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/cloud.svg" height="40"/><br>Cloud
-  </div>
-</div>
-
----
-
-#### **API Integration**
-<div align="center">
-  <img src="https://raw.githubusercontent.com/AdapalaBhargavaKrishna/Web-Development/main/Portfolio/assets/svg/api.svg" height="40"/><br>API Integration
-</div>
+- **API:**  
+  API Integration
 
 ---
 
