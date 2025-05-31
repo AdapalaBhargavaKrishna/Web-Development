@@ -1,12 +1,32 @@
-# React + Vite
+# 📰 Newzx
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Newzx** is a modern, responsive news web application that delivers real-time top headlines across various categories. Designed for simplicity and performance, it features a clean UI, category filtering, and smooth animations. Built with React and styled using Tailwind CSS, Newzx is optimized for all screen sizes and deployed seamlessly on Netlify.
 
-Currently, two official plugins are available:
+🌐 **Live Site**: [https://newzzx.netlify.app/](https://newzzx.netlify.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## ⚡ Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 📰 Fetches real-time news from public APIs
+- 📂 News organized by categories (Technology, Sports, Business, etc.)
+- 🔍 Search functionality for custom topics *(if implemented)*
+- 🌙 Light and Dark mode toggle
+- 📱 Fully responsive and mobile-friendly UI
+- 🎨 Smooth transitions and animations with GSAP / Framer Motion
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React.js
+- **Styling**: Tailwind CSS
+- **Animations**: Framer Motion
+- **Deployment**: Netlify
+- **API**: NewsAPI.org *(or specify if another)*
+
+---
+
+## 📸 Homepage Preview
+
+![Newzx Homepage](https://adapalabhargavakrishna.github.io/Web-Development/Portfolio/assets/newzx.png
