@@ -29,4 +29,4 @@
 
 ## 📸 Homepage Preview
 
-![Newzx Homepage](https://adapalabhargavakrishna.github.io/Web-Development/Portfolio/assets/newzx.png
+![Newzx Homepage](https://adapalabhargavakrishna.github.io/Web-Development/Portfolio/assets/newzx.png)
