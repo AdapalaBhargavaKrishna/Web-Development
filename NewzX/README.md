@@ -10,10 +10,9 @@
 
 - 📰 Fetches real-time news from public APIs
 - 📂 News organized by categories (Technology, Sports, Business, etc.)
-- 🔍 Search functionality for custom topics *(if implemented)*
-- 🌙 Light and Dark mode toggle
+- 🔍 Search functionality for custom topics
 - 📱 Fully responsive and mobile-friendly UI
-- 🎨 Smooth transitions and animations with GSAP / Framer Motion
+- 🎨 Smooth transitions and animations with Framer Motion
 
 ---
 
