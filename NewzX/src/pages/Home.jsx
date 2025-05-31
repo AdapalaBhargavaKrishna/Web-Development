@@ -190,7 +190,7 @@ const Home = () => {
       <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white text-center p-4">
         <span className="inline-flex animate-background-shine bg-[linear-gradient(110deg,#939393,45%,#1e293b,55%,#939393)] bg-[length:250%_100%] bg-clip-text text-4xl md:text-8xl font-bold text-transparent">NewzX</span>
         <p className="animate-background-opacity text-lg md:text-2xl mt-4 font-semibold text-[#454545] text-center">
-          API request limit reached. <span className='block md:inline'> Please come back tomorrow.</span>
+          We're out of headlines... for now! <span className='block md:inline'> Please come back tomorrow.</span>
         </p>
 
       </div>
