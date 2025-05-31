@@ -22,7 +22,7 @@
 - **Styling**: Tailwind CSS
 - **Animations**: Framer Motion
 - **Deployment**: Netlify
-- **API**: NewsAPI.org *(or specify if another)*
+- **API**: gnews.io
 
 ---
 
