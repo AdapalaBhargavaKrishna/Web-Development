@@ -462,7 +462,7 @@ const Home = () => {
 };
 
 const newstopics = {
-  padding: '2.5rem',
+  padding: '1rem',
   backgroundColor: '#080a0e',
   borderRadius: '1rem',
   margin: '0.75rem',
