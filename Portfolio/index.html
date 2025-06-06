@@ -1,376 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" >
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio</title>
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio Preview</title>
+  <link rel="stylesheet" href="css/output.css" />
 </head>
+<body class="bg-gradient-to-r from-yellow-100/60 via-yellow-200/40 to-yellow-100/60 min-h-screen flex items-center justify-center md:p-8 p-4">
 
-<body>
-    <nav>
-        <div class="Name navani">Bhargava Krishna</div>
-        <div>
-            <ul>
-                <li class="navani"><a href="#Home">Home</a></li>
-                <li class="navani"><a href="#Experience">Experience</a></li>
-                <li class="navani"><a href="#projects">Projects</a></li>
-                <li class="navani"><a href="#contact">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
-    <!-- <hr style="color: black;"> -->
-    <div id="Home">
-        <div class="profilepic">
-            <img src="assets/pfp.JPG" alt="">
-        </div>
-        <div class="profileinfo">
-            <h1 class="pfani1">Bhargava Krishna</h1>
-            <h2 class="pfani1">Aspiring SDE | Full-Stack Developer | Problem Solver</h2>
-            <p class="pfani1"> I'm a passionate software developer focused on web development and problem-solving,
-                always striving to
-                build scalable, user-friendly solutions.</p>
+  <div class="flex flex-col md:flex-row items-center justify-around max-w-6xl w-full gap-12">
 
-            <div class="view">
-                <a class="pfani1" href="#projects" class="btn">View Projects</a>
-                <a class="pfani1" href="resume.pdf" download class="btn">Download Resume</a>
-            </div>
-            <div class="social">
-                <a class="pfani1" href="https://www.instagram.com/bhargava.246"><img src="assets/insta.svg" alt=""></a>
-                <a class="pfani1" href="https://www.facebook.com/"><img src="assets/facebook.svg" alt=""></a>
-                <a class="pfani1" href="https://www.linkedin.com/in/bhargavakrishnaadapala"><img
-                        src="assets/linkedin.svg" alt=""></a>
-                <a class="pfani1" href="https://github.com/AdapalaBhargavaKrishna/Web-Development"><img
-                        src="assets/github.svg" alt=""></a>
-            </div>
-        </div>
+    <div class="relative rounded-2xl shadow-2xl overflow-hidden border-4 border-yellow-400 hover:shadow-yellow-400 transition-shadow duration-500 flex justify-center items-center md:w-[25vw] md:h-[91vh] w-full h-[80vh] bg-white/90">
+
+      <iframe
+        src="https://bhargava1028.web.app/"
+        frameborder="0"
+        class="w-full h-full rounded-2xl pointer-events-none"
+        title="New Portfolio Preview"
+      ></iframe>
+      <a
+        href="https://bhargava1028.web.app/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="absolute inset-0"
+        aria-label="Open full portfolio in new tab"
+      ></a>
+
     </div>
-    <hr style="color: black;">
-    <div id="Experience">
-        <div class="experience">
-            <p>Explore my</p>
-            <h1>Experience</h1>
-            <div class="experience-details-container">
-                <div class="about-containers">
 
-                    <div class="details-container">
-                        <h2>Frontend Development</h2>
-                        <div class="article-container">
-                            <article>
-                                <span class="material-symbols-outlined">
-                                    new_releases
-                                </span>
-                                <div>
-                                    <h3>HTML</h3>
-                                    <p>Proficient in HTML</p>
-                                </div>
-                            </article>
-                            <article>
-                                <span class="material-symbols-outlined">
-                                    new_releases
-                                </span>
-                                <div>
-                                    <h3>CSS</h3>
-                                    <p>Proficient in CSS</p>
-                                </div>
-                            </article>
-                            <article>
-                                <span class="material-symbols-outlined">
-                                    new_releases
-                                </span>
-                                <div>
-                                    <h3>JavaScript</h3>
-                                    <p>Skilled in JavaScript</p>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                    <div class="details-container">
-                        <h2>Backend Development</h2>
-                        <div class="article-container">
-                            <article>
-                                <span class="material-symbols-outlined">
-                                    new_releases
-                                </span>
-                                <div>
-                                    <h3>Node JS</h3>
-                                    <p>Proficient in Node JS</p>
-                                </div>
-                            </article>
-                            <article>
-                                <span class="material-symbols-outlined">
-                                    new_releases
-                                </span>
-                                <div>
-                                    <h3>Express JS</h3>
-                                    <p>Proficient in Express JS</p>
-                                </div>
-                            </article>
-                            <article>
-                                <span class="material-symbols-outlined">
-                                    new_releases
-                                </span>
-                                <div>
-                                    <h3>Python</h3>
-                                    <p>Skilled in Python</p>
-                                </div>
-                            </article>
-                            <article>
-                                <span class="material-symbols-outlined">
-                                    new_releases
-                                </span>
-                                <div>
-                                    <h3>React</h3>
-                                    <p>Skilled in React</p>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-
-
-                    <div class="details-container">
-                        <h2>Programming Languages</h2>
-                        <div class="article-container">
-                            <article>
-                                <span class="material-symbols-outlined">
-                                    new_releases
-                                </span>
-                                <div>
-                                    <h3>Python</h3>
-                                    <p>Skilled in Python</p>
-                                </div>
-                            </article>
-                            <article>
-                                <span class="material-symbols-outlined">
-                                    new_releases
-                                </span>
-                                <div>
-                                    <h3>Java</h3>
-                                    <p>Proficient in Java</p>
-                                </div>
-                            </article>
-                            <article>
-                                <span class="material-symbols-outlined">
-                                    new_releases
-                                </span>
-                                <div>
-                                    <h3>JavaScript</h3>
-                                    <p>Skilled in JavaScript</p>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                    <div class="details-container">
-                        <h2>Technical Skills & Tools</h2>
-                        <div class="article-container">
-                            <article>
-                                <span class="material-symbols-outlined">
-                                    new_releases
-                                </span>
-                                <div>
-                                    <h3>Data Structures & Algorithms</h3>
-                                    <p>Proficient in DSA</p>
-                                </div>
-                            </article>
-                            <article>
-                                <span class="material-symbols-outlined">
-                                    new_releases
-                                </span>
-                                <div>
-                                    <h3>MySQL</h3>
-                                    <p>Proficient in MySQL</p>
-                                </div>
-                            </article>
-                            <article>
-                                <span class="material-symbols-outlined">
-                                    new_releases
-                                </span>
-                                <div>
-                                    <h3>MongoDB</h3>
-                                    <p>Skilled in MongoDB</p>
-                                </div>
-                            </article>
-                            <article>
-                                <span class="material-symbols-outlined">
-                                    new_releases
-                                </span>
-                                <div>
-                                    <h3>Git</h3>
-                                    <p>Skilled in Git</p>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
+    <div class="max-w-sm text-center md:text-left">
+      <h1 class="text-4xl font-extrabold text-yellow-600 mb-4 drop-shadow-md">Check Out My New Portfolio</h1>
+      <p class="text-yellow-900/90 mb-6 leading-relaxed">
+        Visit the full site to explore all my latest projects, designs, and skills.
+      </p>
+      <a
+        href="https://bhargava1028.web.app/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-block px-8 py-3 bg-yellow-400 text-yellow-900 font-semibold rounded-lg shadow-lg hover:bg-yellow-500 transition-colors duration-300"
+      >
+        Visit Full Portfolio
+      </a>
     </div>
-    <div class="logos">
-        <div class="logos-slide">
-            <img src="assets/python.png" alt="Python" class="skill-img" id="python">
-            <img src="assets/java.png" alt="Java" class="skill-img" id="java">
-            <img src="assets/html.webp" alt="HTML" class="skill-img" id="html">
-            <img src="assets/css.webp" alt="CSS" class="skill-img" id="css">
-            <img src="assets/javascript.png" alt="JavaScript" class="skill-img" id="js">
-            <img src="assets/react.png" alt="JavaScript" class="skill-img" id="js">
-            <img src="assets/mongodb.png" alt="DBMS" class="skill-img" id="dbms">
-            <img src="assets/mysql.png" alt="DBMS" class="skill-img" id="dbms">
-            <img src="assets/git.png" alt="DBMS" class="skill-img" id="dbms">
-        </div>
-    </div>
-    </div>
-    <hr style="color: black;">
-    <div id="projects">
-        <p>Browse my projects</p>
-        <h1>Projects</h1>
-        <div class="projects-container">
-            <div class="project-card">
-                <img src="assets/attendz.png" alt="">
-                <h3>Smart College Management System</h3>
-                <p>A web platform where teachers and students can log in to check daily attendance, with future
-                    integrations for marks, timetables, and more.</p>
-                <a href="https://adapalabhargavakrishna.github.io/Web-Development/AttendEz/index.html" class="btn">View
-                    Project</a>
-            </div>
-            <div class="project-card">
-                <img src="assets/movieshelf.png" alt="">
-                <h3>Movie Shelf</h3>
-                <p>A sleek movie library app to explore, categorize, and manage your favorite films effortlessly.</p>
-                <a href="https://movieshelf-bk.netlify.app/" class="btn">View Project</a>
-            </div>
-            <div class="project-card">
-                <img src="assets/newzx.png" alt="NewzX Project Screenshot">
-                <h3>NewzX</h3>
-                <p>NewzX is a sleek, responsive news website that delivers the latest headlines across categories like
-                    technology, sports and entertainment. Built using reactJS it fetches real-time data from a news API
-                    and presents it in a clean, modern UI</p>
-                <a href="https://newzzx.netlify.app/" class="btn">View Project</a>
-            </div>
-            <div class="project-card">
-                <img src="assets/attendancecalculator.png" alt="Screenshot of Attendance Calculator Project">
-                <h3>Attendance Calculator</h3>
-                <p>A handy web app to track and calculate your attendance percentage effortlessly.</p>
-                <a href="https://attendance-calculator-tau.vercel.app/" class="btn" target="_blank"
-                    rel="noopener noreferrer">View Project</a>
-            </div>
 
-            <div class="project-card">
-                <img src="assets/getmeacoffee.png" alt="Buy Me a Coffee Project Screenshot">
-                <h3>Get Me a Coffee</h3>
-                <p>A simple donation platform where users can support you by buying a virtual coffee. Built with modern
-                    web technologies and deployed using Vercel.</p>
-                <a href="https://get-me-a-coffee-rho.vercel.app/" class="btn">View Project</a>
-            </div>
+  </div>
 
-
-            <div class="project-card">
-                <img src="assets/safepass.png" alt="">
-                <h3>Password Manager</h3>
-                <p>SafePass helps you securely store, generate, and manage all your passwords in one vault, with easy
-                    access.</p>
-                <a href="https://safepassx.netlify.app/" class="btn">View Project</a>
-            </div>
-            <div class="project-card">
-                <img src="assets/RecipeMate.png" alt="">
-                <h3>Recipe Mate</h3>
-                <p>Recipe Mate helps you explore, save, and organize recipes easily with a smooth React.js experience.
-                </p>
-                <a href="https://recipemate-bk.netlify.app/" class="btn">View Project</a>
-            </div>
-            <div class="project-card">
-                <img src="assets/Todo.png" alt="">
-                <h3>Todo-List</h3>
-                <p>A responsive Todo-List application built with React.js and styled using Tailwind CSS, designed to
-                    help users efficiently manage their tasks and stay organized.</p>
-                <a href="https://taskfocus-bk.netlify.app/" class="btn">View
-                    Project</a>
-            </div>
-            <div class="project-card">
-                <img src="assets/Weather.png" alt="">
-                <h3>Real-Time Weather</h3>
-                <p>A real-time weather web app that fetches live weather data using an API, providing accurate forecasts
-                    and current conditions.</p>
-                <a href="https://adapalabhargavakrishna.github.io/Web-Development/Weather/index.html" class="btn">View
-                    Project</a>
-            </div>
-            <div class="project-card">
-                <img src="assets/spotify.jpg" alt="">
-                <h3>Spotify Clone</h3>
-                <p>A music streaming app with features like playlists and song playback.</p>
-                <a href="https://adapalabhargavakrishna.github.io/Web-Development/spotify/spotify.html" class="btn">View
-                    Project</a>
-            </div>
-            <div class="project-card">
-                <img src="assets/X.jpg" alt="">
-                <h3>X Clone</h3>
-                <p>A social media platform with posts, likes, and real-time notifications.</p>
-                <a href="https://adapalabhargavakrishna.github.io/Web-Development/X/index.html" class="btn">View
-                    Project</a>
-            </div>
-            <div class="project-card">
-                <img src="assets/class.png" alt="">
-                <h3>Class Performance Dashboard</h3>
-                <p>A dashboard to track and visualize student performance using real-time data.</p>
-                <a href="https://adapalabhargavakrishna.github.io/Web-Development/Class%20Performance%20dashboard/class.html"
-                    class="btn">View Project</a>
-            </div>
-            <div class="project-card">
-                <img src="assets/Netflix.jpg" alt="">
-                <h3>Netflix Clone</h3>
-                <p>A responsive Netflix clone built using HTML and CSS, replicating the layout and design of the
-                    original platform.</p>
-
-                <a href="https://adapalabhargavakrishna.github.io/Web-Development/Netflix/Netflix.html" class="btn">View
-                    Project</a>
-            </div>
-        </div>
-    </div>
-    <hr style="color: black;">
-    <div id="contact">
-        <div class="contact-head">
-            <p>Get in touch</p>
-            <h1>Contact Me</h1>
-        </div>
-        <div class="contact-info">
-            <div class="mail">
-                <span class="material-symbols-outlined">
-                    mail
-                </span>
-                <a href="https://mail.google.com/mail/u/0/#inbox">a.bhargavak@gmail.com</a>
-            </div>
-            <div class="linkedin">
-                <a class="pfani1" href="https://www.linkedin.com/in/bhargavakrishnaadapala"><img
-                        src="assets/linkedin.svg" alt=""></a>
-                <a href="https://www.linkedin.com/in/bhargavakrishnaadapala">linkedin</a>
-            </div>
-        </div>
-        <div class="dupnav">
-            <ul>
-                <li><a href="#Home">Home</a></li>
-                <li><a href="#Experience">Experience</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </div>
-        <div class="copyright">
-            Copyright © 2025 Bhargava .All rights reserved
-        </div>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
-        integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"
-        integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
-        const copy = document.querySelector(".logos-slide").cloneNode(true);
-        document.querySelector(".logos").appendChild(copy)
-    </script>
-    <script src="script.js"></script>
 </body>
-
 </html>
