@@ -102,7 +102,7 @@ const App = () => {
       <nav className={`flex flex-wrap gap-4 justify-between items-center rounded-full mx-auto max-w-6xl px-4 sm:px-6 py-3 ${isDarkMode ? "bg-neutral-900" : "bg-white shadow-xl"}`}>
         <h1 className={`font-bold text-xl sm:text-2xl ${isDarkMode ? "text-white" : "text-black"}`}>File Switch</h1>
         <div className="flex items-center gap-4">
-          <a href="https://github.com/AdapalaBhargavaKrishna/Web-Development/" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/AdapalaBhargavaKrishna/Web-Development/tree/main/FileSwitch" target="_blank" rel="noopener noreferrer">
             <img src={githubsvg} className={`${isDarkMode ? "" : "invert"} w-6 h-6`} alt="GitHub" />
           </a>
           <button
