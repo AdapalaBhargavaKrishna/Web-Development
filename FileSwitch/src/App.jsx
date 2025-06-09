@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import toast from 'react-hot-toast';
 import githubsvg from "./assets/github.svg";
@@ -70,7 +71,10 @@ const App = () => {
     setSelectedFiles([{ file, outputFormat }]);
 
     toast.custom((t) => (
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
         className={`${t.visible ? "animate-enter" : "animate-leave"
           } max-w-md w-full shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5
       ${isDarkMode
@@ -86,7 +90,7 @@ const App = () => {
             </p>
           </div>
         </div>
-      </div>
+      </motion.div>
     ));
   };
 
@@ -99,7 +103,11 @@ const App = () => {
 
   return (
     <div className={`${isDarkMode ? "bg-[#0a0a0a]" : "bg-[#fff5eb]"} min-h-screen p-4 sm:p-5`}>
-      <nav className={`flex flex-wrap gap-4 justify-between items-center rounded-full mx-auto max-w-6xl px-4 sm:px-6 py-3 ${isDarkMode ? "bg-neutral-900" : "bg-white shadow-xl"}`}>
+      <motion.nav
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className={`flex flex-wrap gap-4 justify-between items-center rounded-full mx-auto max-w-6xl px-4 sm:px-6 py-3 ${isDarkMode ? "bg-neutral-900" : "bg-white shadow-xl"}`}>
         <h1 className={`font-bold text-xl sm:text-2xl ${isDarkMode ? "text-white" : "text-black"}`}>File Switch</h1>
         <div className="flex items-center gap-4">
           <a href="https://github.com/AdapalaBhargavaKrishna/Web-Development/tree/main/FileSwitch" target="_blank" rel="noopener noreferrer">
@@ -116,7 +124,7 @@ const App = () => {
             </span>
           </button>
         </div>
-      </nav>
+      </motion.nav>
 
       <div className={`${isDarkMode ? "text-white" : "text-black"} text-center mt-16 sm:mt-24 px-2 sm:p-4 max-w-4xl mx-auto space-y-4`}>
         <h1 className="font-bold text-3xl sm:text-5xl leading-tight sm:leading-[3.75rem]">FileSwitch File Converter</h1>
@@ -125,14 +133,19 @@ const App = () => {
 
       <div className="mx-auto mt-10 sm:mt-12 max-w-xl w-full px-2">
         {selectedFiles.length === 0 ? (
-          <div onClick={openFileDialog} onDrop={handleDrop} onDragOver={(e) => e.preventDefault()} className={`border-2 border-dashed border-gray-400 ${isDarkMode ? "hover:bg-neutral-800" : "hover:bg-neutral-100"} rounded-lg p-8 sm:p-12 text-center space-y-4 cursor-pointer flex flex-col items-center justify-center`}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+            onClick={openFileDialog} onDrop={handleDrop} onDragOver={(e) => e.preventDefault()} className={`border-2 border-dashed border-gray-400 ${isDarkMode ? "hover:bg-neutral-800" : "hover:bg-neutral-100"} rounded-lg p-8 sm:p-12 text-center space-y-4 cursor-pointer flex flex-col items-center justify-center`}>
             <img src={uploadsvg} className={`${isDarkMode ? "" : "invert"} w-16 h-16`} alt="Upload" />
             <p className={`${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>Drag and drop a file here or <span className="underline">click to browse</span></p>
             <p className={`${isDarkMode ? "text-white" : "text-black"}`}>Supported formats: Images, Audio, and Video</p>
             <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*,audio/*,video/*" />
-          </div>
+          </motion.div>
         ) : (
-          <div className={`${isDarkMode ? "text-white" : "text-black"} flex flex-col gap-4 items-center border border-neutral-700 rounded-xl p-6 sm:p-11 w-full`}>
+          <div
+            className={`${isDarkMode ? "text-white" : "text-black"} flex flex-col gap-4 items-center border border-neutral-700 rounded-xl p-6 sm:p-11 w-full`}>
             <div className={`flex flex-col sm:flex-row sm:items-center justify-between w-full gap-4 ${isDarkMode ? "bg-neutral-800" : "bg-white"} p-4 sm:p-5 rounded-lg`}>
               <div className="flex items-center gap-3">
                 <img src={photosvg} className="w-10 h-10" alt="File Icon" />
@@ -156,7 +169,10 @@ const App = () => {
                   <a
                     onClick={() => {
                       toast.custom((t) => (
-                        <div
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3 }}
                           className={`${t.visible ? "animate-enter" : "animate-leave"
                             } max-w-md w-full shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5
       ${isDarkMode
@@ -172,7 +188,7 @@ const App = () => {
                               </p>
                             </div>
                           </div>
-                        </div>
+                        </motion.div>
                       ));
                       setConvertedUrl(null);
                       setConvertedName("");
@@ -198,7 +214,10 @@ const App = () => {
                         setConvertedName(result.output);
 
                         toast.custom((t) => (
-                          <div
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3 }}
                             className={`${t.visible ? "animate-enter" : "animate-leave"
                               } max-w-md w-full shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5
       ${isDarkMode
@@ -214,7 +233,7 @@ const App = () => {
                                 </p>
                               </div>
                             </div>
-                          </div>
+                          </motion.div>
                         ));
                       } catch (error) {
                         alert("Conversion failed. Please try another file or format.");
@@ -236,7 +255,10 @@ const App = () => {
                   <a
                     onClick={() => {
                       toast.custom((t) => (
-                        <div
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3 }}
                           className={`${t.visible ? "animate-enter" : "animate-leave"
                             } max-w-md w-full shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5
       ${isDarkMode
@@ -252,7 +274,7 @@ const App = () => {
                               </p>
                             </div>
                           </div>
-                        </div>
+                        </motion.div>
                       ));
                       setConvertedUrl(null);
                       setConvertedName("");
@@ -267,7 +289,10 @@ const App = () => {
                     download={convertedName}
                     onClick={() => {
                       toast.custom((t) => (
-                        <div
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3 }}
                           className={`${t.visible ? "animate-enter" : "animate-leave"
                             } max-w-md w-full shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5
       ${isDarkMode
@@ -283,7 +308,7 @@ const App = () => {
                               </p>
                             </div>
                           </div>
-                        </div>
+                        </motion.div>
                       ));
                       setTimeout(() => {
                         setConvertedUrl(null);
