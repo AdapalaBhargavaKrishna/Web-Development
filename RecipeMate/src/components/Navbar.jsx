@@ -30,7 +30,7 @@ const Navbar = () => {
       className="fixed text-white top-0 flex items-center justify-between mt-2 p-5 bg-transparent rounded-xl w-full z-10 transition-all duration-300"
     >
       <div id="head">
-        <h1 className="font-bold text-2xl">Recipe Mate</h1>
+        <h1 className="font-bold md:text-2xl text-xl">Recipe Mate</h1>
       </div>
 
       <div id="themes" className="flex justify-around items-center gap-5 text-lg">
