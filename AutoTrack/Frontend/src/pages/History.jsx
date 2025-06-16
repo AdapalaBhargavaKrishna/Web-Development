@@ -3,11 +3,14 @@ import Navbar from '../components/Navbar'
 import videosvg from '../assets/svg/video.svg'
 import completesvg from '../assets/svg/complete.svg'
 import streaksvg from '../assets/svg/fire.svg'
-
+import searchsvg from '../assets/svg/search.svg'
+import calendersvg from '../assets/svg/calender.svg'
+import usersvg from '../assets/svg/user.svg'
+import deletesvg from '../assets/svg/delete.svg'
 
 const History = () => {
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [history, setHistory] = useState([])
 
   return (
     <>
@@ -18,23 +21,23 @@ const History = () => {
           <p className='text-base text-neutral-500'>Track your learning journey and revisit your favorite videos</p>
         </div>
 
-        <div className='flex items-center justify-between max-w-7xl w-full mt-7'>
+        <div className='flex items-center justify-between max-w-6xl w-full mt-7'>
 
-          <div className='bg-white rounded-xl flex items-center justify-start gap-4 px-10 pr-40 py-5'>
+          <div className='bg-white rounded-xl flex items-center justify-start gap-4 px-10 pr-28 py-5 shadow-lg'>
             <img src={videosvg} className='bg-blue-200 p-2 rounded-xl' alt="" />
             <div>
               <h1 className='font-bold text-2xl'>4</h1>
               <p>Videos Processed</p>
             </div>
           </div>
-          <div className='bg-white rounded-xl flex items-center justify-start gap-4 px-10 pr-40 py-5'>
+          <div className='bg-white rounded-xl flex items-center justify-start gap-4 px-10 pr-40 py-5 shadow-lg'>
             <img src={completesvg} className='bg-green-100 p-2 rounded-xl w-10 h-10' alt="" />
             <div>
               <h1 className='font-bold text-2xl'>4</h1>
               <p>Completed</p>
             </div>
           </div>
-          <div className='bg-white rounded-xl flex items-center justify-start gap-4 px-10 pr-40 py-5'>
+          <div className='bg-white rounded-xl flex items-center justify-start gap-4 px-10 pr-40 py-5 shadow-lg'>
             <img src={streaksvg} className='bg-gradient-to-r from-orange-100 to-red-100 p-1 rounded-xl w-10 h-10' alt="" />
             <div>
               <h1 className='font-bold text-2xl'>4</h1>
@@ -44,31 +47,108 @@ const History = () => {
 
         </div>
 
-        <div className='mt-7 max-w-7xl w-full p-5 bg-white rounded-xl relative'>
+        <div className='mt-7 max-w-6xl w-full p-7 bg-white rounded-xl relative flex flex-wrap items-center justify-between gap-4 shadow-lg'>
 
-          <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Dropdown button <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
-          </svg>
-          </button>
+          <div className={`flex items-center gap-2 border border-neutral-300 rounded-xl px-3 py-2 w-full ${history.length === 0 ? 'md:w-[70%]' : 'md:w-[62%]'
+            } shadow-sm bg-white`}>
+            <img src={searchsvg} className='w-5 h-5' alt="Search" />
+            <input
+              type="text"
+              placeholder='Search videos...'
+              className='outline-none w-full text-sm placeholder:text-gray-500 bg-transparent'
+            />
+          </div>
 
-          <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700">
-            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-              <li>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
-              </li>
-              <li>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-              </li>
-              <li>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-              </li>
-              <li>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
-              </li>
-            </ul>
+
+          <div className="flex gap-7 items-center">
+
+            <select
+              className="bg-white border border-gray-300 text-gray-800 text-sm rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-300"
+            >
+              <option value="all">All Videos</option>
+              <option value="completed">Completed</option>
+              <option value="ongoing">Ongoing</option>
+            </select>
+
+            <select
+              className="bg-white border border-gray-300 text-gray-800 text-sm rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-300"
+            >
+              <option value="recent">Most Recent</option>
+              <option value="oldest">Oldest First</option>
+              <option value="longest">Longest First</option>
+            </select>
+
+            {history.length > 0 &&
+
+              <div className='flex'>
+                <img src={deletesvg} alt="" />
+                <span className='text-red-500'>Clear All</span>
+              </div>
+
+            }
+
           </div>
 
         </div>
+
+        {history.length === 0 &&
+
+          <div className='flex flex-col items-center justify-between max-w-6xl w-full mt-7 bg-white rounded-xl p-20 space-y-2 shadow-lg'>
+            <img src={calendersvg} alt="" />
+            <h1 className='font-semibold text-xl text-neutral-500'>No Learning History</h1>
+            <p className='text-base text-neutral-500'>Start by analyzing your first YouTube video</p>
+          </div>
+        }
+
+        {history.length > 0 && (
+          <div className="relative max-w-6xl w-full mt-7 bg-white rounded-2xl shadow-lg p-6 hover:bg-gray-50 transition-colors">
+
+            <img
+              src={completesvg}
+              className="absolute top-4 right-4 w-6 h-6"
+              alt="Completed"
+            />
+
+            <div className="flex space-x-4">
+
+              <div className="flex-shrink-0">
+                <img
+                  src="https://i.ytimg.com/vi/JuAxi3mniFQ/hqdefault.jpg"
+                  className="w-28 h-20 object-cover rounded-xl"
+                  alt="Thumbnail"
+                />
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <h3 className="text-base md:text-lg font-medium text-gray-900 line-clamp-2 mb-2">
+                  Match The Voice To The Person
+                </h3>
+
+                <div className="flex flex-wrap gap-4 text-sm text-gray-500 mb-3">
+                  <span className="flex items-center gap-1">
+                    <img src={usersvg} className="w-4 h-4" alt="User icon" />
+                    <span>NDL</span>
+                  </span>
+                  <span>Jun 16, 2025</span>
+                  <span>31 minutes ago</span>
+                </div>
+
+                <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+                  This video covers key concepts related to Match The Voice To The Person. The main topics discussed include important principles, practical applications, and actionable insights...
+                </p>
+
+                <div className="flex gap-3 flex-wrap">
+                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    5 key points
+                  </span>
+                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                    3 flashcards
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
     </>
