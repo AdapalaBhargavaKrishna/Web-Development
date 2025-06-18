@@ -36,18 +36,116 @@ router.post('/login', async (req, res) => {
 })
 
 router.post('/firebase-login', async (req, res) => {
-    try {
-        const { name, email } = req.body
+     try {
+        const { name, email } = req.body;
         let user = await User.findOne({ email });
 
         if (!user) {
-            user = new User({name, email, password: email})
+            // Hash the email before storing it as password
+            const hashedEmail = await bcrypt.hash(email, 10);
+            user = new User({ name, email, password: hashedEmail });
             await user.save();
-             return res.status(201).json({ msg: "User Created", user })
+            return res.status(201).json({ msg: "User Created", user });
         }
-        res.status(201).json({ msg: "Login Successful", user })
+
+        res.status(201).json({ msg: "Login Successful", user });
+
+    } catch (err) {
+        res.status(500).json({ msg: "Server Error", error: err.message });
+    }
+})
+
+router.get('/:id', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).json({ msg: "User not found" });
+        res.status(200).json({ user })
     } catch (err) {
         res.status(500).json({ msg: "Server Error", error: err.message })
+    }
+})
+
+router.post('/:id/add-video', async (req, res) => {
+    try {
+        const { id } = req.params
+        const { title, author, thumbnail, date, time, videoUrl, summary, isCompleted } = req.body;
+
+        const user = await User.findById(id);
+        if (!user) return res.status(404).json({ msg: "User not found" })
+
+        const newVideo = { title, author, thumbnail, date, time, videoUrl, summary, isCompleted }
+        user.videos.push(newVideo)
+        await user.save();
+
+        res.status(200).json({ msg: "video added successfully", videos: user.videos })
+    } catch (err) {
+        res.status(500).json({ msg: "Error adding video", error: err.message });
+    }
+})
+
+router.put('/:id/mark-complete', async (req, res) => {
+
+    const { videoUrl } = req.body
+
+    try {
+        const { id } = req.params
+        const user = await User.findById(id);
+        if (!user) return res.status(404).json({ msg: "User not found" })
+
+        const video = user.videos.find(v => v.videoUrl === videoUrl)
+        if (video) video.isCompleted = true;
+
+        await user.save()
+        res.json({ videos: user.videos })
+
+    } catch (err) {
+        res.status(500).json({ msg: "Error mark video", error: err.message });
+    }
+})
+
+router.delete('/:id/clear', async (req, res) => {
+    try {
+        const { id } = req.params
+        const user = await User.findById(id)
+        if (!user) return res.status(404).json({ msg: "User not found" });
+
+        user.videos = []
+        await user.save()
+
+        res.status(200).json({ msg: "History Cleared", videos: [] })
+    } catch (err) {
+        res.status(500).json({ msg: "Error clear data", error: err.message });
+    }
+})
+
+router.put('/:id/change-pass', async (req, res) => {
+    try {
+        const { oldPassword, newPassword } = req.body
+        const { id } = req.params
+        const user = await User.findById(id)
+        if (!user) return res.status(404).json({ msg: "User not found" })
+
+        const isMatch = await bcrypt.compare(oldPassword, user.password)
+        if (!isMatch) return res.status(401).json({ msg: "Old Password Incorrect" });
+
+        user.password = await bcrypt.hash(newPassword, 10)
+        await user.save()
+
+        res.json({ success: true, message: "Password updated successfully.", updateDate: user.updatedAt, createDate: user.createdAt });
+    } catch (err) {
+        res.status(500).json({ msg: "Error change pass", error: err.message });
+    }
+})
+
+router.delete('/:id/delete', async (req, res) => {
+    try {
+        const { id } = req.params
+        const user = await User.findByIdAndDelete(id);
+        if (!user) return res.status(404).json({ msg: "User not found" })
+
+        res.status(200).json({ success: true, msg: "User deleted successfully" })
+    } catch (err) {
+        res.status(500).json({ msg: "Error change pass", error: err.message });
     }
 })
 

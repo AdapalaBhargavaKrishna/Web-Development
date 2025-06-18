@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
+import API from '../api'
 import { motion } from 'framer-motion'
 import { useUser } from '../data/UserContext'
 import { useNavigate } from 'react-router-dom';
@@ -22,6 +23,12 @@ const Home = () => {
   const navigate = useNavigate()
 
   const [videoUrl, setVideoUrl] = useState('')
+  const [completePer, setCompletePer] = useState(0)
+  const [transcript, setTranscript] = useState('')
+  const [loading, setLoading] = useState(false);
+  const [completedVideos, setCompletedVideos] = useState(0)
+  const [watchedVideos, setWatchedVideos] = useState(0)
+  const [pageLoading, setPageLoading] = useState(true)
   const [latestVideo, setLatestVideo] = useState({
     title: '',
     author: '',
@@ -29,16 +36,48 @@ const Home = () => {
     date: '',
     time: '',
     videoUrl: '',
+    iscomlpleted: false
   });
-  const [videos, setVideos] = useState([])
-  const [transcript, setTranscript] = useState('')
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!user || !user.name) {
-      navigate("/");
-    }
-  }, [user]);
+    const fetchUser = async () => {
+      if (!user || !user._id) {
+        navigate("/");
+        return;
+      }
+
+      try {
+        const res = await API.get(`/user/${user._id}`);
+        const videosFromDB = res.data.user.videos || [];
+
+        setUser(prev => ({
+          ...prev,
+          history: [...videosFromDB],
+        }));
+
+        updateProgress(res.data.user.videos);
+
+        console.log(res.data.user.videos)
+      } catch (err) {
+        console.error('Error fetching user from DB:', err);
+      } finally {
+        setPageLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  const updateProgress = (videos) => {
+    const completed = videos.filter(v => v.isCompleted).length;
+    const total = videos.length;
+    const percent = total > 0 ? (completed / total) * 100 : 0;
+
+    setCompletePer(percent);
+    setCompletedVideos(completed);
+    setWatchedVideos(total);
+  };
+
 
   const testVideoUrl = (url) => {
     return url.includes('youtube.com/watch') || url.includes('youtu.be/')
@@ -53,6 +92,7 @@ const Home = () => {
       date: '',
       time: '',
       videoUrl: '',
+      iscomlpleted: false,
     })
 
     try {
@@ -71,17 +111,19 @@ const Home = () => {
           day: 'numeric'
         }),
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        videoUrl: videoUrl,
+        videoUrl: url,
+        isCompleted: false,
       };
 
-      setUser({
-        ...user,
-        history: [...(user.history || []), newVideo],
-      })
+      const res = await API.post(`user/${user._id}/add-video`, newVideo)
+
+      setUser(prev => ({
+        ...prev,
+        history: res.data.videos,
+      }))
       setLatestVideo(newVideo);
-      console.log(data)
 
-
+      updateProgress(res.data.videos);
     } catch (error) {
       console.error(error)
     }
@@ -104,14 +146,37 @@ const Home = () => {
       );
 
       const data = await response.json();
-      setTranscript(data.transctipt)
-      console.log(data.transcript)
+      setTranscript(data.transcript)
+      // console.log(data.transcript)
       fetchVideoDetails(videoUrl)
 
     } catch (error) {
       console.error(error)
     }
     setLoading(false)
+  }
+
+  const markAsComplete = async () => {
+    try {
+      const res = await API.put(`/user/${user._id}/mark-complete`, {
+        videoUrl: latestVideo.videoUrl
+      });
+      setLatestVideo(prev => ({
+        ...prev,
+        isCompleted: true
+      }))
+      const updatedVideos = res.data.videos;
+      setUser(prev => ({
+        ...prev,
+        history: updatedVideos,
+      }))
+
+      updateProgress(res.data.videos);
+
+
+    } catch (err) {
+      console.error("Mark complete error", err)
+    }
   }
 
   return (
@@ -167,7 +232,9 @@ const Home = () => {
               </div>
               <div className='flex'>
                 <a href={latestVideo.videoUrl} target='_blank' className='flex items-center gap-2 mx-4'><img className='w-8 h-8' src={playsvg} alt="" /><span>Watch Video</span></a>
-                <button className='flex items-center gap-2 mx-4 bg-green-500 text-white rounded-xl font-semibold p-2'><img className='w-5 h-5' src={completewsvg} alt="" /><span>Mark Complete</span></button>
+
+                <button onClick={markAsComplete}
+                  className={`flex items-center gap-2 mx-4 ${latestVideo.isCompleted ? 'bg-green-100 text-[#16a34a]' : 'bg-green-500'}  text-white rounded-xl font-semibold p-2`}><img className='w-5 h-5' src={latestVideo.isCompleted ? completesvg : completewsvg} alt="" /><span>{latestVideo.isCompleted ? "Completed" : "Mark Complete"}</span></button>
               </div>
             </div>
             <div className='p-5 space-y-7'>
@@ -202,7 +269,7 @@ const Home = () => {
                 </div>
               </div>
               <div className='p-6 px-24'>
-                <CircularProgress completionRate={50} />
+                <CircularProgress completionRate={completePer} />
               </div>
             </div>
 
@@ -212,25 +279,13 @@ const Home = () => {
                 <h1 className='font-bold text-xl'>Videos Watched</h1>
               </div>
               <div className='text-center'>
-                <h1 className='font-bold text-2xl'>2</h1>
-                <p className='text-base text-neutral-500'>1 Completed</p>
+                <h1 className='font-bold text-2xl'>{watchedVideos}</h1>
+                <p className='text-base text-neutral-500'>{completedVideos} Completed</p>
               </div>
             </div>
-
-            <div className='bg-white rounded-2xl shadow-md p-5 flex flex-col  items-center gap-4'>
-              <div className='flex items-center gap-2'>
-                <img src={studysvg} className='w-8 h-8' alt="" />
-                <h1 className='font-bold text-xl'>Study Days</h1>
-              </div>
-              <div className='text-center flex items-end gap-2'>
-                <h1 className='font-bold text-2xl'>1</h1>
-                <p className='text-base text-neutral-500'>Day Active</p>
-              </div>
-            </div>
-
           </div>
 
-          <div className='m-4 bg-white rounded-xl shadow-md w-[65%] max-h-max'>
+          <div className='m-4 bg-white rounded-xl shadow-md w-[65%] '>
             <div className='p-5'>
               <h1 className='font-bold text-xl'>Recent Learning</h1>
               <p className='text-base text-neutral-500'>Your Latest video summaries</p>
@@ -238,20 +293,21 @@ const Home = () => {
             <hr className='mb-4' />
 
             <div className='space-x-2 overflow-y-scroll overflow-x-hidden max-h-96'>
+
               {user.history && user.history.map((video, index) => (
 
-                <motion.div key={index} className='rounded-lg' 
-                onClick={() => setLatestVideo(video)}
-                initial={{scale : 1}}
-                whileHover={{scale: 1.01, }}
-                transition={{duration: 0.4}}
-                
+                <motion.div key={index} className='rounded-lg'
+                  onClick={() => setLatestVideo(video)}
+                  initial={{ scale: 1 }}
+                  whileHover={{ scale: 1.01, }}
+                  transition={{ duration: 0.4 }}
+
                 >
                   <div className='flex'>
                     <img src={video.thumbnail} className='h-24 rounded-3xl object-cover p-4' alt="" />
 
                     <div className='space-y-2 relative'>
-                      <img src={completesvg} className='top-0 right-4 absolute w-7 h-7' alt="" />
+                      <img src={completesvg} className={`${video.isCompleted ? "" : "hidden"} top-0 right-4 absolute w-7 h-7`} alt="" />
                       <h1 className='font-semibold text-sm md:text-base'>
                         {video.title}
                       </h1>

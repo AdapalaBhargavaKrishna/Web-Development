@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import API from '../api'
 import Navbar from '../components/Navbar'
 import { useUser } from '../data/UserContext'
 import videosvg from '../assets/svg/video.svg'
@@ -11,7 +12,14 @@ import deletesvg from '../assets/svg/delete.svg'
 import { useNavigate } from 'react-router-dom'
 
 const History = () => {
-  const { user ,setUser } = useUser();
+
+  const [searchTerm, setSearchTerm] = useState('')
+  const [filter, setFilter] = useState('all')
+  const [sort, setSort] = useState('recent')
+  const [clearData, setClearData] = useState(false)
+
+
+  const { user, setUser } = useUser();
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -20,10 +28,36 @@ const History = () => {
     }
   }, [user]);
 
-  const handleClear = () => {
-    const updatedHistory = {...user, history : []}
-    setUser(updatedHistory);
+  const handleClear = async () => {
+    try {
+      const res = await API.delete(`user/${user._id}/clear`)
+      const updatedUser = { ...user, history: [] };
+      setUser(updatedUser)
+      setClearData(false)
+    } catch (error) {
+      console.error("Failed to clear history:", error);
+    }
   }
+
+  const getDateObj = (dateStr, timeStr) => new Date(`${dateStr} ${timeStr}`);
+
+  const filteredVideos = user?.history
+    ?.filter(video => video.title.toLowerCase().includes(searchTerm.toLowerCase()))
+    ?.filter(video => {
+      if (filter === 'completed') return video.isCompleted;
+      if (filter === 'ongoing') return !video.isCompleted;
+      return true;
+    })
+    ?.sort((a, b) => {
+      const dateA = getDateObj(a.date, a.time)
+      const dateB = getDateObj(b.date, b.time)
+
+      if (sort === 'recent') return dateB - dateA;
+      if (sort === 'oldest') return dateA - dateB;
+      if (sort === 'alphabetical') return a.title.localeCompare(b.title);
+      return 0;
+    })
+
 
   return (
     <>
@@ -34,78 +68,60 @@ const History = () => {
           <p className='text-base text-neutral-500'>Track your learning journey and revisit your favorite videos</p>
         </div>
 
-        <div className='flex items-center justify-between max-w-6xl w-full mt-7'>
-
-          <div className='bg-white rounded-xl flex items-center justify-start gap-4 px-10 pr-28 py-5 shadow-lg'>
-            <img src={videosvg} className='bg-blue-200 p-2 rounded-xl' alt="" />
-            <div>
-              <h1 className='font-bold text-2xl'>{user?.history?.length || 0}</h1>
-              <p>Videos Processed</p>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-7 max-w-6xl w-full'>
+          {[
+            { icon: videosvg, title: 'Videos Processed', value: user?.history?.length || 0, bg: 'bg-blue-100' },
+            { icon: completesvg, title: 'Completed', value: user?.history?.filter(v => v.isCompleted).length, bg: 'bg-green-100' },
+            { icon: streaksvg, title: 'My Streak', value: user?.history?.length || 0, bg: 'bg-gradient-to-r from-orange-100 to-red-100' },
+          ].map((card, i) => (
+            <div key={i} className='bg-white p-6 rounded-2xl shadow-md flex items-center gap-4'>
+              <img src={card.icon} className={`${card.bg} w-12 h-12 p-2 rounded-xl`} alt="" />
+              <div>
+                <h2 className='text-2xl font-bold'>{card.value}</h2>
+                <p className='text-sm text-gray-500'>{card.title}</p>
+              </div>
             </div>
-          </div>
-          <div className='bg-white rounded-xl flex items-center justify-start gap-4 px-10 pr-40 py-5 shadow-lg'>
-            <img src={completesvg} className='bg-green-100 p-2 rounded-xl w-10 h-10' alt="" />
-            <div>
-              <h1 className='font-bold text-2xl'>4</h1>
-              <p>Completed</p>
-            </div>
-          </div>
-          <div className='bg-white rounded-xl flex items-center justify-start gap-4 px-10 pr-40 py-5 shadow-lg'>
-            <img src={streaksvg} className='bg-gradient-to-r from-orange-100 to-red-100 p-1 rounded-xl w-10 h-10' alt="" />
-            <div>
-              <h1 className='font-bold text-2xl'>{user?.history?.length || 0}</h1>
-              <p>My Streak</p>
-            </div>
-          </div>
-
+          ))}
         </div>
 
-        <div className='mt-7 max-w-6xl w-full p-7 bg-white rounded-xl relative flex flex-wrap items-center justify-between gap-4 shadow-lg'>
 
-          <div className={`flex items-center gap-2 border border-neutral-300 rounded-xl px-3 py-2 w-full ${user?.history?.length === 0 ? 'md:w-[68%]' : 'md:w-[59%]'
-            } shadow-sm bg-white`}>
-            <img src={searchsvg} className='w-5 h-5' alt="Search" />
+        <div className='mt-7 max-w-6xl w-full bg-white rounded-xl shadow-md p-5 flex flex-wrap items-center gap-4 justify-between'>
+          <div className='flex items-center gap-2 border border-gray-300 rounded-xl px-3 py-2 flex-grow min-w-[200px]'>
+            <img src={searchsvg} className='w-4 h-4' alt="Search" />
             <input
               type="text"
               placeholder='Search videos...'
-              className='outline-none w-full text-sm placeholder:text-gray-500 bg-transparent'
-            />
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+              className='outline-none text-sm w-full bg-transparent placeholder:text-gray-500' />
           </div>
 
+          <select
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            className='text-sm border border-gray-300 rounded-lg px-3 py-2 bg-white shadow-sm'>
+            <option value="all">All Videos</option>
+            <option value="completed">Completed</option>
+            <option value="ongoing">Ongoing</option>
+          </select>
 
-          <div className="flex gap-7 items-center">
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+            className='text-sm border border-gray-300 rounded-lg px-3 py-2 bg-white shadow-sm'>
+            <option value="recent">Most Recent</option>
+            <option value="oldest">Oldest First</option>
+            <option value="alphabetical">A → Z</option>
+          </select>
 
-            <select
-              className="bg-white border border-gray-300 text-gray-800 text-sm rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-300"
-            >
-              <option value="all">All Videos</option>
-              <option value="completed">Completed</option>
-              <option value="ongoing">Ongoing</option>
-            </select>
-
-            <select
-              className="bg-white border border-gray-300 text-gray-800 text-sm rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-300"
-            >
-              <option value="recent">Most Recent</option>
-              <option value="oldest">Oldest First</option>
-              <option value="longest">Longest First</option>
-            </select>
-
-            {user?.history?.length > 0 &&
-
-              <button 
-              className='flex hover:bg-red-100 p-2 rounded-lg'
-              onClick={handleClear}
-              >
-                <img src={deletesvg} alt="" />
-                <span className='text-red-500'>Clear All</span>
-              </button>
-
-            }
-
-          </div>
-
+          {user?.history?.length > 0 && (
+            <button onClick={() => setClearData(true)} className='flex items-center gap-1 text-red-500 hover:bg-red-100 px-3 py-2 rounded-lg transition'>
+              <img src={deletesvg} alt="" className='w-4 h-4' />
+              Clear All
+            </button>
+          )}
         </div>
+
 
         {user?.history?.length === 0 &&
 
@@ -116,59 +132,72 @@ const History = () => {
           </div>
         }
 
-        {user?.history?.length > 0 && user?.history?.map((video, index) =>  (
-          <div key={index}>
-            <div className="relative max-w-6xl w-full mt-7 bg-white rounded-2xl shadow-lg p-6 hover:bg-gray-50 transition-colors">
+        {filteredVideos?.length > 0 && filteredVideos.map((video, index) => (
+          <div key={index} className="relative max-w-6xl w-full mt-6 bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition-shadow">
+            <img src={completesvg} className={`${video.isCompleted ? '' : 'hidden'} absolute top-5 right-5 w-6 h-6`} alt="Complete" />
 
-              <img
-                src={completesvg}
-                className="absolute top-4 right-4 w-6 h-6"
-                alt="Completed"
-              />
+            <div className="flex gap-5">
+              <img src={video.thumbnail} alt="Thumbnail" className="w-32 h-20 rounded-xl object-cover" />
 
-              <div className="flex space-x-4">
-
-                <div className="flex-shrink-0">
-                  <img
-                    src={video.thumbnail}
-                    className="w-28 h-20 object-cover rounded-xl"
-                    alt="Thumbnail"
-                  />
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-base md:text-lg font-medium text-gray-900 line-clamp-2 mb-2">
-                    {video.title}
-                  </h3>
-
-                  <div className="flex flex-wrap gap-4 text-sm text-gray-500 mb-3">
-                    <span className="flex items-center gap-1">
-                      <img src={usersvg} className="w-4 h-4" alt="User icon" />
-                      <span>{video.author}</span>
-                    </span>
+              <div className="flex flex-col justify-between w-full">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800 line-clamp-2 mb-1">{video.title}</h3>
+                  <div className="text-sm text-gray-500 flex flex-wrap gap-3 mb-2">
+                    <span className="flex items-center gap-1"><img src={usersvg} className="w-4 h-4" /> {video.author}</span>
                     <span>{video.date}</span>
                     <span>{video.time}</span>
                   </div>
+                </div>
+                <p className="text-sm text-gray-600 line-clamp-2 mb-2">This video covers key concepts like Match The Voice... practical applications, and actionable insights.</p>
 
-                  <p className="text-sm text-gray-600 line-clamp-2 mb-3">
-                    This video covers key concepts related to Match The Voice To The Person. The main topics discussed include important principles, practical applications, and actionable insights...
-                  </p>
-
-                  <div className="flex gap-3 flex-wrap">
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                      5 key points
-                    </span>
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                      3 flashcards
-                    </span>
-                  </div>
+                <div className="flex gap-3 text-xs font-medium">
+                  <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">5 key points</span>
+                  <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full">3 flashcards</span>
                 </div>
               </div>
             </div>
           </div>
+
         ))}
+
+        {user?.history?.length > 0 && filteredVideos?.length === 0 && (
+          <div className='mt-10 text-gray-500'>No matching videos found.</div>
+        )}
+
       </div>
 
+      {clearData && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+                <div className="bg-white rounded-lg shadow-xl p-6 w-[90%] max-w-md border border-red-100">
+                  <div className='flex flex-col items-center text-center mb-6'>
+                    <div className='rounded-xl bg-red-100 p-3 mb-3'>
+                      <img
+                        src={deletesvg}
+                        alt="Warning"
+                        className='w-8 h-8 text-red-500'
+                      />
+                    </div>
+                    <h1 className='font-bold text-2xl text-gray-800 mb-1'>Clear Data</h1>
+                    <p className='text-gray-600'>Are you sure you want to clear all data? This action cannot be undone.</p>
+                  </div>
+      
+                  <div className="flex justify-end gap-3">
+                    <button
+                      onClick={() => setClearData(false)}
+                      className="px-5 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors duration-200 font-medium"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleClear}
+                      className="px-5 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors duration-200 font-medium shadow-sm"
+                    >
+                      Confirm
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
     </>
   )
 }
