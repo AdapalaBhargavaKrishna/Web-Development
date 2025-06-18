@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
+import API from '../api'
 import { UserContext } from '../data/UserContext';
 import logosvg from '../assets/svg/logo.svg';
 import googlelogo from '../assets/svg/google.svg';
@@ -12,27 +13,46 @@ import mailsvg from '../assets/svg/mail.svg';
 const Login = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
+  const [form , setForm] = useState({email: '', password: ''})
+
+  useEffect(() => {
+    setUser(null);
+    localStorage.removeItem("autotube-user");
+  }, [])
+  
+
+  const handleSignin = async (e) => {
+    e.preventDefault()
+    try {
+      const res = await API.post('/user/login', form)
+      alert(res.data.msg)
+      console.log(res.data.user)
+      setUser({
+        _id: res.data.user._id,
+        name: res.data.user.name,
+        email: res.data.user.email 
+      })
+      navigate('/Dashboard')
+    } catch (err) {
+      console.log(err)
+      alert(err.response?.data?.msg || "Signup Failed")
+    }
+  }
 
   const handleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      console.log("User Info:", user);
-
+      const res = await API.post('/user/firebase-login', {
+        name: user.displayName,
+        email: user.email
+      })
+      console.log("User Info:", res.data.user);
       setUser({
-        uid: user.uid,
-        name: user.displayName,
-        email: user.email,
-        photo: user.photoURL,
-      });
-
-      localStorage.setItem("autotube-user", JSON.stringify({
-        uid: user.uid,
-        name: user.displayName,
-        email: user.email,
-        photo: user.photoURL,
-      }));
-
+        _id: res.data.user._id,
+        name: res.data.user.name,
+        email: res.data.user.email 
+      })
       navigate("/dashboard");
     } catch (error) {
       console.error("Login failed", error);
@@ -79,6 +99,7 @@ const Login = () => {
             <input
               type="email"
               id="email"
+              onChange={(e) => setForm({...form, email: e.target.value})}
               placeholder="Enter your email"
               className="w-full bg-transparent outline-none text-base"
             />
@@ -91,13 +112,16 @@ const Login = () => {
             <input
               type="password"
               id="password"
+              onChange={(e) => setForm({...form, password: e.target.value})}
               placeholder="Enter your password"
               className="w-full bg-transparent outline-none text-base"
             />
           </div>
         </div>
 
-        <button className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl py-2 font-semibold hover:opacity-90 transition">
+        <button 
+        onClick={handleSignin}
+        className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl py-2 font-semibold hover:opacity-90 transition">
           Sign In
         </button>
 

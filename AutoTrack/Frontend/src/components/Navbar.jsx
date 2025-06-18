@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
+import { auth } from "../firebase/firebase";
+import { signOut } from "firebase/auth";
 import { useUser, UserContext } from '../data/UserContext'
 import logosvg from '../assets/svg/logo.svg'
 import homesvg from '../assets/svg/home.svg'
@@ -11,6 +13,7 @@ const Navbar = ({ item }) => {
     const { user } = useUser();
     const navigate = useNavigate();
     const { setUser } = useContext(UserContext);
+    const [signingOut, setSigningOut] = useState(false)
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
@@ -22,11 +25,19 @@ const Navbar = ({ item }) => {
     ];
 
     const handleSignOut = async () => {
-        await signOut(auth);
-        localStorage.removeItem("autotube-user");
-        setUser(null);
-        navigate('/')
+        try {
+            setSigningOut(true);
+            await signOut(auth);
+            setUser(null);
+            localStorage.removeItem("autotube-user");
+            navigate('/');
+        } catch (error) {
+            console.error("Error signing out:", error);
+        } finally {
+            setSigningOut(false);
+        }
     };
+
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -73,7 +84,7 @@ const Navbar = ({ item }) => {
                                 onClick={handleSignOut}
                                 className="w-full mt-2 bg-red-100 hover:bg-red-200 text-red-600 font-semibold px-3 py-1 rounded-md text-sm transition"
                             >
-                                Sign Out
+                                {signingOut ? "Signing Out" : "Sign Out"}
                             </button>
                         </div>
                     )}

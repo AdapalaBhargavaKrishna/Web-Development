@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useUser, UserContext } from '../data/UserContext'
 import Navbar from '../components/Navbar'
 import usersvg from '../assets/svg/user.svg'
@@ -14,6 +14,12 @@ const Settings = () => {
 
   const [gender, setGender] = useState("Male")
   const [enabled, setEnabled] = useState(true);
+
+  useEffect(() => {
+    if (!user || !user.name) {
+      navigate("/");
+    }
+  }, [user]);
 
   const handleGenderChange = (e) => {
     setGender(e.target.value);
@@ -67,7 +73,7 @@ const Settings = () => {
                   required
                   id="email"
                   placeholder="Enter your email"
-                  onChange={(e) => setUser({...user, email: e.target.value})}
+                  onChange={(e) => setUser({ ...user, email: e.target.value })}
                   defaultValue={user.email}
                   className="w-full bg-transparent outline-none text-base"
                 />
