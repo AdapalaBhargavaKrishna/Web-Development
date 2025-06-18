@@ -1,10 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import API from '../api';
 import logosvg from '../assets/svg/logo.svg';
 import usersvg from '../assets/svg/user.svg';
-import arrowsvg from '../assets/svg/arrow.svg';
 import mailsvg from '../assets/svg/mail.svg';
 
 const Signup = () => {
+  const navigate = useNavigate()
+  const [form, setForm] = useState({name: '', email: '', password: ''})
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await API.post('/user/signup', form);
+      alert(res.data.msg)
+      navigate('/')
+    } catch (err) {
+      console.log(err)
+      alert(err.response?.data?.msg || "Signup Failed")
+    }
+  }
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
 
@@ -31,6 +47,7 @@ const Signup = () => {
             <input
               type="text"
               id="name"
+              onChange={(e) => setForm({...form, name:e.target.value})}
               placeholder="Enter your name"
               className="w-full bg-transparent outline-none text-base"
             />
@@ -44,6 +61,7 @@ const Signup = () => {
             <input
               type="email"
               id="email"
+              onChange={(e) => setForm({...form, email: e.target.value})}
               placeholder="Enter your email"
               className="w-full bg-transparent outline-none text-base"
             />
@@ -56,13 +74,16 @@ const Signup = () => {
             <input
               type="password"
               id="password"
+              onChange={(e) => setForm({...form, password:e.target.value})}
               placeholder="Enter your password"
               className="w-full bg-transparent outline-none text-base"
             />
           </div>
         </div>
 
-        <button className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl py-2 font-semibold hover:opacity-90 transition">
+        <button 
+        onClick={handleSignup}
+        className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl py-2 font-semibold hover:opacity-90 transition">
           Create Account
         </button>
 

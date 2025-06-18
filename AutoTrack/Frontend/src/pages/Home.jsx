@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
+import { motion } from 'framer-motion'
 import { useUser } from '../data/UserContext'
+import { useNavigate } from 'react-router-dom';
 import CircularProgress from '../components/CircularProgress';
 import youtubelogo from '../assets/svg/youtube.svg'
 import studysvg from '../assets/svg/study.svg'
@@ -16,19 +18,27 @@ import completesvg from '../assets/svg/complete.svg'
 import completewsvg from '../assets/svg/completew.svg'
 
 const Home = () => {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
+  const navigate = useNavigate()
 
   const [videoUrl, setVideoUrl] = useState('')
   const [latestVideo, setLatestVideo] = useState({
     title: '',
     author: '',
     thumbnail: '',
+    date: '',
+    time: '',
     videoUrl: '',
   });
   const [videos, setVideos] = useState([])
   const [transcript, setTranscript] = useState('')
   const [loading, setLoading] = useState(false);
-  const [summary, setSummary] = useState("s")
+
+  useEffect(() => {
+    if (!user || !user.name) {
+      navigate("/");
+    }
+  }, [user]);
 
   const testVideoUrl = (url) => {
     return url.includes('youtube.com/watch') || url.includes('youtu.be/')
@@ -40,6 +50,8 @@ const Home = () => {
       title: '',
       author: '',
       thumbnail: '',
+      date: '',
+      time: '',
       videoUrl: '',
     })
 
@@ -53,11 +65,20 @@ const Home = () => {
         title: data.title,
         author: data.author_name,
         thumbnail: data.thumbnail_url,
+        date: new Date().toLocaleDateString([], {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        }),
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         videoUrl: videoUrl,
       };
 
+      setUser({
+        ...user,
+        history: [...(user.history || []), newVideo],
+      })
       setLatestVideo(newVideo);
-      setVideos(prev => [...prev, newVideo]);
       console.log(data)
 
 
@@ -176,7 +197,7 @@ const Home = () => {
               <div className='flex items-center gap-2 bg-gradient-to-r from-orange-100 to-red-100 p-2 rounded-lg shadow-md transition duration-200 hover:shadow-lg w-2/4'>
                 <img src={firesvg} className='w-10 h-10' alt="" />
                 <div className='text-center'>
-                  <h1 className='font-bold text-2xl'>{videos.length}</h1>
+                  <h1 className='font-bold text-2xl'>{user?.history?.length || 0}</h1>
                   <p>My Streak</p>
                 </div>
               </div>
@@ -216,10 +237,16 @@ const Home = () => {
             </div>
             <hr className='mb-4' />
 
-            <div className='space-x-2 overflow-y-scroll max-h-96'>
-              {videos.map((video, index) => (
+            <div className='space-x-2 overflow-y-scroll overflow-x-hidden max-h-96'>
+              {user.history && user.history.map((video, index) => (
 
-                <div key={index}>
+                <motion.div key={index} className='rounded-lg' 
+                onClick={() => setLatestVideo(video)}
+                initial={{scale : 1}}
+                whileHover={{scale: 1.01, }}
+                transition={{duration: 0.4}}
+                
+                >
                   <div className='flex'>
                     <img src={video.thumbnail} className='h-24 rounded-3xl object-cover p-4' alt="" />
 
@@ -234,7 +261,7 @@ const Home = () => {
                           <img src={usersvg} className='w-4 h-4' alt="" />
                           <span>{video.author}</span>
                         </h1>
-                        <p>{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                        <p>{video.time}</p>
                       </div>
 
                       <p className='text-xs text-gray-700 line-clamp-2'>
@@ -253,11 +280,11 @@ const Home = () => {
                   </div>
 
                   <hr className='my-8' />
-                </div>
+                </motion.div>
 
               ))}
 
-              {videos.length === 0 &&
+              {user.history && user.history.length === 0 &&
                 <div className='flex flex-col items-center justify-between max-w-6xl w-full mt-7 bg-white rounded-xl p-20 space-y-2 shadow-lg'>
                   <img src={linksvg} alt="" />
                   <h1 className='font-semibold text-xl text-neutral-500'>No Learning History</h1>
