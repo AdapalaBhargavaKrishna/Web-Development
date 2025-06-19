@@ -367,7 +367,7 @@ const Settings = () => {
                 onClick={() => setClearData(true)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className='px-3 sm:px-4 py-1 sm:py-2 text-sm sm:text-base text-red-500 border border-red-500 rounded-lg transition-colors'
+                className='px-4 py-2 text-sm sm:text-base text-red-500 border border-red-500 rounded-lg transition-colors'
               >
                 Clear Data
               </motion.button>
@@ -385,7 +385,7 @@ const Settings = () => {
                 onClick={() => setDeleteAccount(true)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className='px-3 sm:px-4 py-1 sm:py-2 text-sm sm:text-base text-white bg-red-500 rounded-lg transition-colors'
+                className='px-4 py-2 text-sm sm:text-base text-white bg-red-500 rounded-lg transition-colors'
               >
                 Delete Account
               </motion.button>
@@ -393,9 +393,7 @@ const Settings = () => {
           </motion.div>
         </motion.div>
 
-        {/* Modals */}
         <AnimatePresence>
-          {/* Change Password Modal */}
           {changePassword && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -476,7 +474,6 @@ const Settings = () => {
             </motion.div>
           )}
 
-          {/* Clear Data Modal */}
           {clearData && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -543,7 +540,6 @@ const Settings = () => {
             </motion.div>
           )}
 
-          {/* Delete Account Modal */}
           {deleteAccount && (
             <motion.div
               initial={{ opacity: 0 }}
