@@ -202,7 +202,7 @@ const Home = () => {
     <>
       <Navbar item={"Dashboard"} />
       <div className='bg-[#f4f9ff] min-h-screen font-sans text-gray-800'>
-        {/* Welcome + Input Section */}
+
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -260,7 +260,7 @@ const Home = () => {
                 y: 2
               }}
               transition={buttonSpring}
-              className='flex items-center justify-center gap-2 px-3 sm:px-4 py-1 sm:py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg text-xs sm:text-sm whitespace-nowrap shadow-lg'
+              className='flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg text-xs sm:text-sm whitespace-nowrap shadow-lg'
             >
               <motion.img 
                 src={magicsvg} 
