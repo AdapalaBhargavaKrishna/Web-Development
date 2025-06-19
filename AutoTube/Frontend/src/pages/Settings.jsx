@@ -150,7 +150,7 @@ const Settings = () => {
             Settings
           </h1>
           <p className='text-center text-sm sm:text-base text-neutral-800 max-w-lg mx-auto'>
-            Customize your AutoTrack experience and manage your account
+            Customize your AutoTube experience and manage your account
           </p>
         </motion.div>
 
