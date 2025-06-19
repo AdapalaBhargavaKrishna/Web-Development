@@ -8,6 +8,13 @@ const videoSchema = new mongoose.Schema({
     time: String,
     videoUrl: String,
     summary: String,
+    keyPoints: [String],
+    qna: [
+    {
+      question: String,
+      answer: String
+    }
+  ],
     isCompleted: Boolean
 }, {_id: false});
 

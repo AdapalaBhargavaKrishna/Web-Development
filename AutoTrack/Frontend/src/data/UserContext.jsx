@@ -5,7 +5,7 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(() => {
         const saved = localStorage.getItem("autotube-user");
-        return saved ? JSON.parse(saved) :  { _id: "", name: "", email: "", history: [] };
+        return saved ? JSON.parse(saved) :  { _id: "", name: "", email: "",createdAt: "",updatedAt: "", history: [] };
     });
 
     useEffect(() => {

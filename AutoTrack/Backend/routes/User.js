@@ -36,12 +36,12 @@ router.post('/login', async (req, res) => {
 })
 
 router.post('/firebase-login', async (req, res) => {
-     try {
+    try {
         const { name, email } = req.body;
         let user = await User.findOne({ email });
 
         if (!user) {
-            // Hash the email before storing it as password
+
             const hashedEmail = await bcrypt.hash(email, 10);
             user = new User({ name, email, password: hashedEmail });
             await user.save();
@@ -68,12 +68,34 @@ router.get('/:id', async (req, res) => {
 router.post('/:id/add-video', async (req, res) => {
     try {
         const { id } = req.params
-        const { title, author, thumbnail, date, time, videoUrl, summary, isCompleted } = req.body;
+        const {
+            title,
+            author,
+            thumbnail,
+            date,
+            time,
+            videoUrl,
+            summary,
+            keyPoints,
+            qna,
+            isCompleted
+        } = req.body;
 
         const user = await User.findById(id);
         if (!user) return res.status(404).json({ msg: "User not found" })
 
-        const newVideo = { title, author, thumbnail, date, time, videoUrl, summary, isCompleted }
+        const newVideo = {
+            title,
+            author,
+            thumbnail,
+            date,
+            time,
+            videoUrl,
+            summary,
+            keyPoints,
+            qna,
+            isCompleted
+        };
         user.videos.push(newVideo)
         await user.save();
 
@@ -148,5 +170,18 @@ router.delete('/:id/delete', async (req, res) => {
         res.status(500).json({ msg: "Error change pass", error: err.message });
     }
 })
+router.post('/reset-password', async (req, res) => {
+    const { email, newPassword } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ msg: "User not found" });
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+    user.password = hashed;
+    await user.save();
+
+    res.json({ success: true, msg: "Password reset successfully" });
+});
+
 
 export default router
