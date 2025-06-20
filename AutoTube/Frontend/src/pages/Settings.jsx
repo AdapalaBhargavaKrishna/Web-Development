@@ -352,9 +352,9 @@ const Settings = () => {
                   }}
                   className='flex items-center border rounded-xl px-3 py-2 w-full text-sm sm:text-base'
                 >
-                  <option value="Short (1-2 paragraphs)">Short (1-2 paragraphs)</option>
-                  <option value="Medium (3-4 paragraphs)">Medium (3-4 paragraphs)</option>
-                  <option value="Detailed (5+ paragraphs)">Detailed (5+ paragraphs)</option>
+                  <option value="Short (1-2 paragraphs)">Short</option>
+                  <option value="Medium (3-4 paragraphs)">Medium</option>
+                  <option value="Detailed (5+ paragraphs)">Detailed</option>
                 </select>
               </div>
 
