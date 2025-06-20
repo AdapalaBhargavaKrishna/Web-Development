@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { toast } from 'react-hot-toast';
 import API from '../api';
 import logosvg from '../assets/svg/logo.svg';
 import usersvg from '../assets/svg/user.svg';
@@ -13,27 +14,52 @@ const Signup = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
+
+    // Form validation
+    if (!form.name || !form.email || !form.password) {
+      toast.error('Please fill in all fields', {
+        position: 'top-center',
+        icon: '⚠️',
+      });
+      return;
+    }
+
     setIsLoading(true);
+    const loadingToast = toast.loading('Creating your account...', {
+      position: 'top-center',
+    });
+
     try {
       const res = await API.post('/user/signup', form);
-      alert(res.data.msg);
+      toast.success(res.data.msg, {
+        id: loadingToast,
+        position: 'top-center',
+        icon: '🎉',
+        duration: 4000,
+      });
       navigate('/');
     } catch (err) {
-      console.log(err);
-      alert(err.response?.data?.msg || 'Signup Failed');
+      console.error(err);
+      toast.error(
+        err.response?.data?.msg || 'Signup failed. Please try again.',
+        {
+          id: loadingToast,
+          position: 'top-center',
+          duration: 5000,
+        }
+      );
     } finally {
       setIsLoading(false);
     }
   };
-
 
   const fieldVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: (i) => ({
       opacity: 1,
       y: 0,
-      transition: { delay: i * 0.1, type: "spring", stiffness: 120 }
-    })
+      transition: { delay: i * 0.1, type: 'spring', stiffness: 120 },
+    }),
   };
 
   return (
@@ -153,21 +179,41 @@ const Signup = () => {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.96 }}
           onClick={handleSignup}
-          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl py-3 font-semibold transition hover:opacity-90"
+          disabled={isLoading}
+          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl py-3 font-semibold transition hover:opacity-90 relative overflow-hidden"
         >
-          Create Account
+          {isLoading ? (
+            <motion.span
+              className="flex items-center justify-center gap-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <motion.span
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+                className="block w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+              />
+              Creating Account...
+            </motion.span>
+          ) : (
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              Create Account
+            </motion.span>
+          )}
         </motion.button>
         {isLoading && (
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 2 }}
+            transition={{ delay: 2 }} // show after 2 seconds
             className="text-sm text-center mt-4 text-red-500"
           >
             If this is taking too long, please refresh and try again.
           </motion.p>
         )}
-
         {/* Login Link */}
         <motion.p
           variants={fieldVariants}
@@ -175,7 +221,10 @@ const Signup = () => {
           className="text-sm text-center text-gray-600 mt-5"
         >
           Already have an account?{' '}
-          <a href="/" className="text-blue-600 font-semibold hover:underline">
+          <a
+            href="/"
+            className="text-blue-600 font-semibold hover:underline"
+          >
             Sign in
           </a>
         </motion.p>

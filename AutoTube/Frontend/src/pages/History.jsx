@@ -11,6 +11,7 @@ import calendersvg from '../assets/svg/calender.svg';
 import usersvg from '../assets/svg/user.svg';
 import deletesvg from '../assets/svg/delete.svg';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const History = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -58,17 +59,36 @@ const History = () => {
   useEffect(() => {
     if (!user || !user.name) {
       navigate("/");
+      toast.error('Please login to view your history', {
+        position: 'top-center',
+        icon: '🔒',
+      });
     }
   }, [user]);
 
   const handleClear = async () => {
+    const loadingToast = toast.loading('Clearing your history...', {
+      position: 'top-center',
+    });
+    
     try {
       const res = await API.delete(`user/${user._id}/clear`);
       const updatedUser = { ...user, history: [] };
       setUser(updatedUser);
       setClearData(false);
+      
+      toast.success('History cleared successfully!', {
+        id: loadingToast,
+        position: 'top-center',
+        icon: '🗑️',
+      });
     } catch (error) {
       console.error("Failed to clear history:", error);
+      toast.error('Failed to clear history. Please try again.', {
+        id: loadingToast,
+        position: 'top-center',
+        icon: '⚠️',
+      });
     }
   };
 
@@ -244,6 +264,13 @@ const History = () => {
                 variants={item}
                 whileHover={cardHover}
                 className="relative bg-white rounded-xl sm:rounded-2xl shadow-md p-4 sm:p-6 hover:shadow-lg transition-shadow"
+                onClick={() => {
+                  toast.success(`Selected: ${video.title}`, {
+                    position: 'top-center',
+                    duration: 2000,
+                    icon: '🎬',
+                  });
+                }}
               >
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-5">
                   <motion.div
@@ -354,7 +381,13 @@ const History = () => {
 
                 <div className="flex justify-end gap-3">
                   <motion.button
-                    onClick={() => setClearData(false)}
+                    onClick={() => {
+                      setClearData(false);
+                      toast('Clear action cancelled', {
+                        position: 'top-center',
+                        icon: '❌',
+                      });
+                    }}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="px-4 sm:px-5 py-1 sm:py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors duration-200 font-medium text-sm sm:text-base"

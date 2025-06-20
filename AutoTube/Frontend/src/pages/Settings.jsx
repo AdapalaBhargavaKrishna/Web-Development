@@ -13,6 +13,7 @@ import dangersvg from '../assets/svg/danger.svg';
 import femalesvg from '../assets/svg/woman.svg';
 import shieldsvg from '../assets/svg/shield.svg';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const Settings = () => {
   const { user } = useUser();
@@ -61,6 +62,10 @@ const Settings = () => {
   useEffect(() => {
     if (!user || !user.name) {
       navigate("/");
+      toast.error('Please login to access settings', {
+        position: 'top-center',
+        icon: '🔒',
+      });
       return;
     }
 
@@ -75,13 +80,25 @@ const Settings = () => {
 
   const handleGenderChange = (e) => {
     setGender(e.target.value);
+    toast.success('Gender preference updated', {
+      position: 'top-center',
+      icon: '👤',
+      duration: 2000,
+    });
   };
 
   const handleChangePass = async () => {
     if (!oldPass || !newPass) {
-      alert("Please fill both the password fields.");
+      toast.error('Please fill both password fields', {
+        position: 'top-center',
+        icon: '⚠️',
+      });
       return;
     }
+
+    const loadingToast = toast.loading('Updating password...', {
+      position: 'top-center',
+    });
 
     try {
       const res = await API.put(`user/${user._id}/change-pass`, {
@@ -90,37 +107,84 @@ const Settings = () => {
       });
 
       if (res.data.success) {
-        alert("Password changed successfully!");
+        toast.success('Password changed successfully!', {
+          id: loadingToast,
+          position: 'top-center',
+          icon: '🔑',
+          duration: 3000,
+        });
         setLastUpdatedPass(new Date(res.data.updateDate).toLocaleDateString());
         setMemberSince(new Date(res.data.createDate).toLocaleDateString());
         setChangePassword(false);
         setOldPass('');
         setNewPass('');
       } else {
-        alert(res.data.message || "Failed to change password.");
+        toast.error(res.data.message || "Failed to change password", {
+          id: loadingToast,
+          position: 'top-center',
+          icon: '❌',
+        });
       }
     } catch (error) {
       console.error("Failed to change password", error);
+      toast.error('Failed to change password. Please try again.', {
+        id: loadingToast,
+        position: 'top-center',
+        icon: '⚠️',
+      });
     }
   };
 
   const handleClear = async () => {
+    const loadingToast = toast.loading('Clearing your data...', {
+      position: 'top-center',
+    });
+
     try {
       const res = await API.delete(`user/${user._id}/clear`);
       const updatedUser = { ...user, history: [] };
       setUser(updatedUser);
       setClearData(false);
+      
+      toast.success('All learning data cleared!', {
+        id: loadingToast,
+        position: 'top-center',
+        icon: '🗑️',
+        duration: 3000,
+      });
     } catch (error) {
       console.error("Failed to clear data:", error);
+      toast.error('Failed to clear data. Please try again.', {
+        id: loadingToast,
+        position: 'top-center',
+        icon: '⚠️',
+      });
     }
   };
 
   const handleDeleteAccount = async () => {
+    if (deleteEmail !== user.email) {
+      toast.error('Email does not match', {
+        position: 'top-center',
+        icon: '✖️',
+      });
+      return;
+    }
+
+    const loadingToast = toast.loading('Deleting your account...', {
+      position: 'top-center',
+    });
+
     try {
       const res = await API.delete(`user/${user._id}/delete`);
 
       if (res.data.success) {
-        alert("Account deleted successfully.");
+        toast.success('Account deleted successfully', {
+          id: loadingToast,
+          position: 'top-center',
+          icon: '👋',
+          duration: 3000,
+        });
         setUser(null);
         localStorage.clear();
         setDeleteAccount(false);
@@ -128,6 +192,11 @@ const Settings = () => {
       }
     } catch (error) {
       console.error("Failed to delete account:", error);
+      toast.error('Failed to delete account. Please try again.', {
+        id: loadingToast,
+        position: 'top-center',
+        icon: '⚠️',
+      });
     }
   };
 
@@ -160,6 +229,7 @@ const Settings = () => {
           animate="show"
           className='w-full max-w-4xl space-y-4 sm:space-y-6 mt-6 sm:mt-10'
         >
+          {/* Profile Card */}
           <motion.div
             variants={item}
             whileHover={cardHover}
@@ -199,7 +269,9 @@ const Settings = () => {
                     id="name"
                     required
                     placeholder="Enter your full name"
-                    onChange={(e) => setUser({ ...user, name: e.target.value })}
+                    onChange={(e) => {
+                      setUser({ ...user, name: e.target.value });
+                    }}
                     defaultValue={user.name}
                     className="w-full bg-transparent outline-none text-sm sm:text-base"
                   />
@@ -214,7 +286,9 @@ const Settings = () => {
                     required
                     id="email"
                     placeholder="Enter your email"
-                    onChange={(e) => setUser({ ...user, email: e.target.value })}
+                    onChange={(e) => {
+                      setUser({ ...user, email: e.target.value });
+                    }}
                     defaultValue={user.email}
                     className="w-full bg-transparent outline-none text-sm sm:text-base"
                   />
@@ -268,7 +342,14 @@ const Settings = () => {
                 <label className="block text-sm sm:text-base font-semibold mb-1" htmlFor="summarylength">Summary Length</label>
                 <select
                   value={summaryLength}
-                  onChange={(e) => setSummaryLength(e.target.value)}
+                  onChange={(e) => {
+                    setSummaryLength(e.target.value);
+                    toast.success('Summary length preference saved', {
+                      position: 'top-center',
+                      icon: '📝',
+                      duration: 2000,
+                    });
+                  }}
                   className='flex items-center border rounded-xl px-3 py-2 w-full text-sm sm:text-base'
                 >
                   <option value="Short (1-2 paragraphs)">Short (1-2 paragraphs)</option>
@@ -279,7 +360,15 @@ const Settings = () => {
 
               <div className="mb-3 sm:mb-5">
                 <label className="block text-sm sm:text-base font-semibold mb-1" htmlFor="theme">Theme</label>
-                <select className='flex items-center border rounded-xl px-3 py-2 w-full text-sm sm:text-base'>
+                <select 
+                  className='flex items-center border rounded-xl px-3 py-2 w-full text-sm sm:text-base'
+                  onChange={() => {
+                    toast('Theme preference saved', {
+                      position: 'top-center',
+                      icon: '🎨',
+                    });
+                  }}
+                >
                   <option value="Lignt">Light</option>
                   <option value="Dark">Dark</option>
                 </select>
@@ -301,7 +390,19 @@ const Settings = () => {
                 <input
                   type="checkbox"
                   checked={quickQuizEnabled}
-                  onChange={(e) => setQuickQuizEnabled(e.target.checked)}
+                  onChange={(e) => {
+                    setQuickQuizEnabled(e.target.checked);
+                    toast.success(
+                      e.target.checked 
+                        ? 'QuickQuiz enabled' 
+                        : 'QuickQuiz disabled',
+                      {
+                        position: 'top-center',
+                        icon: e.target.checked ? '✅' : '❌',
+                        duration: 2000,
+                      }
+                    );
+                  }}
                   className="toggle-checkbox absolute block w-4 h-4 sm:w-6 sm:h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
                   style={{ right: quickQuizEnabled ? '0' : '1rem' }}
                 />
@@ -312,6 +413,7 @@ const Settings = () => {
               </motion.div>
             </motion.div>
           </motion.div>
+
           {/* Privacy Card */}
           <motion.div
             variants={item}
@@ -453,7 +555,13 @@ const Settings = () => {
 
                   <motion.div variants={item} className="flex justify-end gap-3 sm:gap-4">
                     <motion.button
-                      onClick={() => setChangePassword(false)}
+                      onClick={() => {
+                        setChangePassword(false);
+                        toast('Password change cancelled', {
+                          position: 'top-center',
+                          icon: '❌',
+                        });
+                      }}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       className="px-3 sm:px-4 py-1 sm:py-2 text-sm sm:text-base rounded-lg bg-neutral-100 hover:bg-neutral-200"
@@ -519,7 +627,13 @@ const Settings = () => {
                 >
                   <motion.button
                     variants={item}
-                    onClick={() => setClearData(false)}
+                    onClick={() => {
+                      setClearData(false);
+                      toast('Clear action cancelled', {
+                        position: 'top-center',
+                        icon: '❌',
+                      });
+                    }}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="px-3 sm:px-5 py-1 sm:py-2 text-sm sm:text-base rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors duration-200 font-medium"
@@ -599,7 +713,13 @@ const Settings = () => {
                 >
                   <motion.button
                     variants={item}
-                    onClick={() => setDeleteAccount(false)}
+                    onClick={() => {
+                      setDeleteAccount(false);
+                      toast('Account deletion cancelled', {
+                        position: 'top-center',
+                        icon: '❌',
+                      });
+                    }}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="px-3 sm:px-5 py-1.5 sm:py-2.5 text-sm sm:text-base rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors duration-200 font-medium"
