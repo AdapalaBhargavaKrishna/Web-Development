@@ -9,6 +9,7 @@ import googlelogo from '../assets/svg/google.svg';
 import arrowsvg from '../assets/svg/arrow.svg';
 import mailsvg from '../assets/svg/mail.svg';
 import { motion } from 'framer-motion';
+import toast from 'react-hot-toast';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -19,14 +20,36 @@ const Login = () => {
   useEffect(() => {
     setUser(null);
     localStorage.removeItem("autotube-user");
+    toast.success("Session cleared. Please login again.", {
+      position: "top-center",
+      icon: '🔒',
+    });
   }, []);
 
   const handleSignin = async (e) => {
     e.preventDefault();
+    
+    if (!form.email || !form.password) {
+      toast.error("Please fill in all fields", {
+        position: "top-center",
+        icon: '⚠️',
+      });
+      return;
+    }
+
     setIsLoading(true);
+    const loadingToast = toast.loading("Authenticating...", {
+      position: "top-center",
+    });
+
     try {
       const res = await API.post('/user/login', form);
-      alert(res.data.msg);
+      toast.success(`Welcome back!`, {
+        id: loadingToast,
+        position: "top-center",
+        icon: '👋',
+      });
+
       setUser({
         _id: res.data.user._id,
         name: res.data.user.name,
@@ -34,10 +57,17 @@ const Login = () => {
         createdAt: res.data.user.createdAt,
         updatedAt: res.data.user.updatedAt
       });
-      navigate('/Dashboard');
+      navigate('/dashboard');
     } catch (err) {
-      console.log(err);
-      alert(err.response?.data?.msg || "Signup Failed");
+      console.error(err);
+      toast.error(
+        err.response?.data?.msg || "Login failed. Please check your credentials.",
+        { 
+          id: loadingToast,
+          position: "top-center",
+          duration: 4000,
+        }
+      );
     } finally {
       setIsLoading(false);
     }
@@ -45,6 +75,10 @@ const Login = () => {
 
   const handleLogin = async () => {
     setIsLoading(true);
+    const loadingToast = toast.loading("Connecting with Google...", {
+      position: "top-center",
+    });
+
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
@@ -52,6 +86,13 @@ const Login = () => {
         name: user.displayName,
         email: user.email
       });
+
+      toast.success(`Welcome, ${user.displayName.split(' ')[0]}!`, {
+        id: loadingToast,
+        position: "top-center",
+        icon: '🎉',
+      });
+
       setUser({
         _id: res.data.user._id,
         name: res.data.user.name,
@@ -61,12 +102,18 @@ const Login = () => {
       });
       navigate("/dashboard");
     } catch (error) {
-      console.error("Login failed", error);
+      console.error("Google login failed:", error);
+      toast.error("Google login failed. Please try again.", {
+        id: loadingToast,
+        position: "top-center",
+        duration: 4000,
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Animation variants (unchanged)
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -115,7 +162,7 @@ const Login = () => {
         animate="visible"
         className="w-full max-w-md"
       >
-        {/* Logo and Title - Horizontal Layout */}
+        {/* Logo and Title */}
         <motion.div
           variants={itemVariants}
           className="flex items-center justify-center gap-4 mb-8"
@@ -282,10 +329,6 @@ const Login = () => {
                   Sign In
                 </motion.span>
               )}
-              <motion.span
-                className="absolute inset-0 bg-white opacity-0 hover:opacity-10 transition"
-                whileHover={{ opacity: 0.1 }}
-              />
             </motion.button>
             {isLoading && (
               <motion.p
@@ -297,6 +340,7 @@ const Login = () => {
                 If this is taking too long, please refresh and try again.
               </motion.p>
             )}
+
             {/* Sign Up Link */}
             <motion.p
               variants={itemVariants}
@@ -304,7 +348,7 @@ const Login = () => {
             >
               Don't have an account?{' '}
               <motion.a
-                href="/Signup"
+                href="/signup"
                 className="text-blue-600 font-semibold hover:underline"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

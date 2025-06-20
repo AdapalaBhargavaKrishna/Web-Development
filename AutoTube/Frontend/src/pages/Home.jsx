@@ -17,6 +17,7 @@ import firesvg from '../assets/svg/fire.svg';
 import usersvg from '../assets/svg/user.svg';
 import completesvg from '../assets/svg/complete.svg';
 import completewsvg from '../assets/svg/completew.svg';
+import toast from 'react-hot-toast';
 
 const Home = () => {
   const { user, setUser } = useUser();
@@ -94,6 +95,10 @@ const Home = () => {
         updateProgress(res.data.user.videos);
       } catch (err) {
         console.error('Error fetching user from DB:', err);
+        toast.error('Failed to load your history. Please refresh the page.', {
+          position: 'top-center',
+          icon: '⚠️',
+        });
       } finally {
         setPageLoading(false);
       }
@@ -117,8 +122,27 @@ const Home = () => {
   };
 
   const fetchTranscript = async () => {
-    if (!testVideoUrl(videoUrl)) return;
+    if (!videoUrl) {
+      toast.error('Please enter a YouTube URL', {
+        position: 'top-center',
+        icon: '🔗',
+      });
+      return;
+    }
+
+    if (!testVideoUrl(videoUrl)) {
+      toast.error('Please enter a valid YouTube URL', {
+        position: 'top-center',
+        icon: '❌',
+      });
+      return;
+    }
+
     setLoading(true);
+    const loadingToast = toast.loading('Analyzing video content...', {
+      position: 'top-center',
+      icon: '🔍',
+    });
 
     try {
       const encodedUrl = encodeURIComponent(videoUrl);
@@ -132,6 +156,10 @@ const Home = () => {
           },
         }
       );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch transcript');
+      }
 
       const data = await response.json();
       const transcriptText = data.transcript;
@@ -170,14 +198,33 @@ const Home = () => {
       setLatestVideo(newVideo);
       updateProgress(res.data.videos);
 
+      toast.success('Video analysis complete!', {
+        id: loadingToast,
+        position: 'top-center',
+        icon: '✅',
+        duration: 3000,
+      });
+
     } catch (error) {
       console.error(error);
+      toast.error('Failed to analyze video. Please try again.', {
+        id: loadingToast,
+        position: 'top-center',
+        icon: '⚠️',
+        duration: 4000,
+      });
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   const markAsComplete = async () => {
+    if (!latestVideo.videoUrl) return;
+
+    const loadingToast = toast.loading('Updating your progress...', {
+      position: 'top-center',
+    });
+
     try {
       const res = await API.put(`/user/${user._id}/mark-complete`, {
         videoUrl: latestVideo.videoUrl
@@ -193,8 +240,25 @@ const Home = () => {
       }));
 
       updateProgress(updatedVideos);
+
+      toast.success(
+        updatedVideo.isCompleted 
+          ? 'Marked as completed! 🎉' 
+          : 'Removed from completed list',
+        {
+          id: loadingToast,
+          position: 'top-center',
+          duration: 3000,
+        }
+      );
+
     } catch (err) {
       console.error("Mark complete error", err);
+      toast.error('Failed to update status. Please try again.', {
+        id: loadingToast,
+        position: 'top-center',
+        icon: '⚠️',
+      });
     }
   };
 
@@ -440,7 +504,7 @@ const Home = () => {
               className='bg-white rounded-2xl shadow-md p-5 flex flex-col items-center gap-4'
             >
               <h1 className='font-bold text-lg sm:text-xl'>Learning Progress</h1>
-              <div className='flex items-center gap-2 bg-gradient-to-r from-orange-100 to-red-100 p-2 rounded-lg shadow-md transition duration-200 hover:shadow-lg w-1/2'>
+              <div className='flex items-center gap-2 bg-gradient-to-r from-orange-100 to-red-100 p-2 rounded-lg shadow-md transition duration-200 hover:shadow-lg w-1/2 md:w-40'>
                 <img src={firesvg} className='w-10 h-10' alt="" />
                 <div className='text-center'>
                   <h1 className='font-bold text-2xl'>{user?.history?.length || 0}</h1>
@@ -489,7 +553,9 @@ const Home = () => {
                     y: -5,
                     boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)"
                   }}
-                  onClick={() => setLatestVideo(video)}
+                  onClick={() => {
+                    setLatestVideo(video);
+                  }}
                   className='rounded-lg cursor-pointer'
                 >
                   <div className='flex'>
