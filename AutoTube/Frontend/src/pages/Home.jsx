@@ -77,6 +77,8 @@ const Home = () => {
   };
 
   useEffect(() => {
+    console.log(summaryLength)
+
     const fetchUser = async () => {
       if (!user || !user._id) {
         navigate("/");
@@ -171,6 +173,7 @@ const Home = () => {
       });
 
       const { summary: parsedSummary, keyPoints: parsedKeyPoints, qna: parsedQnA } = aiRes.data;
+      console.log(parsedSummary)
 
       const ytRes = await fetch(`https://www.youtube.com/oembed?url=${encodedUrl}&format=json`);
       const ytData = await ytRes.json();
