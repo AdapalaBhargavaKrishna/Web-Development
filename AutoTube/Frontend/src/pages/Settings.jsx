@@ -363,13 +363,14 @@ const Settings = () => {
                 <select 
                   className='flex items-center border rounded-xl px-3 py-2 w-full text-sm sm:text-base'
                   onChange={() => {
-                    toast('Theme preference saved', {
+                    toast('Dark mode is coming soon!', {
                       position: 'top-center',
-                      icon: '🎨',
+                      icon: '🌙',
+                      duration: 3000,
                     });
                   }}
                 >
-                  <option value="Lignt">Light</option>
+                  <option value="Light">Light</option>
                   <option value="Dark">Dark</option>
                 </select>
               </div>
