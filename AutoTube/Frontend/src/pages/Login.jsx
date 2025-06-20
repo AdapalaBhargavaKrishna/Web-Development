@@ -116,7 +116,7 @@ const Login = () => {
         className="w-full max-w-md"
       >
         {/* Logo and Title - Horizontal Layout */}
-        <motion.div 
+        <motion.div
           variants={itemVariants}
           className="flex items-center justify-center gap-4 mb-8"
         >
@@ -128,7 +128,7 @@ const Login = () => {
             <img src={logosvg} alt="Logo" className="w-12 h-12" />
           </motion.div>
           <div>
-            <motion.h1 
+            <motion.h1
               className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -136,7 +136,7 @@ const Login = () => {
             >
               AutoTube
             </motion.h1>
-            <motion.p 
+            <motion.p
               className="text-lg text-neutral-600"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -181,17 +181,17 @@ const Login = () => {
               disabled={isLoading}
               className="group relative flex items-center justify-center gap-3 w-full h-12 border rounded-xl bg-neutral-50 font-medium text-neutral-900 hover:bg-gray-100 transition mb-4"
             >
-              <motion.img 
-                src={googlelogo} 
-                alt="Google" 
+              <motion.img
+                src={googlelogo}
+                alt="Google"
                 className="w-5 h-5"
                 whileHover={{ rotate: 360 }}
                 transition={{ duration: 1 }}
               />
               <span>{isLoading ? "Signing in..." : "Continue with Google"}</span>
-              <motion.img 
-                src={arrowsvg} 
-                alt="Arrow" 
+              <motion.img
+                src={arrowsvg}
+                alt="Arrow"
                 className="absolute right-4 opacity-0 group-hover:opacity-100 transition"
                 initial={{ x: -10 }}
                 animate={{ x: 0 }}
@@ -200,7 +200,7 @@ const Login = () => {
             </motion.button>
 
             {/* Divider */}
-            <motion.div 
+            <motion.div
               className="flex items-center my-5"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
@@ -217,7 +217,7 @@ const Login = () => {
               className="mb-4"
             >
               <label className="block text-base font-semibold mb-1" htmlFor="email">Email Address</label>
-              <motion.div 
+              <motion.div
                 className="flex items-center border rounded-xl px-3 py-2 gap-2 hover:border-purple-400 focus-within:border-purple-500 transition"
                 whileHover={{ scale: 1.01 }}
               >
@@ -238,7 +238,7 @@ const Login = () => {
               className="mb-5"
             >
               <label className="block text-base font-semibold mb-1" htmlFor="password">Password</label>
-              <motion.div 
+              <motion.div
                 className="flex items-center border rounded-xl px-3 py-2 hover:border-purple-400 focus-within:border-purple-500 transition"
                 whileHover={{ scale: 1.01 }}
               >
@@ -287,15 +287,24 @@ const Login = () => {
                 whileHover={{ opacity: 0.1 }}
               />
             </motion.button>
-
+            {isLoading && (
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 2 }} // show after 2 seconds
+                className="text-sm text-center mt-4 text-red-500"
+              >
+                If this is taking too long, please refresh and try again.
+              </motion.p>
+            )}
             {/* Sign Up Link */}
             <motion.p
               variants={itemVariants}
               className="text-center text-neutral-600 mt-6"
             >
               Don't have an account?{' '}
-              <motion.a 
-                href="/Signup" 
+              <motion.a
+                href="/Signup"
                 className="text-blue-600 font-semibold hover:underline"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

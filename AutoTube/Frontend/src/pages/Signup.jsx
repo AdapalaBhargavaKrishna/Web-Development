@@ -9,9 +9,11 @@ import mailsvg from '../assets/svg/mail.svg';
 const Signup = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const res = await API.post('/user/signup', form);
       alert(res.data.msg);
@@ -19,8 +21,11 @@ const Signup = () => {
     } catch (err) {
       console.log(err);
       alert(err.response?.data?.msg || 'Signup Failed');
+    } finally {
+      setIsLoading(false);
     }
   };
+
 
   const fieldVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -152,6 +157,16 @@ const Signup = () => {
         >
           Create Account
         </motion.button>
+        {isLoading && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2 }}
+            className="text-sm text-center mt-4 text-red-500"
+          >
+            If this is taking too long, please refresh and try again.
+          </motion.p>
+        )}
 
         {/* Login Link */}
         <motion.p
