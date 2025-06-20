@@ -1,28 +1,31 @@
 # 🌐 Web Development Projects
 
 Welcome to my **Web Development** repository! 🚀  
-This repository is a collection of projects I’ve built while learning and exploring **HTML, CSS, JavaScript, React.js, MongoDB**, and more. Each project is a milestone in my full-stack web development journey.
+This repository is a collection of full-stack and frontend projects I’ve built while learning and exploring technologies like **HTML, CSS, JavaScript, React.js, MongoDB**, and more.
+
+Each project is a milestone in my journey as a developer — from static sites to interactive web apps powered by APIs, databases, and AI.
 
 ---
 
-## 📁 Projects
+## 📁 Featured Projects (High → Low)
 
-| Project Name                                                                                                                           | Tech Stack                                                 | Purpose / Description                                                                                                                                                             |
-| -------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [**AttendEz**](https://adapalabhargavakrishna.github.io/Web-Development/AttendEz/index.html)                                           | HTML, CSS, JavaScript, Node.js, Express.js, MongoDB, GSAP  | An all-in-one college management system with attendance tracking, academic reports, fee monitoring, announcements, and schedules — all integrated into a sleek and responsive UI. |
-| [**SafePass**](https://safepassx.netlify.app/)                                                                                         | React.js, Tailwind CSS, MongoDB, Node.js, Express.js        | A secure password manager with encrypted storage and a user-friendly interface to easily store, copy, and manage credentials safely.                                              |
-| [**MovieShelf**](https://movieshelf-bk.netlify.app/)                                                                                   | React.js, Tailwind CSS, Firebase, OMDB API                  | A feature-rich movie companion app allowing users to search, save, and organize favorite movies with Firebase authentication, ratings, trailers, and cast info.                   |
-| [**FileSwitch**](https://fileswitch.vercel.app/)                                                                                       | React.js, Tailwind CSS, FFmpeg.wasm, Framer Motion          | A modern file converter that allows users to convert image, audio, and video formats (like JPG to PNG, MP4 to MP3) directly in the browser. Features dark/light mode and animated UI. |
-| [**NewzX**](https://newzzx.netlify.app/)                                                                                               | React.js, Tailwind CSS, Framer Motion, API                  | A real-time news web app with topic filters, search, and dynamic content delivery. Responsive and modern UI tailored for trending headlines across various categories.            |
-| [**Get Me a Coffee**](https://attendance-calculator-tau.vercel.app/)                                                                   | Next.js, React.js, Tailwind CSS, MongoDB                    | A Patreon-inspired creator support platform featuring donations, messages, responsive UI, and engaging animations to enhance user experience.                                     |
-| [**RecipeMate**](https://recipemate-bk.netlify.app/)                                                                                   | React.js, Tailwind CSS, API Integration                     | A recipe discovery platform offering step-by-step cooking instructions, ingredients, and tutorial videos. API-driven with a clean, user-friendly UI.                              |
-| [**Attendance Calculator**](https://attendance-calculator-tau.vercel.app/)                                                             | HTML, CSS, JavaScript, Python, Flask                        | A Python Flask-powered web tool that helps students calculate required attendance to maintain minimum percentages. Features animated UI and clear input flow.                     |
-| [**TaskFocus**](https://taskfocus-bk.netlify.app/)                                                                                     | React.js, Tailwind CSS                                      | A minimalist task manager that helps users organize and prioritize daily tasks with a clean UI and smooth animations to improve workflow.                                         |
-| [**WeatherNow**](https://adapalabhargavakrishna.github.io/Web-Development/Weather/index.html)                                          | HTML, CSS, JavaScript, API                                  | A responsive weather app displaying real-time conditions, 5-day forecasts, temperature, wind speed, humidity, and sunrise/sunset timings with an intuitive interface.             |
-| [**X Clone**](https://adapalabhargavakrishna.github.io/Web-Development/X/index.html)                                                   | HTML, Tailwind CSS                                          | A responsive clone of X (formerly Twitter) featuring sidebars, post feeds, trending topics, and user interactions with smooth animations.                                         |
-| [**Spotify Clone**](https://adapalabhargavakrishna.github.io/Web-Development/spotify/spotify.html)                                     | HTML, CSS, JavaScript                                       | A sleek Spotify web player clone featuring custom-designed sidebars, playlist cards, and functional music playbar with animations.                                                |
-| [**Class Performance Dashboard**](https://adapalabhargavakrishna.github.io/Web-Development/Class%20Performance%20dashboard/class.html) | HTML, CSS, JavaScript                                       | A detailed dashboard tracking academic scores, attendance, and extracurricular involvement with performance predictions and interactive charts.                                   |
-| [**Netflix Clone**](https://adapalabhargavakrishna.github.io/Web-Development/Netflix/Netflix.html)                                     | HTML, CSS                                                  | A static front-end replica of Netflix's landing page, fully responsive and visually aligned with the official layout and styling.                                                 |
+| Project Name                                                                                                                           | Tech Stack                                                             | Description                                                                                                                                                                       |
+| -------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [**AutoTube**](https://autotubeai.netlify.app)                                                                                         | React.js, Tailwind CSS, Framer Motion, Node.js, Express.js, MongoDB, Firebase, Groq AI | 🎓 An AI-powered learning assistant that transforms YouTube videos into structured study content. Features include summarization, history tracking, Smart QnAs, and personal dashboards. |
+| [**AttendEz**](https://adapalabhargavakrishna.github.io/Web-Development/AttendEz/index.html)                                           | HTML, CSS, JavaScript, Node.js, Express.js, MongoDB, GSAP              | 🎓 A college management system with attendance tracking, academic reports, fee monitoring, announcements, and schedules — all wrapped in a clean and responsive UI.               |
+| [**SafePass**](https://safepassx.netlify.app/)                                                                                         | React.js, Tailwind CSS, MongoDB, Node.js, Express.js                   | 🔐 A secure password manager with encrypted storage, seamless credential handling, and a slick UI.                                                                                |
+| [**MovieShelf**](https://movieshelf-bk.netlify.app/)                                                                                   | React.js, Tailwind CSS, Firebase, OMDB API                             | 🎬 A personal movie tracker where users can search, rate, and organize films. Includes Firebase Auth, trailers, cast info, and watchlists.                                       |
+| [**FileSwitch**](https://fileswitch.vercel.app/)                                                                                       | React.js, Tailwind CSS, FFmpeg.wasm, Framer Motion                     | 🔄 A powerful in-browser file converter for images, videos, and audio. Features drag-and-drop upload, dark/light mode toggle, and FFmpeg.wasm support.                           |
+| [**NewzX**](https://newzzx.netlify.app/)                                                                                               | React.js, Tailwind CSS, Framer Motion, API                             | 🗞️ A dynamic news app with real-time headlines, category filters, search functionality, and smooth animations.                                                                   |
+| [**Get Me a Coffee**](https://attendance-calculator-tau.vercel.app/)                                                                   | Next.js, React.js, Tailwind CSS, MongoDB                               | ☕ A Patreon-style donation platform with creator profiles, messages, and animation-enhanced design.                                                                             |
+| [**RecipeMate**](https://recipemate-bk.netlify.app/)                                                                                   | React.js, Tailwind CSS, API Integration                                | 🍳 A recipe discovery platform with step-by-step cooking instructions, ingredients, and food video tutorials.                                                                   |
+| [**Attendance Calculator**](https://attendance-calculator-tau.vercel.app/)                                                             | HTML, CSS, JavaScript, Python, Flask                                   | 📊 A simple Flask-based app that helps students track how many classes they need to attend to meet the required attendance percentage.                                            |
+| [**TaskFocus**](https://taskfocus-bk.netlify.app/)                                                                                     | React.js, Tailwind CSS                                                 | ✅ A clean, animated task manager app for staying focused and productive.                                                                                                        |
+| [**WeatherNow**](https://adapalabhargavakrishna.github.io/Web-Development/Weather/index.html)                                          | HTML, CSS, JavaScript, API                                             | 🌤️ A weather app that shows real-time conditions, forecasts, humidity, wind speed, and sunrise/sunset timings.                                                                 |
+| [**X Clone**](https://adapalabhargavakrishna.github.io/Web-Development/X/index.html)                                                   | HTML, Tailwind CSS                                                     | 🐦 A responsive clone of X (formerly Twitter) with sidebars, trending feeds, and animation effects.                                                                             |
+| [**Spotify Clone**](https://adapalabhargavakrishna.github.io/Web-Development/spotify/spotify.html)                                     | HTML, CSS, JavaScript                                                  | 🎵 A static Spotify replica featuring stylish UI, sidebar nav, and a functional playbar.                                                                                        |
+| [**Class Performance Dashboard**](https://adapalabhargavakrishna.github.io/Web-Development/Class%20Performance%20dashboard/class.html) | HTML, CSS, JavaScript                                                  | 📚 A dashboard for visualizing academic performance, attendance, and extracurricular involvement using interactive charts.                                                       |
+| [**Netflix Clone**](https://adapalabhargavakrishna.github.io/Web-Development/Netflix/Netflix.html)                                     | HTML, CSS                                                              | 🎥 A pixel-perfect, responsive clone of the Netflix landing page for UI/UX practice.                                                                                             |
 
 > 📌 **More exciting projects will be added soon!** Stay tuned. 🎯
 
@@ -30,20 +33,23 @@ This repository is a collection of projects I’ve built while learning and expl
 
 ## 🚀 Tech Stack
 
-- **Frontend:**  
-  HTML, CSS, JavaScript, React.js, Next.js, Tailwind CSS, Framer Motion
+**Frontend:**
+- HTML, CSS, JavaScript
+- React.js, Next.js
+- Tailwind CSS, Framer Motion
 
-- **Backend:**  
-  Node.js, Express.js, Flask, Python, Java
+**Backend:**
+- Node.js, Express.js
+- Flask, Python
+- Java (for backend basics)
 
-- **Database:**  
-  MongoDB, MySQL, Firebase
+**Database:**
+- MongoDB, Firebase, MySQL
 
-- **DevOps & Tools:**  
-  Git, GitHub, npm, VS Code, Postman, Vercel, Netlify, Cloud
-
-- **API & Media:**  
-  API Integration, FFmpeg.wasm
+**Other Tools:**
+- Git, GitHub, Postman, VS Code
+- Netlify, Vercel
+- REST APIs
 
 ---
 
@@ -53,3 +59,4 @@ This repository is a collection of projects I’ve built while learning and expl
 
 ```bash
 git clone https://github.com/AdapalaBhargavaKrishna/Web-Development.git
+cd Web-Development
