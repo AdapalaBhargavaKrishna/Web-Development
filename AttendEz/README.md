@@ -72,18 +72,6 @@ Visit `http://localhost:3000`
 
 ---
 
-## 🤝 Contributing
-
-Pull requests are welcome! For major changes, please open an issue first to discuss what you’d like to change or improve.
-
----
-
-## 📄 License
-
-This project is open source under the [MIT License](LICENSE).
-
----
-
 ## 🙌 Feedback
 
 Have suggestions or want to collaborate?  
