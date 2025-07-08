@@ -1,4 +1,3 @@
-import React from 'react'
 import streamSync from '../assets/streamSync.svg'
 import flashsvg from '../assets/flash.svg'
 import userssvg from '../assets/users.svg'
@@ -9,10 +8,77 @@ import globesvg from '../assets/globe.svg'
 import userswsvg from '../assets/usersw.svg'
 import playsvg from '../assets/play.svg'
 import playwsvg from '../assets/playw.svg'
+import API from '../api.jsx'
 import { useTheme } from '../context/ThemeContext.jsx'
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react'
 
 const Home = () => {
+  const navigate = useNavigate();
+  const [createName, setCreateName] = useState('');
+  const [joinName, setJoinName] = useState('');
+  const [joinCode, setJoinCode] = useState('');
   const { isDark, toggleTheme } = useTheme();
+
+  const generateRoomCode = () => {
+    return Math.random().toString(36).substring(2, 8).toUpperCase();
+  };
+
+  const handleCreateRoom = async () => {
+    if (!createName.trim()) return alert("Enter your name");
+
+    const code = generateRoomCode();
+    console.log(code)
+    try {
+      const res = await API.post('/rooms', {
+        roomId: code,
+        host: createName
+      });
+
+      localStorage.setItem('username', createName);
+      localStorage.setItem('isHost', true);
+      localStorage.setItem('roomCode', code);
+
+      navigate(`/room/${code}`);
+    } catch (err) {
+      console.error('Room creation failed:', err);
+      alert(err.response?.data?.message || 'Something went wrong');
+    }
+  };
+
+  const handleJoinRoom = async () => {
+    if (!joinName.trim() || !joinCode.trim()) {
+      alert("Fill in all fields");
+      return;
+    }
+
+    try {
+      const roomId = joinCode.toUpperCase();
+
+      const res = await API.post('/rooms/join', {
+        roomId,
+        name: joinName.trim()
+      });
+
+      // Store session info in localStorage
+      localStorage.setItem('username', joinName.trim());
+      localStorage.setItem('isHost', false);
+      localStorage.setItem('roomCode', roomId);
+
+      // Navigate to the room
+      navigate(`/room/${roomId}`);
+    } catch (err) {
+      console.error('Room join failed:', err);
+
+      // If room doesn't exist, navigate to notfound page with the room code
+      if (err.response?.status === 404) {
+        navigate(`/notfound/${joinCode.toUpperCase()}`);
+      } else {
+        alert(err.response?.data?.error || 'Something went wrong');
+      }
+    }
+  };
+
 
   return (
     <div className='bg-purple-50/50 dark:bg-zinc-950 min-h-screen'>
@@ -79,9 +145,13 @@ const Home = () => {
             <input
               type="text"
               placeholder="Enter your name"
+              value={createName}
+              onChange={(e) => setCreateName(e.target.value)}
               className="w-full p-3 sm:p-4 rounded-lg sm:rounded-xl bg-white dark:bg-neutral-900 text-black dark:text-white placeholder-zinc-500 focus:outline-none focus:ring-2 border dark:border-neutral-700 focus:ring-purple-400 transition text-sm sm:text-base"
             />
-            <button className="w-full bg-gradient-to-r from-purple-500 to-pink-400 hover:from-purple-600 hover:to-pink-500 text-white font-medium sm:font-semibold py-2 sm:py-2.5 rounded-lg sm:rounded-xl shadow transition duration-300 text-sm sm:text-base">
+            <button
+              onClick={handleCreateRoom}
+              className="w-full bg-gradient-to-r from-purple-500 to-pink-400 hover:from-purple-600 hover:to-pink-500 text-white font-medium sm:font-semibold py-2 sm:py-2.5 rounded-lg sm:rounded-xl shadow transition duration-300 text-sm sm:text-base">
               Create Room
             </button>
           </div>
@@ -97,14 +167,20 @@ const Home = () => {
             <input
               type="text"
               placeholder="Enter your name"
+              value={joinName}
+              onChange={(e) => setJoinName(e.target.value)}
               className="w-full p-3 sm:p-4 rounded-lg sm:rounded-xl bg-white dark:bg-neutral-900 text-black dark:text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-purple-400 border dark:border-neutral-700 transition text-sm sm:text-base"
             />
             <input
               type="text"
               placeholder="Enter room code"
+              value={joinCode}
+              onChange={(e) => setJoinCode(e.target.value)}
               className="w-full p-3 sm:p-4 rounded-lg sm:rounded-xl bg-white dark:bg-neutral-900 text-black dark:text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-purple-400 border dark:border-neutral-700 transition text-sm sm:text-base"
             />
-            <button className="w-full bg-gradient-to-r from-purple-500 to-pink-400 hover:from-purple-600 hover:to-pink-500 text-white font-medium sm:font-semibold py-2 sm:py-2.5 rounded-lg sm:rounded-xl shadow transition duration-300 text-sm sm:text-base">
+            <button
+              onClick={handleJoinRoom}
+              className="w-full bg-gradient-to-r from-purple-500 to-pink-400 hover:from-purple-600 hover:to-pink-500 text-white font-medium sm:font-semibold py-2 sm:py-2.5 rounded-lg sm:rounded-xl shadow transition duration-300 text-sm sm:text-base">
               Join Room
             </button>
           </div>
