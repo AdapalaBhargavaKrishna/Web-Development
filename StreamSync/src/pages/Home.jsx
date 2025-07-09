@@ -35,9 +35,9 @@ const Home = () => {
         host: createName
       });
 
-      localStorage.setItem('username', createName);
-      localStorage.setItem('isHost', true);
-      localStorage.setItem('roomCode', code);
+      sessionStorage.setItem('username', createName);
+      sessionStorage.setItem('isHost', true);
+      sessionStorage.setItem('roomCode', code);
 
       navigate(`/room/${code}`);
     } catch (err) {
@@ -60,17 +60,14 @@ const Home = () => {
         name: joinName.trim()
       });
 
-      // Store session info in localStorage
-      localStorage.setItem('username', joinName.trim());
-      localStorage.setItem('isHost', false);
-      localStorage.setItem('roomCode', roomId);
+      sessionStorage.setItem('username', joinName.trim());
+      sessionStorage.setItem('isHost', false);
+      sessionStorage.setItem('roomCode', roomId);
 
-      // Navigate to the room
       navigate(`/room/${roomId}`);
     } catch (err) {
       console.error('Room join failed:', err);
 
-      // If room doesn't exist, navigate to notfound page with the room code
       if (err.response?.status === 404) {
         navigate(`/notfound/${joinCode.toUpperCase()}`);
       } else {

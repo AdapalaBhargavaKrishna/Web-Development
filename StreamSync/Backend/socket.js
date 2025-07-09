@@ -5,14 +5,16 @@ export const socketHandler = (io) => {
     io.on('connection', (socket) => {
         console.log('client connected:', socket.id);
 
-        socket.on('joinRoom', ({roomId, user}) => {
+        socket.on('joinRoom', ({ roomId, user }) => {
             socket.join(roomId);
             console.log(`User ${socket.id} joined room ${roomId}`);
 
             if (!roomUsers[roomId]) roomUsers[roomId] = [];
             const exists = roomUsers[roomId].some(u => u.name === user);
-            if (!exists) roomUsers[roomId].push({ name: user, isHost: false });
-
+            if (!exists) {
+                const isHost = roomUsers[roomId].length === 0;
+                roomUsers[roomId].push({ name: user, isHost });
+            }
             io.to(roomId).emit('roomData', { users: roomUsers[roomId] });
         });
 
