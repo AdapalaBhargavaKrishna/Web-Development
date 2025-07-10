@@ -100,4 +100,19 @@ router.post('/leave', async (req, res) => {
     }
 })
 
+router.post('/kick', async (req, res) => {
+    const { roomId, target } = req.body;
+    try {
+        const room = await Room.findOne({ roomId });
+        if (!room) return res.status(404).json({ error: 'Room not found' });
+
+        room.users = room.users.filter(user => user.name !== target);
+        await room.save();
+        res.status(200).json({message: `${target} removed from room`})
+    } catch (error) {
+        console.log('Kick error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+})
+
 export default router
