@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: ["https://streamsyncc.vercel.app"],
     methods: ['GET', 'POST']
   }
 });

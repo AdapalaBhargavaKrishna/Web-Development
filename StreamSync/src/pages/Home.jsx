@@ -1,4 +1,4 @@
-import streamSync from '../assets/streamSync.svg'
+import streamSync from '../assets/streamsync.svg'
 import flashsvg from '../assets/flash.svg'
 import userssvg from '../assets/users.svg'
 import videosvg from '../assets/video.svg'
