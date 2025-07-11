@@ -53,7 +53,7 @@ export const MobileView = ({
             <div className="bg-white dark:bg-neutral-900 rounded-lg shadow mb-2">
                 <div className="h-[35vh] w-full rounded-t-lg overflow-hidden">
                     <YouTube
-                        videoId={extractVideoId(youtubeVideo) || '5RMQCb7QXGU'}
+                        videoId={extractVideoId(youtubeVideo) || 'QucA4W4RBL0'}
                         onReady={handlePlayerReady}
                         onStateChange={handleStateChange}
                         opts={{

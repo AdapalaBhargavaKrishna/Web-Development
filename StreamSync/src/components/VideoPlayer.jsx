@@ -17,7 +17,7 @@ export const VideoPlayer = ({ youtubeVideo, handlePlayerReady, handleStateChange
     >
       <div className='bg-white dark:bg-neutral-900 rounded-lg shadow-xl h-[40vh] sm:h-[50vh] md:h-[58vh] overflow-hidden'>
         <YouTube
-          videoId={extractVideoId(youtubeVideo) || '5RMQCb7QXGU'}
+          videoId={extractVideoId(youtubeVideo) || 'QucA4W4RBL0'}
           onReady={handlePlayerReady}
           onStateChange={(e) => handleStateChange(e, isHost)}
           opts={{
