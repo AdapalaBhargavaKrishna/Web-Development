@@ -1,16 +1,8 @@
 import { motion } from 'framer-motion';
-import copysvg from '../assets/copy.svg';
-import deletesvg from '../assets/delete.svg';
-import exitsvg from '../assets/exit.svg';
+
 import cancelsvg from '../assets/cancel.svg';
-import removesvg from '../assets/remove.svg';
-import lightModeIcon from '../assets/lightmode.svg';
-import darkModeIcon from '../assets/darkmode.svg';
-import userssvg from '../assets/users.svg';
-import hostsvg from '../assets/host.svg';
 import searchsvg from '../assets/search.svg';
 import linksvg from '../assets/link.svg';
-import chatsvg from '../assets/chat.svg';
 
 export const VideoSearch = ({
   activeTab,
@@ -130,7 +122,7 @@ export const VideoSearch = ({
               className="p-1 rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-600 transition"
               aria-label="Clear search results"
             >
-              <img src={cancelsvg} className="w-5 h-5" alt="Cancel" />
+              <img src={cancelsvg} className="w-5 h-5 dark:invert" alt="Cancel" />
             </motion.button>
           </div>
           <ul className='space-y-3 max-h-[40vh] overflow-y-auto custom-scroll'>

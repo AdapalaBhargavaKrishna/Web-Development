@@ -1,16 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import copysvg from '../assets/copy.svg';
 import deletesvg from '../assets/delete.svg';
 import exitsvg from '../assets/exit.svg';
-import cancelsvg from '../assets/cancel.svg';
-import removesvg from '../assets/remove.svg';
-import lightModeIcon from '../assets/lightmode.svg';
-import darkModeIcon from '../assets/darkmode.svg';
-import userssvg from '../assets/users.svg';
-import hostsvg from '../assets/host.svg';
-import searchsvg from '../assets/search.svg';
-import linksvg from '../assets/link.svg';
-import chatsvg from '../assets/chat.svg';
 
 export const ExitModal = ({ showExitModal, setShowExitModal, isHost, handleExitConfirm }) => {
   return (
@@ -58,7 +48,7 @@ export const ExitModal = ({ showExitModal, setShowExitModal, isHost, handleExitC
                 </motion.div>
 
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {isHost ? "Delete this room?" : "Leave the party?"}
+                  {isHost ? "Delete this room?" : "Leave the room?"}
                 </h3>
               </motion.div>
 

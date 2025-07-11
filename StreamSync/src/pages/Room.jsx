@@ -7,7 +7,6 @@ import { useTheme } from '../context/ThemeContext';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// Import components
 import { RoomHeader } from '../components/RoomHeader.jsx';
 import { VideoPlayer } from '../components/VideoPlayer';
 import { VideoSearch } from '../components/VideoSearch';
@@ -15,19 +14,7 @@ import { ChatSection } from '../components/ChatSection';
 import { UsersList } from '../components/UsersList';
 import { ExitModal } from '../components/ExitModal';
 import { MobileView } from '../components/MobileView';
-
-// Import assets
-import copysvg from '../assets/copy.svg';
-import deletesvg from '../assets/delete.svg';
-import exitsvg from '../assets/exit.svg';
-import cancelsvg from '../assets/cancel.svg';
-import removesvg from '../assets/remove.svg';
-import lightModeIcon from '../assets/lightmode.svg';
-import darkModeIcon from '../assets/darkmode.svg';
 import userssvg from '../assets/users.svg';
-import hostsvg from '../assets/host.svg';
-import searchsvg from '../assets/search.svg';
-import linksvg from '../assets/link.svg';
 import chatsvg from '../assets/chat.svg';
 
 const Room = () => {
@@ -71,9 +58,16 @@ const Room = () => {
   }, [activeTab]);
 
   useEffect(() => {
-    socket.current = io('http://localhost:5000');
+    socket.current = io(import.meta.env.VITE_SOCKET_SERVER_URL);
 
     const username = sessionStorage.getItem('username');
+    const roomCode = sessionStorage.getItem('roomCode');
+
+    if (!username || !roomCode) {
+      sessionStorage.clear();
+      navigate(`/notfound/${roomId}`);
+      return;
+    }
     socket.current.emit('joinRoom', { roomId, user: username });
 
     socket.current.on('chatMessage', (data) => {
@@ -183,13 +177,6 @@ const Room = () => {
     toast.success('Video added', { position: 'top-center' });
   };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(roomId);
-    setCopied(true);
-    toast.success('Copied!', { position: 'top-center' });
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   const handlePlayerReady = (event) => {
     playerRef.current = event.target;
     setIsPlayerReady(true);
@@ -215,7 +202,7 @@ const Room = () => {
       } catch (error) {
         console.error("Fetch error:", error);
         toast.error("Failed to fetch", { position: 'top-center' });
-        setTimeout(() => navigate('/'), 2000);
+        navigate(`/notfound/${roomId}`)
       }
     };
     fetchRoomData();
@@ -236,7 +223,7 @@ const Room = () => {
     socket.current?.on('kicked', () => {
       toast.error("You were removed from the room", { position: 'top-center' });
       sessionStorage.clear();
-      setTimeout(() => navigate(`/notfound/${roomId}`), 2000); // 👈 Redirect to /notfound
+      setTimeout(() => navigate(`/notfound/${roomId}`), 2000);
     });
 
     return () => socket.current?.off('kicked');
@@ -263,32 +250,29 @@ const Room = () => {
     }
   };
 
-  const fadeIn = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.3 } } };
-  const slideUp = { hidden: { y: 20, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.3 } } };
-
   return (
     <div className='bg-purple-50 dark:bg-neutral-950 min-h-screen'>
       <Toaster position="top-center" />
 
-      <RoomHeader 
-        roomId={roomId} 
-        roomData={roomData} 
-        copied={copied} 
-        setCopied={setCopied} 
-        setShowExitModal={setShowExitModal} 
-        toggleTheme={toggleTheme} 
-        isDark={isDark} 
+      <RoomHeader
+        roomId={roomId}
+        roomData={roomData}
+        copied={copied}
+        setCopied={setCopied}
+        setShowExitModal={setShowExitModal}
+        toggleTheme={toggleTheme}
+        isDark={isDark}
       />
 
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-7 pb-20 lg:pb-0'>
         {!isMobile ? (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="col-span-1 lg:col-span-2 flex flex-col gap-6">
-              <VideoPlayer 
-                youtubeVideo={youtubeVideo} 
-                handlePlayerReady={handlePlayerReady} 
-                handleStateChange={handleStateChange} 
-                isHost={isHost} 
+              <VideoPlayer
+                youtubeVideo={youtubeVideo}
+                handlePlayerReady={handlePlayerReady}
+                handleStateChange={handleStateChange}
+                isHost={isHost}
               />
 
               <VideoSearch
@@ -315,7 +299,7 @@ const Room = () => {
               transition={{ delay: 0.2 }}
               className="col-span-1"
             >
-              <div className="bg-white dark:bg-neutral-800 rounded-lg shadow h-full flex flex-col">
+              <div className="rounded-lg h-full flex flex-col">
                 <div className="flex border-b dark:border-neutral-700">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
@@ -341,22 +325,22 @@ const Room = () => {
                   <motion.div
                     className={`absolute inset-0 transition-all duration-300 ease-in-out ${activeTab === 'chat' ? 'translate-x-0' : '-translate-x-full'}`}
                   >
-                    <ChatSection 
-                      messages={messages} 
-                      messageInput={messageInput} 
-                      setMessageInput={setMessageInput} 
-                      sendMessage={sendMessage} 
-                      messagesEndRef={messagesEndRef} 
+                    <ChatSection
+                      messages={messages}
+                      messageInput={messageInput}
+                      setMessageInput={setMessageInput}
+                      sendMessage={sendMessage}
+                      messagesEndRef={messagesEndRef}
                     />
                   </motion.div>
 
                   <motion.div
                     className={`absolute inset-0 transition-all duration-300 ease-in-out ${activeTab === 'users' ? 'translate-x-0' : 'translate-x-full'}`}
                   >
-                    <UsersList 
-                      roomData={roomData} 
-                      isHost={isHost} 
-                      handleKick={handleKick} 
+                    <UsersList
+                      roomData={roomData}
+                      isHost={isHost}
+                      handleKick={handleKick}
                     />
                   </motion.div>
                 </div>
@@ -395,11 +379,11 @@ const Room = () => {
         )}
       </div>
 
-      <ExitModal 
-        showExitModal={showExitModal} 
-        setShowExitModal={setShowExitModal} 
-        isHost={isHost} 
-        handleExitConfirm={handleExitConfirm} 
+      <ExitModal
+        showExitModal={showExitModal}
+        setShowExitModal={setShowExitModal}
+        isHost={isHost}
+        handleExitConfirm={handleExitConfirm}
       />
     </div>
   );

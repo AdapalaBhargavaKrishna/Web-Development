@@ -2,17 +2,8 @@ import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import toast from 'react-hot-toast';
 import copysvg from '../assets/copy.svg';
-import deletesvg from '../assets/delete.svg';
-import exitsvg from '../assets/exit.svg';
-import cancelsvg from '../assets/cancel.svg';
-import removesvg from '../assets/remove.svg';
 import lightModeIcon from '../assets/lightmode.svg';
 import darkModeIcon from '../assets/darkmode.svg';
-import userssvg from '../assets/users.svg';
-import hostsvg from '../assets/host.svg';
-import searchsvg from '../assets/search.svg';
-import linksvg from '../assets/link.svg';
-import chatsvg from '../assets/chat.svg';
 
 export const RoomHeader = ({ roomId, roomData, copied, setCopied, setShowExitModal, toggleTheme, isDark }) => {
   const handleCopy = () => {
@@ -27,7 +18,7 @@ export const RoomHeader = ({ roomId, roomData, copied, setCopied, setShowExitMod
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.3 }}
-      className="bg-white dark:bg-black flex flex-col sm:flex-row items-center justify-between px-4 sm:px-8 md:px-12 lg:px-20 xl:px-40 py-4 dark:border-zinc-800 transition-colors duration-300 sticky top-0 z-20"
+      className="bg-white dark:bg-black flex flex-col sm:flex-row items-center justify-between px-4 sm:px-8 md:px-12 lg:px-20 xl:px-40 py-4 dark:border-zinc-800 transition-colors duration-300 top-0 z-20"
     >
       <div className="text-center sm:text-left mb-3 sm:mb-0">
         <motion.h1
@@ -46,7 +37,7 @@ export const RoomHeader = ({ roomId, roomData, copied, setCopied, setShowExitMod
           onClick={handleCopy}
           className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-800 text-zinc-800 dark:text-white rounded-lg text-sm transition"
         >
-          <img src={copysvg} alt="" className="w-4 h-4" />
+          <img src={copysvg} alt="" className="w-4 h-4 dark:invert" />
           {copied ? "Copied!" : "Copy Code"}
         </motion.button>
 

@@ -1,20 +1,10 @@
 import { motion } from 'framer-motion';
-import copysvg from '../assets/copy.svg';
-import deletesvg from '../assets/delete.svg';
-import exitsvg from '../assets/exit.svg';
-import cancelsvg from '../assets/cancel.svg';
 import removesvg from '../assets/remove.svg';
-import lightModeIcon from '../assets/lightmode.svg';
-import darkModeIcon from '../assets/darkmode.svg';
-import userssvg from '../assets/users.svg';
 import hostsvg from '../assets/host.svg';
-import searchsvg from '../assets/search.svg';
-import linksvg from '../assets/link.svg';
-import chatsvg from '../assets/chat.svg';
 
 export const UsersList = ({ roomData, isHost, handleKick }) => {
   return (
-    <div className="h-full overflow-y-auto p-4 custom-scroll">
+    <div className="bg-white dark:bg-neutral-900 h-[70vh] md:max-h-[80vh] max-h-[50vh] overflow-y-auto p-4 custom-scroll rounded-b-2xl">
       {roomData?.users?.length > 0 ? (
         <ul className='grid gap-3'>
           {roomData.users.map((user, index) => {
@@ -26,7 +16,7 @@ export const UsersList = ({ roomData, isHost, handleKick }) => {
                 animate={{ opacity: 1, x: 0 }}
                 whileHover={{ scale: 1.01 }}
                 transition={{ delay: index * 0.05 }}
-                className="flex items-center gap-3 bg-neutral-50 dark:bg-neutral-700 p-3 rounded-xl shadow-sm"
+                className="flex items-center gap-3 bg-neutral-50 dark:bg-neutral-800 p-3 rounded-xl shadow-sm"
               >
                 <motion.div
                   whileHover={{ rotate: 5 }}

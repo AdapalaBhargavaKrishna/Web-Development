@@ -121,17 +121,16 @@ const Home = () => {
       return;
     }
 
+    const roomId = joinCode.toUpperCase();
+    const loadingToast = toast.loading('Joining room...', {
+      position: "top-right",
+      style: {
+        background: isDark ? '#18181b' : '#fff',
+        color: isDark ? '#fff' : '#000',
+        border: isDark ? '1px solid #3f3f46' : '1px solid #e4e4e7'
+      }
+    });
     try {
-      const roomId = joinCode.toUpperCase();
-      const loadingToast = toast.loading('Joining room...', {
-        position: "top-right",
-        style: {
-          background: isDark ? '#18181b' : '#fff',
-          color: isDark ? '#fff' : '#000',
-          border: isDark ? '1px solid #3f3f46' : '1px solid #e4e4e7'
-        }
-      });
-
       const res = await API.post('/rooms/join', {
         roomId,
         name: joinName.trim()
@@ -156,6 +155,15 @@ const Home = () => {
       console.error('Room join failed:', err);
 
       if (err.response?.status === 404) {
+        toast.error(err.response?.data?.error || 'Room not found', {
+        id: loadingToast,
+        position: "top-right",
+        style: {
+          background: isDark ? '#18181b' : '#fff',
+          color: isDark ? '#fff' : '#000',
+          border: isDark ? '1px solid #3f3f46' : '1px solid #e4e4e7'
+        }
+      });
         navigate(`/notfound/${joinCode.toUpperCase()}`);
       } else {
         toast.error(err.response?.data?.error || 'Failed to join room', {
@@ -201,13 +209,14 @@ const Home = () => {
           <motion.a
             whileHover={{ scale: 1.05 }}
             href="#about"
-            className="text-zinc-800 dark:text-zinc-200 hover:underline hover:text-purple-500 dark:hover:text-purple-400 transition-all text-sm font-medium p-2 sm:p-3 rounded-full bg-neutral-100 dark:bg-neutral-900"
+            className="hidden sm:inline-flex text-zinc-800 dark:text-zinc-200 hover:underline hover:text-purple-500 dark:hover:text-purple-400 transition-all text-sm font-medium p-2 sm:p-3 rounded-full bg-neutral-100 dark:bg-neutral-900"
           >
             About
           </motion.a>
         </div>
       </motion.nav>
 
+      {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -232,6 +241,7 @@ const Home = () => {
         </motion.h1>
       </motion.div>
 
+      {/* Features and Room Actions */}
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -244,11 +254,13 @@ const Home = () => {
         >
           Create or join a room to watch YouTube videos in perfect sync with friends.
         </motion.h2>
+        
+        {/* Feature Highlights */}
         <motion.div
           variants={itemVariants}
-          className='mt-3 sm:mt-5 flex max-w-full overflow-x-auto sm:overflow-visible pb-2 sm:pb-0'
+          className='mt-3 sm:mt-5 flex justify-center w-full'
         >
-          <ul className='flex items-center gap-4 sm:gap-6 md:gap-10 px-2 sm:px-0'>
+          <ul className='flex flex-wrap justify-center gap-3 sm:gap-6 md:gap-10 px-2 sm:px-0'>
             <motion.li
               whileHover={{ scale: 1.05 }}
               className='dark:text-neutral-200 text-black flex items-center gap-1 sm:gap-2 text-sm sm:text-base'
@@ -270,13 +282,15 @@ const Home = () => {
           </ul>
         </motion.div>
 
+        {/* Room Creation/Join Cards */}
         <motion.div
           variants={containerVariants}
           className="flex flex-col sm:flex-row justify-center mt-8 sm:mt-14 gap-6 sm:gap-8 md:gap-14 px-4 w-full max-w-6xl"
         >
+          {/* Create Room Card */}
           <motion.div
             variants={itemVariants}
-            whileHover="hover"
+            whileHover={{ y: -5 }}
             className="flex flex-col items-center bg-white dark:bg-neutral-900 p-5 sm:p-7 rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl w-full sm:w-[20rem] md:w-[22rem] space-y-3 sm:space-y-4 transition-all duration-300"
           >
             <motion.div
@@ -307,9 +321,10 @@ const Home = () => {
             </motion.button>
           </motion.div>
 
+          {/* Join Room Card */}
           <motion.div
             variants={itemVariants}
-            whileHover="hover"
+            whileHover={{ y: -5 }}
             className="flex flex-col items-center bg-white dark:bg-neutral-900 p-5 sm:p-7 rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl w-full sm:w-[20rem] md:w-[22rem] space-y-3 sm:space-y-4 transition-all duration-300"
           >
             <motion.div
@@ -350,6 +365,7 @@ const Home = () => {
         </motion.div>
       </motion.div>
 
+      {/* About Section */}
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -372,6 +388,7 @@ const Home = () => {
             </p>
           </motion.div>
 
+          {/* Features Grid */}
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -403,6 +420,7 @@ const Home = () => {
             ))}
           </motion.div>
 
+          {/* How It Works */}
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
