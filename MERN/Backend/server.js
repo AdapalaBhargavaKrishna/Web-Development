@@ -18,11 +18,13 @@ app.get("/", (req, res) => {
 
 // CREATE
 
-app.post("/videos", (req, res) => {
+app.post("/videos", (req, res, next) => {
   const video = req.body;
 
   if (!video || !video.title || !video.duration) {
-    return res.status(400).json({ message: "Invalid video data" });
+    const err = new Error("Invalid Video Data.");
+    err.statusCode = 400;
+    return next(err);
   }
 
   const newId = videos.length ? videos[videos.length - 1].id + 1 : 1;
@@ -33,27 +35,31 @@ app.post("/videos", (req, res) => {
 
 // READ
 
-app.get("/videos", (req, res) => {
+app.get("/videos", (req, res, next) => {
   if (!videos.length) {
-    return res.status(404).json({ message: "No videos found" });
+    const err = new Error("No video found.");
+    err.statusCode = 404;
+    return next(err);
   }
   res.json(videos);
 });
 
-app.get("/videos/:id", (req, res) => {
+app.get("/videos/:id", (req, res, next) => {
   const videoId = parseInt(req.params.id);
 
   const video = videos.find((v) => v.id === videoId);
   if (video) {
     res.json(video);
   } else {
-    res.status(404).json({ message: "Video not found", id: videoId });
+    const err = new Error("No video found.");
+    err.statusCode = 404;
+    return next(err);
   }
 });
 
 // UPDATE
 
-app.put("/videos/:id", (req, res) => {
+app.put("/videos/:id", (req, res, next) => {
   const videoId = parseInt(req.params.id);
   const updatedVideo = req.body;
 
@@ -61,28 +67,44 @@ app.put("/videos/:id", (req, res) => {
 
   if (video) {
     if (!updatedVideo.title && !updatedVideo.duration) {
-      return res.status(400).json({ message: "Nothing to update" });
+      const err = new Error("Nothing to update.");
+      err.statusCode = 400;
+      return next(err);
     }
     video.title = updatedVideo.title || video.title;
     video.duration = updatedVideo.duration || video.duration;
     res.json({ message: "Video updated", video });
   } else {
-    res.status(404).json({ message: "Video not found", id: videoId });
+    const err = new Error("No video found.");
+    err.statusCode = 404;
+    return next(err);
   }
 });
 
 // DELETE
 
-app.delete("/videos/:id", (req, res) => {
+app.delete("/videos/:id", (req, res, next) => {
   const videoId = parseInt(req.params.id);
   let video = videos.find((v) => v.id === videoId);
 
   if (!video) {
-    return res.status(404).json({ message: "Video not found", id: videoId });
+    const err = new Error("No video found.");
+    err.statusCode = 404;
+    return next(err);
   }
 
   videos = videos.filter((v) => v.id !== videoId);
   res.json({ message: "Video deleted", id: videoId, video });
+});
+
+app.use((err, req, res, next) => {
+  console.log(err.stack);
+
+  const statusCode = err.statusCode || 500;
+  res.status(statusCode).json({
+    success: false,
+    message: err.message || "Something went wrong!",
+  });
 });
 
 app.listen(PORT, () => {
