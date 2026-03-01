@@ -5,17 +5,17 @@ async function main() {
     // -----------------------CREATE----------------------- 
 
     // Create user with profile
-    // const user = await prisma.user.create({
-    //     data: {
-    //         name: "Bob",
-    //         email: "bob@gmail.com",
-    //         profile: {
-    //             create: { bio: "I love coding!" }
-    //         }
-    //     },
-    //     include: { profile: true }
-    // })
-    // console.log(user)
+    const user = await prisma.user.create({
+        data: {
+            name: "Bob",
+            email: "bob@gmail.com",
+            profile: {
+                create: { bio: "I love coding!" }
+            }
+        },
+        include: { profile: true }
+    })
+    console.log(user)
 
 }
 
