@@ -20,6 +20,7 @@ async function main() {
         include: { posts: true }
     })
     console.log(userWithPosts)
+
     // Create a post and connect to existing user
     const newPost = await prisma.post.create({
         data: {
