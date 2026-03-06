@@ -70,7 +70,6 @@ async function main() {
             }
         }
     })
-
 }
 
 main()
