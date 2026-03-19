@@ -50,3 +50,19 @@ model Tag {
   name  String @unique
   posts Post[] 
 }
+
+model AuditLog {
+  id         Int      @id @default(autoincrement())
+  action     String   // "USER_CREATED", "POST_DELETED", "PASSWORD_CHANGED"
+  entity     String   // "User", "Post", "Order" — which table was affected
+  entityId   Int      // which record was affected
+  userId     Int?     // who performed the action (null if system action)
+  oldData    Json?    // what the data looked like BEFORE the change
+  newData    Json?    // what the data looks like AFTER the change
+  ipAddress  String?  // where the request came from
+  createdAt  DateTime @default(now())
+
+  @@index([entity, entityId])  // look up logs for a specific record fast
+  @@index([userId])             // look up all actions by a specific user
+  @@index([createdAt])          // sort/filter logs by time
+}
