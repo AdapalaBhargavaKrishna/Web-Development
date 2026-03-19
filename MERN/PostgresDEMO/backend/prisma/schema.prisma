@@ -20,6 +20,7 @@ model User {
   age       Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deletedAt DateTime?
   posts     Post[]
   profile   Profile?
 }
@@ -31,6 +32,7 @@ model Post {
   published Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deletedAt DateTime?
   authorId  Int
   author    User     @relation(fields: [authorId], references: [id])
   tags      Tag[]
