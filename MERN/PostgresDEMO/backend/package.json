@@ -12,10 +12,8 @@
   "author": "",
   "license": "ISC",
   "type": "commonjs",
-  "devDependencies": {
-    "prisma": "^5.22.0"
-  },
   "dependencies": {
-    "@prisma/client": "^5.22.0"
+    "@prisma/client": "^6.19.3",
+    "prisma": "^6.19.3"
   }
 }
